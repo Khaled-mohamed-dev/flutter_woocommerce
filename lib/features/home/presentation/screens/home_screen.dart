@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/features/category/presentation/screens/category_screen.dart';
+import 'package:flutter_woocommerce/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/product/presentation/widgets/products_grid.dart';
 import 'package:flutter_woocommerce/features/search/presentation/screens/search_screen.dart';
@@ -28,7 +29,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: false,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsetsDirectional.only(start: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Welcome', style: Theme.of(context).textTheme.titleSmall),
+              Text('Khaled', style: Theme.of(context).textTheme.bodyMedium),
+            ],
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: 24),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const FavoritesScreen()));
+              },
+              child: const Icon(IconlyLight.heart),
+            ),
+          )
+        ],
+      ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           switch (state.status) {

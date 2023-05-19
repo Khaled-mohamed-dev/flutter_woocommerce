@@ -10,6 +10,7 @@ import 'package:flutter_woocommerce/features/product/data/repositories/products_
 import 'package:flutter_woocommerce/features/product/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/product/presentation/widgets/attributes_section.dart';
 import 'package:flutter_woocommerce/features/product/presentation/widgets/image_section.dart';
+import 'package:flutter_woocommerce/features/reviews/presentation/screens/reviews_screen.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../../../locator.dart';
@@ -22,6 +23,8 @@ class ProductDetails extends StatelessWidget {
   final Product product;
   @override
   Widget build(BuildContext context) {
+    double ratePercentage = double.parse(product.averageRating) / 5;
+    var images = product.images;
     return Scaffold(
       body: BlocProvider(
         create: (context) => locator<ProductsBloc>()..add(InitPage(product)),
@@ -33,7 +36,6 @@ class ProductDetails extends StatelessWidget {
                   child: CircularProgressIndicator(color: kcPrimaryColor),
                 );
               case ProductsStatus.success:
-                var images = product.images;
                 return SafeArea(
                   child: Stack(
                     children: [
@@ -95,16 +97,45 @@ class ProductDetails extends StatelessWidget {
                                                 ),
                                               ),
                                               horizontalSpaceSmall,
-                                              Row(
-                                                children: [
-                                                  const Icon(IconlyLight.star),
-                                                  Text(
-                                                    "${product.averageRating} (${product.ratingCount})",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleMedium,
-                                                  )
-                                                ],
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReviewsScreen(
+                                                              product: product),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    ShaderMask(
+                                                      blendMode:
+                                                          BlendMode.srcIn,
+                                                      shaderCallback:
+                                                          (Rect bounds) =>
+                                                              LinearGradient(
+                                                        stops: [
+                                                          ratePercentage,
+                                                          ratePercentage
+                                                        ],
+                                                        colors: [
+                                                          kcIconColorSelected,
+                                                          kcSecondaryColor,
+                                                        ],
+                                                      ).createShader(bounds),
+                                                      child: const Icon(
+                                                          IconlyBold.star),
+                                                    ),
+                                                    horizontalSpaceTiny,
+                                                    Text(
+                                                      "${product.averageRating} (${product.ratingCount})",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium,
+                                                    )
+                                                  ],
+                                                ),
                                               )
                                             ],
                                           ),
@@ -305,15 +336,13 @@ class FavoriteButton extends StatefulWidget {
 
 class _FavoriteButtonState extends State<FavoriteButton> {
   var favoritesRepository = locator<FavoritesRepository>();
-  late var isFavorited = favoritesRepository.isFavorited(widget.product.id);
   @override
   Widget build(BuildContext context) {
+    var isFavorited = favoritesRepository.isFavorited(widget.product.id);
     return IconButton(
       onPressed: () {
         favoritesRepository.changeFavoriteStatus(widget.product.id);
-        setState(() {
-          isFavorited = !isFavorited;
-        });
+        setState(() {});
       },
       splashRadius: 2,
       padding: const EdgeInsets.all(2),

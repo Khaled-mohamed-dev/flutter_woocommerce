@@ -10,7 +10,7 @@ import '../../../../main.dart';
 abstract class FavoritesRepository {
   void changeFavoriteStatus(int productID);
   bool isFavorited(int productID);
-  Future<Either<Failure, List<Product>>> fetchFavoriteProducts();
+  Future<Either<Failure, List<Product>>> fetchFavoriteProducts(int page);
 }
 
 class FavoritesRepositoryImpl implements FavoritesRepository {
@@ -31,11 +31,14 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Product>>> fetchFavoriteProducts() async {
+  Future<Either<Failure, List<Product>>> fetchFavoriteProducts(int page) async {
     var include = sharedPrefService.favorites
+        .skip((page - 1) * 10)
+        .take(10)
         .toString()
-        .replaceAll('[', '')
-        .replaceAll(']', '');
+        .replaceAll('(', '')
+        .replaceAll(')', '');
+    logger.w(sharedPrefService.favorites);
     try {
       var response = await dio.get(
         '${wcAPI}products?include=$include&$wcCred',
@@ -47,11 +50,6 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
           responseType: ResponseType.plain,
         ),
       );
-
-      if (errorStatusCodes.contains(response.statusCode)) {
-        logger.e(response.data);
-        return Left(ServerFailure());
-      }
 
       var result = productFromJson(response.data);
       logger.wtf(result);

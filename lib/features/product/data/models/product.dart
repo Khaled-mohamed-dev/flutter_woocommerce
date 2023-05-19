@@ -57,7 +57,7 @@ class Product extends Equatable {
     required this.groupedProducts,
     required this.menuOrder,
     required this.metaData,
-    required this.externalUrl, 
+    required this.externalUrl,
   });
 
   final int id;
@@ -202,63 +202,63 @@ class Product extends Equatable {
         variations: variations ?? this.variations,
         groupedProducts: groupedProducts ?? this.groupedProducts,
         menuOrder: menuOrder ?? this.menuOrder,
-        metaData: metaData ?? this.metaData, externalUrl:externalUrl?? this.externalUrl ,
+        metaData: metaData ?? this.metaData,
+        externalUrl: externalUrl ?? this.externalUrl,
       );
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        name: json["name"],
-        slug: json["slug"],
-        permalink: json["permalink"],
-        type: getProductType(json["type"]),
-        status: json["status"],
-        featured: json["featured"],
-        catalogVisibility: json["catalog_visibility"],
-        description: json["description"],
-        shortDescription: json["short_description"],
-        price: json["price"],
-        htmlPrice: formatHtmlPrice(json['price_html']),
-        regularPrice: json["regular_price"],
-        salePrice: json["sale_price"],
-        dateOnSaleFrom: json["date_on_sale_from"],
-        dateOnSaleTo: json["date_on_sale_to"],
-        onSale: json["on_sale"],
-        purchasable: json["purchasable"],
-        totalSales: json["total_sales"] is String
-            ? int.parse(json["total_sales"])
-            : json["total_sales"],
-        manageStock: json["manage_stock"],
-        stockQuantity: json["stock_quantity"],
-        stockStatus: json["stock_status"],
-        backorders: json["backorders"],
-        backordersAllowed: json["backorders_allowed"],
-        backordered: json["backordered"],
-        soldIndividually: json["sold_individually"],
-        weight: json["weight"],
-        dimensions: Dimensions.fromJson(json["dimensions"]),
-        shippingRequired: json["shipping_required"],
-        reviewsAllowed: json["reviews_allowed"],
-        averageRating: json["average_rating"],
-        ratingCount: json["rating_count"],
-        relatedIds: List<int>.from(json["related_ids"].map((x) => x)),
-        upsellIds: List<dynamic>.from(json["upsell_ids"].map((x) => x)),
-        crossSellIds: List<dynamic>.from(json["cross_sell_ids"].map((x) => x)),
-        parentId: json["parent_id"],
-        purchaseNote: json["purchase_note"],
-        categories: List<CategoryRef>.from(
-            json["categories"].map((x) => CategoryRef.fromJson(x))),
-        tags: List<dynamic>.from(json["tags"].map((x) => x)),
-        images: List<String>.from(json["images"].map((x) => x['src'])),
-        attributes: List<dynamic>.from(json["attributes"].map((x) => x)),
-        defaultAttributes:
-            List<dynamic>.from(json["default_attributes"].map((x) => x)),
-        variations: List<dynamic>.from(json["variations"].map((x) => x)),
-        groupedProducts:
-            List<dynamic>.from(json["grouped_products"].map((x) => x)),
-        menuOrder: json["menu_order"],
-        metaData: List<dynamic>.from(json["meta_data"].map((x) => x)),
-        externalUrl: json['external_url']
-      );
+      id: json["id"],
+      name: json["name"],
+      slug: json["slug"],
+      permalink: json["permalink"],
+      type: getProductType(json["type"]),
+      status: json["status"],
+      featured: json["featured"],
+      catalogVisibility: json["catalog_visibility"],
+      description: json["description"],
+      shortDescription: json["short_description"],
+      price: json["price"],
+      htmlPrice: formatHtmlPrice(json['price_html']),
+      regularPrice: json["regular_price"],
+      salePrice: json["sale_price"],
+      dateOnSaleFrom: json["date_on_sale_from"],
+      dateOnSaleTo: json["date_on_sale_to"],
+      onSale: json["on_sale"],
+      purchasable: json["purchasable"],
+      totalSales: json["total_sales"] is String
+          ? int.parse(json["total_sales"])
+          : json["total_sales"],
+      manageStock: json["manage_stock"],
+      stockQuantity: json["stock_quantity"],
+      stockStatus: json["stock_status"],
+      backorders: json["backorders"],
+      backordersAllowed: json["backorders_allowed"],
+      backordered: json["backordered"],
+      soldIndividually: json["sold_individually"],
+      weight: json["weight"],
+      dimensions: Dimensions.fromJson(json["dimensions"]),
+      shippingRequired: json["shipping_required"],
+      reviewsAllowed: json["reviews_allowed"],
+      averageRating: json["average_rating"],
+      ratingCount: json["rating_count"],
+      relatedIds: List<int>.from(json["related_ids"].map((x) => x)),
+      upsellIds: List<dynamic>.from(json["upsell_ids"].map((x) => x)),
+      crossSellIds: List<dynamic>.from(json["cross_sell_ids"].map((x) => x)),
+      parentId: json["parent_id"],
+      purchaseNote: json["purchase_note"],
+      categories: List<CategoryRef>.from(
+          json["categories"].map((x) => CategoryRef.fromJson(x))),
+      tags: List<dynamic>.from(json["tags"].map((x) => x)),
+      images: List<String>.from(json["images"].map((x) => x['src'])),
+      attributes: List<dynamic>.from(json["attributes"].map((x) => x)),
+      defaultAttributes:
+          List<dynamic>.from(json["default_attributes"].map((x) => x)),
+      variations: List<dynamic>.from(json["variations"].map((x) => x)),
+      groupedProducts:
+          List<dynamic>.from(json["grouped_products"].map((x) => x)),
+      menuOrder: json["menu_order"],
+      metaData: List<dynamic>.from(json["meta_data"].map((x) => x)),
+      externalUrl: json['external_url']);
 
   @override
   List<Object?> get props => [id, images];
@@ -349,7 +349,7 @@ String formatHtmlPrice(String htmlPrice) {
   RegExp regExp = RegExp(r'(?<=\>)(.*?)(?=\<)');
   var matches = regExp.allMatches(htmlPrice);
   for (var match in matches) {
-      result += match.group(0)!;
-    }
+    result += match.group(0)!;
+  }
   return result.replaceAll('&nbsp;', ' ').replaceAll('&ndash;', '-');
 }

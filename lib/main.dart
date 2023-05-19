@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/bloc/bloc.dart';
+import 'package:flutter_woocommerce/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/bloc/orders_bloc.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/bloc/orders_event.dart';
@@ -33,6 +34,7 @@ void main() async {
         BlocProvider<SignFormBloc>(
             create: (context) => locator<SignFormBloc>()),
         BlocProvider(create: (context) => locator<HomeBloc>()..add(LoadHome())),
+        BlocProvider(create: (context) => locator<FavoritesBloc>()),
         BlocProvider(
             create: (context) => locator<CartBloc>()..add(LoadCartItems())),
         BlocProvider(

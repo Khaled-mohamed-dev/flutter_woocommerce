@@ -45,6 +45,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double ratePercentage = double.parse(product.averageRating) / 5;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -114,7 +115,7 @@ class ProductCard extends StatelessWidget {
                     ShaderMask(
                       blendMode: BlendMode.srcIn,
                       shaderCallback: (Rect bounds) => LinearGradient(
-                        stops: [.5, .5],
+                        stops: [ratePercentage, ratePercentage],
                         colors: [
                           kcIconColorSelected,
                           kcSecondaryColor,

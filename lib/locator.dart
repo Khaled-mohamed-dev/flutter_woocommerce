@@ -10,6 +10,7 @@ import 'package:flutter_woocommerce/features/category/data/repositories/category
 import 'package:flutter_woocommerce/features/category/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/favorites/data/repositories/favorites_repository.dart';
+import 'package:flutter_woocommerce/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:flutter_woocommerce/features/home/data/repository/home_repository.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/orders/data/repositories/orders_repository.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_woocommerce/features/orders/presentation/bloc/orders_blo
 import 'package:flutter_woocommerce/features/product/data/repositories/products_repository.dart';
 import 'package:flutter_woocommerce/features/product/presentation/bloc/products_bloc.dart';
 import 'package:flutter_woocommerce/features/reviews/data/repositories/reviews_repository.dart';
+import 'package:flutter_woocommerce/features/reviews/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/search/data/repositories/search_repository.dart';
 import 'package:flutter_woocommerce/features/search/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/settings/data/repositories/settings_repository.dart';
@@ -47,10 +49,7 @@ Future setupLocator() async {
   //Feature - Order
 
   locator.registerLazySingleton<OrdersRepository>(
-    () => OrdersRepositoryImpl(
-      dio: locator(),
-      sharedPrefService: locator()
-    ),
+    () => OrdersRepositoryImpl(dio: locator(), sharedPrefService: locator()),
   );
 
   locator.registerFactory<OrdersBloc>(
@@ -63,6 +62,11 @@ Future setupLocator() async {
     () => ReviewsRepositoryImpl(
       dio: locator(),
     ),
+  );
+
+  locator.registerFactory<ReviewsBloc>(
+    () =>
+        ReviewsBloc(reviewsRepository: locator(), sharedPrefService: locator()),
   );
 
   //Feature - Auth
@@ -115,6 +119,10 @@ Future setupLocator() async {
       sharedPrefService: locator(),
       dio: locator(),
     ),
+  );
+
+  locator.registerFactory<FavoritesBloc>(
+    () => FavoritesBloc(favoritesRepository: locator()),
   );
 
   //Feature - Checkout

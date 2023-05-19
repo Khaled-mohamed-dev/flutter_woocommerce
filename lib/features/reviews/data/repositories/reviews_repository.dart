@@ -8,7 +8,8 @@ import '../../../../main.dart';
 
 abstract class ReviewsRepository {
   Future<Either<Failure, Unit>> leaveReview(Review review);
-  Future<Either<Failure, List<Review>>> fetchProductReviews(int productID);
+  Future<Either<Failure, List<Review>>> fetchProductReviews(
+      int productID, int page);
 
   // TODO Find a way to filter reviews by rating
   // Future<Either<Failure, List<Review>>> fetchProductReviewsByRating(
@@ -24,10 +25,10 @@ class ReviewsRepositoryImpl implements ReviewsRepository {
 
   @override
   Future<Either<Failure, List<Review>>> fetchProductReviews(
-      int productID) async {
+      int productID, int page) async {
     try {
       var response = await dio.get(
-        '${wcAPI}products/reviews?product=$productID&$wcCred',
+        '${wcAPI}products/reviews?product=$productID&page=$page&$wcCred',
         options: Options(
           responseType: respnseType,
         ),
