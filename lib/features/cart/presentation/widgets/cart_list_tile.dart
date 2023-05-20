@@ -113,7 +113,10 @@ class CartListTile extends StatelessWidget {
                               children: [
                                 IconButton(
                                   iconSize: 12,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    BlocProvider.of<CartBloc>(context)
+                                        .add(DecrementQuantity(cartItem: item));
+                                  },
                                   icon: const Icon(Icons.remove),
                                   splashRadius: 0.1,
                                 ),
@@ -124,7 +127,10 @@ class CartListTile extends StatelessWidget {
                                 ),
                                 IconButton(
                                   iconSize: 12,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    BlocProvider.of<CartBloc>(context)
+                                        .add(IncrementQuantity(cartItem: item));
+                                  },
                                   icon: const Icon(Icons.add),
                                   splashRadius: 0.1,
                                 )

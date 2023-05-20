@@ -11,6 +11,7 @@ abstract class FavoritesRepository {
   void changeFavoriteStatus(int productID);
   bool isFavorited(int productID);
   Future<Either<Failure, List<Product>>> fetchFavoriteProducts(int page);
+  List<String> getFavoritesIDs();
 }
 
 class FavoritesRepositoryImpl implements FavoritesRepository {
@@ -38,7 +39,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
         .toString()
         .replaceAll('(', '')
         .replaceAll(')', '');
-    logger.w(sharedPrefService.favorites);
+
     try {
       var response = await dio.get(
         '${wcAPI}products?include=$include&$wcCred',
@@ -52,7 +53,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       );
 
       var result = productFromJson(response.data);
-      logger.wtf(result);
+
       return Right(result);
     } catch (e) {
       logger.e('$e');
@@ -64,5 +65,10 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   bool isFavorited(int productID) {
     List<String> favoritesIDs = sharedPrefService.favorites;
     return favoritesIDs.contains(productID.toString());
+  }
+
+  @override
+  List<String> getFavoritesIDs() {
+    return sharedPrefService.favorites;
   }
 }

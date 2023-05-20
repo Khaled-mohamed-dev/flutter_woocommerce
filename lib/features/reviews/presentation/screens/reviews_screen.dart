@@ -15,7 +15,10 @@ class ReviewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title:
+            Text("${product.averageRating} (${product.ratingCount} reviews)"),
+      ),
       body: BlocProvider(
         create: (context) =>
             locator<ReviewsBloc>()..add(LoadReviews(product.id)),
@@ -58,9 +61,7 @@ class ReviewListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {
-        print('object');
-      },
+      onTap: () {},
       isThreeLine: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       title: Row(

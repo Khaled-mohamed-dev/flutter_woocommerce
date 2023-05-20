@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/bloc/favorites_event.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/bloc/favorites_state.dart';
 import 'package:flutter_woocommerce/features/product/presentation/widgets/products_grid.dart';
@@ -16,6 +17,7 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
   final _scrollController = ScrollController();
 
+  late FavoritesBloc bloc;
   @override
   void initState() {
     super.initState();
@@ -37,12 +39,26 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 child: CircularProgressIndicator(color: kcPrimaryColor),
               );
             case FavoritesStatus.success:
-              return SingleChildScrollView(
-                controller: _scrollController,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: ProductsGrid(products: state.products),
-                ),
+              return Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: ProductsGrid(products: state.products),
+                      ),
+                    ),
+                  ),
+                  if (state.isLoadingMoreProducts)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(color: kcPrimaryColor),
+                        verticalSpaceRegular,
+                      ],
+                    )
+                ],
               );
             case FavoritesStatus.failure:
               return Text(
@@ -56,7 +72,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    bloc = context.read<FavoritesBloc>();
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
+    bloc.add(DisposeFavorites());
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();

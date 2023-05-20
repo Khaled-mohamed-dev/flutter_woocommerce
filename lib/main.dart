@@ -34,7 +34,7 @@ void main() async {
         BlocProvider<SignFormBloc>(
             create: (context) => locator<SignFormBloc>()),
         BlocProvider(create: (context) => locator<HomeBloc>()..add(LoadHome())),
-        BlocProvider(create: (context) => locator<FavoritesBloc>()),
+        BlocProvider(lazy: false,create: (context) => locator<FavoritesBloc>()),
         BlocProvider(
             create: (context) => locator<CartBloc>()..add(LoadCartItems())),
         BlocProvider(

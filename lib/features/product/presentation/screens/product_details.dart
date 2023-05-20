@@ -4,7 +4,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
-import 'package:flutter_woocommerce/features/favorites/data/repositories/favorites_repository.dart';
+import 'package:flutter_woocommerce/features/favorites/presentation/widgets/favorite_button.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product_variation.dart';
 import 'package:flutter_woocommerce/features/product/data/repositories/products_repository.dart';
 import 'package:flutter_woocommerce/features/product/presentation/bloc/bloc.dart';
@@ -317,39 +317,6 @@ class ProductDetails extends StatelessWidget {
             }
           },
         ),
-      ),
-    );
-  }
-}
-
-class FavoriteButton extends StatefulWidget {
-  const FavoriteButton({
-    super.key,
-    required this.product,
-  });
-
-  final Product product;
-
-  @override
-  State<FavoriteButton> createState() => _FavoriteButtonState();
-}
-
-class _FavoriteButtonState extends State<FavoriteButton> {
-  var favoritesRepository = locator<FavoritesRepository>();
-  @override
-  Widget build(BuildContext context) {
-    var isFavorited = favoritesRepository.isFavorited(widget.product.id);
-    return IconButton(
-      onPressed: () {
-        favoritesRepository.changeFavoriteStatus(widget.product.id);
-        setState(() {});
-      },
-      splashRadius: 2,
-      padding: const EdgeInsets.all(2),
-      visualDensity: VisualDensity.compact,
-      icon: Icon(
-        isFavorited ? IconlyBold.heart : IconlyLight.heart,
-        color: isFavorited ? Colors.red : null,
       ),
     );
   }

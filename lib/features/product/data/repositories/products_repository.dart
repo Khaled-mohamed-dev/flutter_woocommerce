@@ -74,7 +74,7 @@ class ProductsRepositoryImpl implements ProductsRepository {
       }
 
       var result = productVariationFromJson(response.data);
-      logger.wtf(result.length);
+
       logger.w('function executed in ${stopwatch.elapsed}');
 
       stopwatch.stop();

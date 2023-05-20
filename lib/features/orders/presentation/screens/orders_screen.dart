@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
-import 'package:flutter_woocommerce/core/widgets/base_button.dart';
 import 'package:flutter_woocommerce/features/orders/data/models/order.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/screens/order_details.dart';
-import 'package:flutter_woocommerce/features/reviews/presentation/widgets/create_review.dart';
-import 'package:iconly/iconly.dart';
 
 import '../../../../core/ui_helpers.dart';
 

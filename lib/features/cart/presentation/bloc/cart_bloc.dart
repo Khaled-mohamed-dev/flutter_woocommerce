@@ -29,12 +29,24 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         cartRepository.removeCartItem(event.cartItem);
         var f = List.of(state.cartItems);
         f.remove(event.cartItem);
-        // print(state.cartItems.remove(event.cartItem));
-        // emit(
-        //   state.copyWith(
-        //     cartItems: f,
-        //   ),
-        // );
+      },
+    );
+
+    on<DecrementQuantity>(
+      (event, emit) {
+        if (event.cartItem.quantity > 1) {
+          var updatedCartItem =
+              event.cartItem.copyWith(quantity: event.cartItem.quantity - 1);
+          cartRepository.updateCartItem(updatedCartItem);
+        }
+      },
+    );
+
+    on<IncrementQuantity>(
+      (event, emit) {
+        var updatedCartItem =
+            event.cartItem.copyWith(quantity: event.cartItem.quantity + 1);
+        cartRepository.updateCartItem(updatedCartItem);
       },
     );
   }

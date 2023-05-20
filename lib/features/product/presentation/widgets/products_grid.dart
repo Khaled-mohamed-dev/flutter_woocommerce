@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/features/favorites/presentation/widgets/favorite_button.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product.dart';
 import 'package:flutter_woocommerce/features/product/presentation/screens/product_details.dart';
 import 'package:iconly/iconly.dart';

@@ -59,7 +59,6 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                     onPressed: () {
                       setState(() {
                         rate = i;
-                        print(i);
                       });
                     },
                     icon: Icon(

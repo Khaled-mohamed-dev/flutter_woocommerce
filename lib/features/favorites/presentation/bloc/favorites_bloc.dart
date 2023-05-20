@@ -21,7 +21,9 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   final FavoritesRepository favoritesRepository;
 
   FavoritesBloc({required this.favoritesRepository})
-      : super(const FavoritesState(status: FavoritesStatus.initial)) {
+      : super(FavoritesState(
+            status: FavoritesStatus.initial,
+            favoritesIDs: favoritesRepository.getFavoritesIDs())) {
     on<LoadFavorites>(
       (event, emit) async {
         if (state.status == FavoritesStatus.success) return;
@@ -47,7 +49,6 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
           emit(state.copyWith(productsHasReachedMax: true));
         }
         if (state.productsHasReachedMax) return;
-        logger.d('fetch more products');
 
         emit(state.copyWith(isLoadingMoreProducts: true));
 
@@ -72,5 +73,15 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       },
       transformer: throttleDroppable(throttleDuration),
     );
+
+    on<ChangeFavoriteStatus>((event, emit) {
+      favoritesRepository.changeFavoriteStatus(event.product.id);
+      emit(state.copyWith(favoritesIDs: favoritesRepository.getFavoritesIDs()));
+    });
+
+    on<DisposeFavorites>((event, emit) {
+      emit(state.copyWith(
+          status: FavoritesStatus.initial, productsHasReachedMax: false));
+    });
   }
 }

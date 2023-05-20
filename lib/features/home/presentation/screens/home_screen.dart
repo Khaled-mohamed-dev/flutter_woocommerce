@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => const FavoritesScreen()));
               },
-              child: const Icon(IconlyLight.heart),
+              child: const Icon(IconlyBold.heart),
             ),
           )
         ],
