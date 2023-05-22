@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/toast.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/widgets/cart_list_tile.dart';
@@ -41,9 +42,11 @@ class CartScreen extends StatelessWidget {
                       return e;
                     },
                   );
-                  var price = cartItems
-                      .map((e) => double.parse(e.productPrice) * e.quantity)
-                      .reduce((a, b) => a + b);
+                  var price = cartItems.isNotEmpty
+                      ? cartItems
+                          .map((e) => double.parse(e.productPrice) * e.quantity)
+                          .reduce((a, b) => a + b)
+                      : '0';
                   return Column(
                     children: [
                       Expanded(
@@ -98,13 +101,18 @@ class CartScreen extends StatelessWidget {
                                     // icon: ,
                                     title: 'Checkout',
                                     callback: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => CheckoutScreen(
-                                            cartItems: cartItems.toList(),
+                                      if (cartItems.isNotEmpty) {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CheckoutScreen(
+                                              cartItems: cartItems.toList(),
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      } else {
+                                        showToast('Your Cart is empty \ncan\'t checkout');
+                                      }
                                     },
                                   ),
                                 ),

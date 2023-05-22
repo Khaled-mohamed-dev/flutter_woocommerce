@@ -27,6 +27,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           (l) => null,
           (r) => emit(
             state.copyWith(
+              status: CheckoutStatus.success,
               shippingZones: r[0],
               countries: r[1],
               selectedCountry: r[1].first,
@@ -86,6 +87,22 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
             state.copyWith(selectedState: event.state, noShippingMethods: true),
           );
         }
+      },
+    );
+
+    on<SelectShippingMethod>(
+      (event, emit) => emit(
+        state.copyWith(selectedShippingMethod: event.method),
+      ),
+    );
+
+    on<ChangeAddress>(
+      (event, emit) {
+        var user = sharedPrefService.user!;
+        sharedPrefService.user = user.copyWith(
+          shipping: user.shipping!.copyWith(address1: event.address),
+        );
+        emit(state.copyWith(shippingAddress: event.address));
       },
     );
   }

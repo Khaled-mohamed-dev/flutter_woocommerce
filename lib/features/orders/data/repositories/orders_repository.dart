@@ -52,8 +52,7 @@ class OrdersRepositoryImpl implements OrdersRepository {
   Future<Either<Failure, List<Order>>> fetchOrders(int page) async {
     try {
       var response = await dio.get(
-        // customer=${sharedPrefService.user?.id}&
-        '${wcAPI}orders?page=$page&$wcCred',
+        '${wcAPI}orders?customer=${sharedPrefService.user?.id}&page=$page&per_page=50&$wcCred',
         options: Options(
           responseType: respnseType,
         ),
@@ -70,3 +69,4 @@ class OrdersRepositoryImpl implements OrdersRepository {
     }
   }
 }
+

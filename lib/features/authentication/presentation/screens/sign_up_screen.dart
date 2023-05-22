@@ -59,20 +59,14 @@ class _SignupScreenState extends State<SignupScreen> {
         );
       },
       builder: (context, state) {
-        // ThemeData theme = BlocProvider.of<SettingsBloc>(context).state.themeData;
-        // Color backgroundColor = theme == ThemeConfig.darkTheme
-        //     ? kcDarkGreyColor
-        //     : kcVeryLightGreyColor;
         var theme = Theme.of(context);
         return Scaffold(
-          // resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(32.0, 0, 32.0, 0),
               child: SingleChildScrollView(
                 reverse: true,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     verticalSpaceLarge,
                     Text('Sign up',
@@ -102,16 +96,19 @@ class _SignupScreenState extends State<SignupScreen> {
                               filled: true,
                               fillColor: kcSecondaryColor,
                               border: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcSecondaryColor),
+                                borderSide:
+                                    BorderSide(color: kcSecondaryColor),
                               ),
                               errorBorder: circularBorder.copyWith(
-                                borderSide: const BorderSide(color: Colors.red),
+                                borderSide:
+                                    const BorderSide(color: Colors.red),
                               ),
                               focusedBorder: circularBorder.copyWith(
                                 borderSide: BorderSide(color: kcPrimaryColor),
                               ),
                               enabledBorder: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcSecondaryColor),
+                                borderSide:
+                                    BorderSide(color: kcSecondaryColor),
                               ),
                             ),
                           ),
@@ -142,16 +139,19 @@ class _SignupScreenState extends State<SignupScreen> {
                               filled: true,
                               fillColor: kcSecondaryColor,
                               border: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcSecondaryColor),
+                                borderSide:
+                                    BorderSide(color: kcSecondaryColor),
                               ),
                               errorBorder: circularBorder.copyWith(
-                                borderSide: const BorderSide(color: Colors.red),
+                                borderSide:
+                                    const BorderSide(color: Colors.red),
                               ),
                               focusedBorder: circularBorder.copyWith(
                                 borderSide: BorderSide(color: kcPrimaryColor),
                               ),
                               enabledBorder: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcSecondaryColor),
+                                borderSide:
+                                    BorderSide(color: kcSecondaryColor),
                               ),
                             ),
                           ),
@@ -161,7 +161,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
-                              } else if (RegExp(r'^.{6,10}$').hasMatch(value) ==
+                              } else if (RegExp(r'^.{6,10}$')
+                                      .hasMatch(value) ==
                                   false) {
                                 return "password is too short";
                               }
@@ -180,16 +181,19 @@ class _SignupScreenState extends State<SignupScreen> {
                               filled: true,
                               fillColor: kcSecondaryColor,
                               border: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcSecondaryColor),
+                                borderSide:
+                                    BorderSide(color: kcSecondaryColor),
                               ),
                               errorBorder: circularBorder.copyWith(
-                                borderSide: const BorderSide(color: Colors.red),
+                                borderSide:
+                                    const BorderSide(color: Colors.red),
                               ),
                               focusedBorder: circularBorder.copyWith(
                                 borderSide: BorderSide(color: kcPrimaryColor),
                               ),
                               enabledBorder: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcSecondaryColor),
+                                borderSide:
+                                    BorderSide(color: kcSecondaryColor),
                               ),
                             ),
                           ),

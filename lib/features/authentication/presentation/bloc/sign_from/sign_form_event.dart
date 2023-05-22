@@ -61,3 +61,12 @@ class SignInWithEmailAndPasswordPressed extends SignFormEvent {
   List<Object> get props => [emailAdress, password];
 }
 
+class SetupAccount extends SignFormEvent {
+  final String fullName;
+  final String address;
+  final String phoneNumber;
+  const SetupAccount(
+      {required this.fullName,
+      required this.address,
+      required this.phoneNumber});
+}

@@ -1,9 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/features/orders/data/models/order.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/bloc/bloc.dart';
-import 'package:flutter_woocommerce/features/orders/presentation/screens/order_details.dart';
+import 'package:flutter_woocommerce/features/orders/presentation/widgets/order_list_tile.dart';
 
 import '../../../../core/ui_helpers.dart';
 
@@ -20,7 +21,7 @@ class OrdersScreen extends StatelessWidget {
           title: const Text('Orders'),
           bottom: TabBar(
             tabs: const <Widget>[
-              Tab(icon: Text("In Delivery")),
+              Tab(icon: Text("processing")),
               Tab(icon: Text("Completed")),
             ],
             indicatorWeight: 2,
@@ -32,155 +33,75 @@ class OrdersScreen extends StatelessWidget {
         ),
         body: BlocBuilder<OrdersBloc, OrdersState>(
           builder: (context, state) {
-            List<Order> completedOrders = state.orders
-                .where((element) => element.status == 'completed')
-                .toList();
-            return TabBarView(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: state.orders.isEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/$notFoundImage.png'),
-                            verticalSpaceRegular,
-                            Text(
-                              'You don\'t have any orders yet.',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyMedium,
+            switch (state.status) {
+              case OrdersStatus.initial:
+                return Center(
+                    child: CircularProgressIndicator(color: kcPrimaryColor));
+              case OrdersStatus.success:
+                List<Order> completedOrders = state.orders
+                    .where((element) => element.status == 'completed')
+                    .toList();
+                List<Order> processingOrders = state.orders
+                    .where((element) => element.status != 'completed')
+                    .toList();
+                return TabBarView(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: state.orders.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/$notFoundImage.png'),
+                                verticalSpaceRegular,
+                                Text(
+                                  'You don\'t have any orders yet.',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            )
+                          : ListView.builder(
+                              itemCount: processingOrders.length,
+                              itemBuilder: (context, index) {
+                                var order = processingOrders[index];
+                                return OrderListTile(order: order);
+                              },
                             ),
-                          ],
-                        )
-                      : ListView.builder(
-                          itemCount: state.orders.length,
-                          itemBuilder: (context, index) {
-                            var order = state.orders[index];
-                            return OrderListTile(order: order);
-                          },
-                        ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: completedOrders.isEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/$notFoundImage.png'),
-                            verticalSpaceRegular,
-                            Text(
-                              'You don\'t have any orders yet.',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: completedOrders.isEmpty
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/$notFoundImage.png'),
+                                verticalSpaceRegular,
+                                Text(
+                                  'You don\'t have any orders yet.',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            )
+                          : ListView.builder(
+                              itemCount: completedOrders.length,
+                              itemBuilder: (context, index) {
+                                var order = completedOrders[index];
+                                return OrderListTile(order: order);
+                              },
                             ),
-                          ],
-                        )
-                      : ListView.builder(
-                          itemCount: completedOrders.length,
-                          itemBuilder: (context, index) {
-                            var order = completedOrders[index];
-                            return OrderListTile(order: order);
-                          },
-                        ),
-                )
-              ],
-            );
+                    )
+                  ],
+                );
+              case OrdersStatus.failure:
+                return const Center(
+                  child: Text('some thing went wrong'),
+                );
+            }
           },
         ),
       ),
     );
-  }
-}
-
-class OrderListTile extends StatelessWidget {
-  const OrderListTile({
-    super.key,
-    required this.order,
-  });
-  final Order order;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => OrdersDetails(order: order),
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: kcCartItemBackgroundColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Order Number : ${order.id.toString()}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    verticalSpaceTiny,
-                    Text(
-                      "order date: ${order.dateCreated?.formatDate()}",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    verticalSpaceTiny,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "total: ${order.total}",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        horizontalSpaceSmall,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: kcSecondaryColor,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6),
-                            child: Text(
-                              "${order.status}",
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              horizontalSpaceSmall,
-              const Icon(Icons.arrow_forward_ios_outlined),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-extension DateTimeParse on String {
-  DateTime dateTimeParse() {
-    List<String> date = split('-');
-    var year = date[0];
-    var month = int.parse(date[1]) < 10 ? '0${date[1]}' : date[1];
-    var day = int.parse(date[2]) < 10 ? '0${date[1]}' : date[1];
-    return DateTime.parse('$year-$month-$day');
-  }
-}
-
-extension FormatDate on DateTime {
-  String formatDate() {
-    return '$year-$month-$day';
   }
 }

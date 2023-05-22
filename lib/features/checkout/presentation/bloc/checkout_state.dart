@@ -5,17 +5,25 @@ import 'package:flutter_woocommerce/features/checkout/data/models/shipping_zone_
 
 import '../../data/models/shipping_method.dart';
 
+enum CheckoutStatus { initial, success, failure }
+
 class CheckoutState extends Equatable {
+  final CheckoutStatus status;
+
   final String shippingAddress;
   final Map<ShippingZone, List<ShippingZoneLocation>>? shippingZones;
-  final ShippingMethod? shippingMethod;
+
   final List<CountryData> countries;
   final CountryData? selectedCountry;
   final State? selectedState;
+
   final bool isFetchingShippingMethods;
   final bool noShippingMethods;
   final List<ShippingMethod>? shippingMethods;
+  final ShippingMethod? selectedShippingMethod;
+
   const CheckoutState({
+    this.status = CheckoutStatus.initial,
     this.shippingAddress = '',
     this.countries = const [],
     this.isFetchingShippingMethods = false,
@@ -24,10 +32,11 @@ class CheckoutState extends Equatable {
     this.selectedCountry,
     this.selectedState,
     this.shippingZones,
-    this.shippingMethod,
+    this.selectedShippingMethod,
   });
 
   CheckoutState copyWith({
+    CheckoutStatus? status,
     String? shippingAddress,
     Map<ShippingZone, List<ShippingZoneLocation>>? shippingZones,
     bool? isFetchingShippingMethods,
@@ -36,9 +45,10 @@ class CheckoutState extends Equatable {
     bool? noShippingMethods,
     CountryData? selectedCountry,
     State? selectedState,
-    ShippingMethod? shippingMethod,
+    ShippingMethod? selectedShippingMethod,
   }) {
     return CheckoutState(
+      status: status ?? this.status,
       shippingAddress: shippingAddress ?? this.shippingAddress,
       shippingMethods: shippingMethods ?? this.shippingMethods,
       isFetchingShippingMethods:
@@ -48,12 +58,13 @@ class CheckoutState extends Equatable {
       selectedCountry: selectedCountry ?? this.selectedCountry,
       selectedState: selectedState ?? this.selectedState,
       shippingZones: shippingZones ?? this.shippingZones,
-      shippingMethod: shippingMethod ?? this.shippingMethod,
+      selectedShippingMethod: selectedShippingMethod ?? this.selectedShippingMethod,
     );
   }
 
   @override
   List<Object?> get props => [
+        status,
         countries,
         shippingAddress,
         noShippingMethods,
@@ -62,6 +73,6 @@ class CheckoutState extends Equatable {
         selectedState,
         selectedCountry,
         shippingZones,
-        shippingMethod,
+        selectedShippingMethod,
       ];
 }

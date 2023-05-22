@@ -119,7 +119,8 @@ class AuthRepositoryImpl implements AuthRepository {
           'email': emailAddress,
           'username': userName,
           'password': password,
-          'billing': {'email': emailAddress}
+          'billing': {'email': emailAddress},
+          'shipping': {'email': emailAddress}
         },
         options: Options(
           headers: {
@@ -157,8 +158,8 @@ class AuthRepositoryImpl implements AuthRepository {
       sharedPrefService.user = User.fromJson(jsonDecode(updatedUser.data));
 
       return const Right(unit);
-    } catch (e) {
-      logger.e(e);
+    } on DioError catch (e) {
+      logger.e(e.response);
       return Left(ServerFailure());
     }
   }

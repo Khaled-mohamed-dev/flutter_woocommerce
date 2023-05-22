@@ -25,6 +25,19 @@ class SignFormBloc extends Bloc<SignFormEvent, SignFormState> {
     //   ),
     // );
 
+    on<SetupAccount>(
+      (event, emit) {
+        var user = authRepository.getSignedInUser()!;
+        var updatedUser = user.copyWith(
+          billing: user.billing!
+              .copyWith(address1: event.address, phone: event.phoneNumber, email: user.email),
+          shipping: user.shipping!
+              .copyWith(address1: event.address, phone: event.phoneNumber, email:user.email ),
+        );
+        authRepository.setupAccount(user: updatedUser);
+      },
+    );
+
     on<RegisterWithEmailAndPasswordPressed>(
       (event, emit) async {
         emit(

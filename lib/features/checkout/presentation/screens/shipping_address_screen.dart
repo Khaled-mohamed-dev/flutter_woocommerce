@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
+import 'package:flutter_woocommerce/core/widgets/toast.dart';
+import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
 import 'package:iconly/iconly.dart';
 
-class ShippingAddressScreen extends StatelessWidget {
+class ShippingAddressScreen extends StatefulWidget {
   const ShippingAddressScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ShippingAddressScreen> createState() => _ShippingAddressScreenState();
+}
+
+class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +31,14 @@ class ShippingAddressScreen extends StatelessWidget {
           children: [
             TextFormField(
               keyboardType: TextInputType.emailAddress,
-              // controller: _emailController,
+              controller: controller,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
                 }
-                // } else if (RegExp(
-                //       r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-                //     ).hasMatch(value) ==
-                //     false) {
-                //   return "email is not valid";
-                // }
                 return null;
               },
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 hintText: 'address',
                 hintStyle: Theme.of(context).textTheme.titleMedium,
@@ -64,7 +68,14 @@ class ShippingAddressScreen extends StatelessWidget {
             BaseButton(
               title: 'Apply',
               callback: () {
-                Navigator.of(context).pop();
+                if (controller.text.isNotEmpty) {
+                  context
+                      .read<CheckoutBloc>()
+                      .add(ChangeAddress(controller.text));
+                  Navigator.of(context).pop();
+                } else {
+                  showToast('Make sure to enter a valid address');
+                }
               },
             )
           ],

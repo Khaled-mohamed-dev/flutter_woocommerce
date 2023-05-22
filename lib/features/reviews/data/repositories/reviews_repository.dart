@@ -50,6 +50,7 @@ class ReviewsRepositoryImpl implements ReviewsRepository {
 
   @override
   Future<Either<Failure, Unit>> leaveReview(Review review) async {
+    logger.w(review.toJson());
     try {
       var response = await dio.post(
         '${wcAPI}products/reviews?$wcCred',

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/features/authentication/presentation/screens/setup_account_screen.dart';
 import 'package:flutter_woocommerce/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dart';
+import 'package:flutter_woocommerce/features/settings/presentation/screens/settings_screen.dart';
 import 'package:iconly/iconly.dart';
 import 'features/cart/presentation/screens/cart_screen.dart';
 import 'features/orders/presentation/screens/orders_screen.dart';
@@ -31,15 +33,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          BlocProvider.of<SettingsBloc>(context).add(ThemeChanged());
-          // locator<CheckoutRepository>().fetchShippingZoneLocations();
-          // BlocProvider.of<AuthBloc>(context).add(LoggedOut());
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => const SigninScreen(),
-          //   ),
-          // );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SetupAccountScreen()));
         },
         child: Icon(
           Icons.add,
@@ -162,8 +156,8 @@ class _MainScreenState extends State<MainScreen> {
                   onPressed: () {
                     setState(
                       () {
-                        // currentScreen = const SettingsScreen();
-                        currentTab = 4;
+                        currentScreen = const SettingsScreen();
+                        currentTab = 3;
                       },
                     );
                   },
@@ -172,12 +166,12 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        currentTab == 4
+                        currentTab == 3
                             ? IconlyBold.profile
                             : IconlyLight.profile,
                         size: 26,
                         color:
-                            currentTab == 4 ? kcIconColorSelected : kcIconColor,
+                            currentTab == 3 ? kcIconColorSelected : kcIconColor,
                       ),
                       Text(
                         'Profile',

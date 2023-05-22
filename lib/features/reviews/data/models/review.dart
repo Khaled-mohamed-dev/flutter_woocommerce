@@ -71,6 +71,5 @@ class Review {
         "reviewer_email": reviewerEmail,
         "review": review,
         "rating": rating,
-        // 'verified': true
       };
 }
