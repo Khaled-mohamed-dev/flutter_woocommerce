@@ -3,10 +3,11 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_woocommerce/core/colors.dart";
 import "package:flutter_woocommerce/core/ui_helpers.dart";
 import "package:flutter_woocommerce/core/widgets/base_button.dart";
+import "package:flutter_woocommerce/core/widgets/custome_text_field.dart";
 import "package:flutter_woocommerce/core/widgets/toast.dart";
 import "package:flutter_woocommerce/features/authentication/presentation/bloc/sign_from/bloc.dart";
+import "package:flutter_woocommerce/features/authentication/presentation/screens/setup_account_screen.dart";
 import "package:flutter_woocommerce/features/authentication/presentation/screens/sign_in_screen.dart";
-import "package:flutter_woocommerce/main_screen.dart";
 import "package:iconly/iconly.dart";
 import "../../../../core/error/failures.dart";
 import "../bloc/bloc.dart";
@@ -19,10 +20,6 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final circularBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(12),
-  );
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -30,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocConsumer<SignFormBloc, SignFormState>(
       listener: (context, state) {
         state.authFailureOrSuccessOption.fold(
@@ -50,7 +48,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MainScreen(),
+                  builder: (context) => const SetupAccountScreen(),
                 ),
               );
               BlocProvider.of<AuthBloc>(context).add(LoggedIn());
@@ -59,7 +57,6 @@ class _SignupScreenState extends State<SignupScreen> {
         );
       },
       builder: (context, state) {
-        var theme = Theme.of(context);
         return Scaffold(
           body: SafeArea(
             child: Padding(
@@ -76,46 +73,23 @@ class _SignupScreenState extends State<SignupScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          TextFormField(
+                          CustomTextField(
                             controller: _nameController,
+                            hint: 'Name',
+                            icon: IconlyBold.profile,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
                               }
                               return null;
                             },
-                            style: theme.textTheme.bodyMedium,
-                            decoration: InputDecoration(
-                              hintText: 'Name',
-                              hintStyle:
-                                  Theme.of(context).textTheme.titleMedium,
-                              prefixIcon: Icon(
-                                IconlyBold.profile,
-                                color: kcIconColorSelected,
-                              ),
-                              filled: true,
-                              fillColor: kcSecondaryColor,
-                              border: circularBorder.copyWith(
-                                borderSide:
-                                    BorderSide(color: kcSecondaryColor),
-                              ),
-                              errorBorder: circularBorder.copyWith(
-                                borderSide:
-                                    const BorderSide(color: Colors.red),
-                              ),
-                              focusedBorder: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcPrimaryColor),
-                              ),
-                              enabledBorder: circularBorder.copyWith(
-                                borderSide:
-                                    BorderSide(color: kcSecondaryColor),
-                              ),
-                            ),
                           ),
                           SizedBox(height: screenHeight(context) * .02),
-                          TextFormField(
+                          CustomTextField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
+                            hint: 'Email',
+                            icon: IconlyBold.message,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
@@ -127,75 +101,22 @@ class _SignupScreenState extends State<SignupScreen> {
                               }
                               return null;
                             },
-                            style: theme.textTheme.bodyMedium,
-                            decoration: InputDecoration(
-                              hintText: 'Email',
-                              hintStyle:
-                                  Theme.of(context).textTheme.titleMedium,
-                              prefixIcon: Icon(
-                                IconlyBold.message,
-                                color: kcIconColorSelected,
-                              ),
-                              filled: true,
-                              fillColor: kcSecondaryColor,
-                              border: circularBorder.copyWith(
-                                borderSide:
-                                    BorderSide(color: kcSecondaryColor),
-                              ),
-                              errorBorder: circularBorder.copyWith(
-                                borderSide:
-                                    const BorderSide(color: Colors.red),
-                              ),
-                              focusedBorder: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcPrimaryColor),
-                              ),
-                              enabledBorder: circularBorder.copyWith(
-                                borderSide:
-                                    BorderSide(color: kcSecondaryColor),
-                              ),
-                            ),
                           ),
                           SizedBox(height: screenHeight(context) * .02),
-                          TextFormField(
+                          CustomTextField(
                             controller: _passwordController,
+                            hint: 'Password',
+                            icon: IconlyBold.lock,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
-                              } else if (RegExp(r'^.{6,10}$')
-                                      .hasMatch(value) ==
+                              } else if (RegExp(r'^.{6,}$').hasMatch(value) ==
                                   false) {
                                 return "password is too short";
                               }
                               return null;
                             },
-                            obscureText: true,
-                            style: theme.textTheme.bodyMedium,
-                            decoration: InputDecoration(
-                              hintText: 'Password',
-                              hintStyle:
-                                  Theme.of(context).textTheme.titleMedium,
-                              prefixIcon: Icon(
-                                IconlyBold.lock,
-                                color: kcIconColorSelected,
-                              ),
-                              filled: true,
-                              fillColor: kcSecondaryColor,
-                              border: circularBorder.copyWith(
-                                borderSide:
-                                    BorderSide(color: kcSecondaryColor),
-                              ),
-                              errorBorder: circularBorder.copyWith(
-                                borderSide:
-                                    const BorderSide(color: Colors.red),
-                              ),
-                              focusedBorder: circularBorder.copyWith(
-                                borderSide: BorderSide(color: kcPrimaryColor),
-                              ),
-                              enabledBorder: circularBorder.copyWith(
-                                borderSide:
-                                    BorderSide(color: kcSecondaryColor),
-                              ),
-                            ),
+                            isPassword: true,
                           ),
                           SizedBox(height: screenHeight(context) * .04),
                         ],

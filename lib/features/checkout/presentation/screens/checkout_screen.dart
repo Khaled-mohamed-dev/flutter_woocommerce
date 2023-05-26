@@ -8,8 +8,10 @@ import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/widgets/cart_list_tile.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/screens/payment_methods_screen.dart';
-import 'package:flutter_woocommerce/features/checkout/presentation/screens/shipping_address_screen.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/screens/shipping_methods_screen.dart';
+import 'package:flutter_woocommerce/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:flutter_woocommerce/features/settings/presentation/screens/shipping_address_screen.dart';
+
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
 
@@ -22,6 +24,7 @@ class CheckoutScreen extends StatelessWidget {
     var price = cartItems
         .map((e) => double.parse(e.productPrice) * e.quantity)
         .reduce((a, b) => a + b);
+    var address = context.watch<SettingsBloc>().state.settingModel.address;
     return Scaffold(
       appBar: AppBar(title: const Text('Checkout')),
       body: BlocProvider(
@@ -71,8 +74,9 @@ class CheckoutScreen extends StatelessWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => BlocProvider.value(
-                                    value: context.read<CheckoutBloc>(),
-                                    child: const ShippingAddressScreen()),
+                                  value: context.read<CheckoutBloc>(),
+                                  child: const ShippingAddressScreen(),
+                                ),
                               ),
                             );
                           },
@@ -103,9 +107,9 @@ class CheckoutScreen extends StatelessWidget {
                                   horizontalSpaceSmall,
                                   Expanded(
                                     child: Text(
-                                      state.shippingAddress.isEmpty
+                                      address.isEmpty
                                           ? 'No Address Has Been Entered'
-                                          : state.shippingAddress,
+                                          : address,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium,

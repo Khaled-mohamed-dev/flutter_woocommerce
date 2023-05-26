@@ -24,6 +24,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
   SettingModel getSettings() {
     var theme = sharedPrefService.theme;
 
-    return SettingModel(theme: theme, language: 'en');
+    return SettingModel(
+      theme: theme,
+      language: 'en',
+      address: sharedPrefService.user!.billing!.address1!,
+    );
   }
 }

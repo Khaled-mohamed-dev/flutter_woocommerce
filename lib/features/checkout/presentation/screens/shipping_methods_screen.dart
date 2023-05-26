@@ -237,7 +237,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                 ],
               );
             case CheckoutStatus.failure:
-              return Center(child: Text('some thing went wrong'));
+              return const Center(child: Text('some thing went wrong'));
           }
         },
       ),

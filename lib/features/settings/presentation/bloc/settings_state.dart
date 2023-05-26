@@ -9,8 +9,8 @@ class SettingsState extends Equatable {
   SettingsState copyWith(SettingModel? settingModel) =>
       SettingsState(settingModel ?? this.settingModel);
 
-  factory SettingsState.initial() =>
-      const SettingsState(SettingModel(theme: 'light', language: 'en'));
+  factory SettingsState.initial() => const SettingsState(
+      SettingModel(theme: 'light', language: 'en', address: ''));
   @override
   List<Object?> get props => [settingModel];
 }

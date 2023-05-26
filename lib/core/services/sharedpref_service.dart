@@ -32,8 +32,8 @@ class SharedPrefService {
 
   void _saveToDisk<T>(String key, T content) {
     var preferences = sharedPreferences;
-    // logger.d(
-    //     '(TRACE) LocalStorageService:_saveStringToDisk. key: $key value: $content');
+    logger.d(
+        '(TRACE) LocalStorageService:_saveStringToDisk. key: $key value: $content');
     if (content is String) {
       preferences.setString(key, content);
     }

@@ -6,7 +6,6 @@ import 'package:flutter_woocommerce/features/product/data/models/product.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../../../core/error/failures.dart';
-import '../../../../main.dart';
 import 'bloc.dart';
 
 const throttleDuration = Duration(milliseconds: 100);

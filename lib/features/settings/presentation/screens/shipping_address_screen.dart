@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
 import 'package:flutter_woocommerce/core/widgets/toast.dart';
-import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
+import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dart';
 import 'package:iconly/iconly.dart';
 
 class ShippingAddressScreen extends StatefulWidget {
@@ -46,7 +46,6 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                   IconlyBold.location,
                   color: kcIconColorSelected,
                 ),
-                // prefixIconColor:kcPrimaryColor,
                 focusColor: kcPrimaryColor,
                 iconColor: kcPrimaryColor,
                 filled: true,
@@ -70,7 +69,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
               callback: () {
                 if (controller.text.isNotEmpty) {
                   context
-                      .read<CheckoutBloc>()
+                      .read<SettingsBloc>()
                       .add(ChangeAddress(controller.text));
                   Navigator.of(context).pop();
                 } else {

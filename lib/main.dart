@@ -34,7 +34,8 @@ void main() async {
         BlocProvider<SignFormBloc>(
             create: (context) => locator<SignFormBloc>()),
         BlocProvider(create: (context) => locator<HomeBloc>()..add(LoadHome())),
-        BlocProvider(lazy: false,create: (context) => locator<FavoritesBloc>()),
+        BlocProvider(
+            lazy: false, create: (context) => locator<FavoritesBloc>()),
         BlocProvider(
             create: (context) => locator<CartBloc>()..add(LoadCartItems())),
         BlocProvider(
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         var theme = state.settingModel.theme == 'light'
             ? ThemeConfig.lightTheme
             : ThemeConfig.darkTheme;
+        print(state.settingModel.address);
         return MaterialApp(
           builder: (context, child) {
             return ScrollConfiguration(

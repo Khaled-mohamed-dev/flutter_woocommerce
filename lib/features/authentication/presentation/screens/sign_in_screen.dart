@@ -3,6 +3,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_woocommerce/core/colors.dart";
 import "package:flutter_woocommerce/core/ui_helpers.dart";
 import "package:flutter_woocommerce/core/widgets/base_button.dart";
+import "package:flutter_woocommerce/core/widgets/custome_text_field.dart";
 import "package:flutter_woocommerce/core/widgets/toast.dart";
 import "package:flutter_woocommerce/features/authentication/presentation/screens/sign_up_screen.dart";
 import "package:flutter_woocommerce/main_screen.dart";
@@ -21,15 +22,13 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SignupViewState extends State<SigninScreen> {
-  final circularBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(12),
-  );
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    Theme.of(context);
     return BlocConsumer<SignFormBloc, SignFormState>(
       listener: (context, state) {
         state.authFailureOrSuccessOption.fold(
@@ -59,7 +58,6 @@ class _SignupViewState extends State<SigninScreen> {
         );
       },
       builder: (context, state) {
-        var theme = Theme.of(context);
         return Scaffold(
           // resizeToAvoidBottomInset: false,
           body: Padding(
@@ -73,81 +71,30 @@ class _SignupViewState extends State<SigninScreen> {
                   child: Column(
                     children: [
                       SizedBox(height: screenHeight(context) * .02),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
+                      CustomTextField(
                         controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        hint: 'Email',
+                        icon: IconlyBold.message,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter some text';
                           }
-                          // } else if (RegExp(
-                          //       r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
-                          //     ).hasMatch(value) ==
-                          //     false) {
-                          //   return "email is not valid";
-                          // }
                           return null;
                         },
-                        style: theme.textTheme.bodyMedium,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: Theme.of(context).textTheme.titleMedium,
-                          prefixIcon: Icon(
-                            IconlyBold.message,
-                            color: kcIconColorSelected,
-                          ),
-                          // prefixIconColor:kcPrimaryColor,
-                          focusColor: kcPrimaryColor,
-                          iconColor: kcPrimaryColor,
-                          filled: true,
-                          fillColor: kcSecondaryColor,
-                          border: circularBorder.copyWith(
-                            borderSide: BorderSide(color: kcSecondaryColor),
-                          ),
-                          errorBorder: circularBorder.copyWith(
-                            borderSide: const BorderSide(color: Colors.red),
-                          ),
-                          focusedBorder: circularBorder.copyWith(
-                            borderSide: BorderSide(color: kcPrimaryColor),
-                          ),
-                          enabledBorder: circularBorder.copyWith(
-                            borderSide: BorderSide(color: kcSecondaryColor),
-                          ),
-                        ),
                       ),
                       SizedBox(height: screenHeight(context) * .02),
-                      TextFormField(
+                      CustomTextField(
                         controller: _passwordController,
+                        hint: 'Password',
+                        icon: IconlyBold.lock,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter some text';
                           }
                           return null;
                         },
-                        obscureText: true,
-                        style: theme.textTheme.bodyMedium,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          hintStyle: Theme.of(context).textTheme.titleMedium,
-                          prefixIcon: Icon(
-                            IconlyBold.lock,
-                            color: kcIconColorSelected,
-                          ),
-                          filled: true,
-                          fillColor: kcSecondaryColor,
-                          border: circularBorder.copyWith(
-                            borderSide: BorderSide(color: kcSecondaryColor),
-                          ),
-                          errorBorder: circularBorder.copyWith(
-                            borderSide: const BorderSide(color: Colors.red),
-                          ),
-                          focusedBorder: circularBorder.copyWith(
-                            borderSide: BorderSide(color: kcPrimaryColor),
-                          ),
-                          enabledBorder: circularBorder.copyWith(
-                            borderSide: BorderSide(color: kcSecondaryColor),
-                          ),
-                        ),
+                        isPassword: true,
                       ),
                       SizedBox(height: screenHeight(context) * .04),
                     ],

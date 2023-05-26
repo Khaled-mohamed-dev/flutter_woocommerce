@@ -47,8 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsetsDirectional.only(end: 24),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const FavoritesScreen()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const FavoritesScreen()));
               },
               child: const Icon(IconlyBold.heart),
             ),
@@ -70,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       TextField(
                         cursorColor: kcPrimaryColor,
-                        // controller: _searchController,
                         readOnly: true,
                         onTap: () {
                           Navigator.of(context).push(_createRoute());

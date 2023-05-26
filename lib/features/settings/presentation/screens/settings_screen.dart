@@ -45,8 +45,11 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   ListTile(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AddressScreen()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AddressScreen(),
+                        ),
+                      );
                     },
                     leading: const Icon(IconlyLight.location),
                     title: Text(

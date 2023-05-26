@@ -101,7 +101,7 @@ class CartListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            item.productPrice,
+                            "${item.productPrice}\$",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           Container(

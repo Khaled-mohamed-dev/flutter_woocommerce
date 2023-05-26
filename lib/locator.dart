@@ -171,7 +171,12 @@ Future setupLocator() async {
     () => SettingsRepositoryImpl(locator()),
   );
 
-  locator.registerFactory(() => SettingsBloc(locator()));
+  locator.registerFactory(
+    () => SettingsBloc(
+      settingsRepository: locator(),
+      sharedPrefService: locator(),
+    ),
+  );
 
   //Core
 

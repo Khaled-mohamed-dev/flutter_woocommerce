@@ -44,7 +44,6 @@ class SearchScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  // controller: _searchController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       IconlyLight.search,
@@ -67,14 +66,16 @@ class SearchScreen extends StatelessWidget {
                           },
                         );
                       },
-                      icon: Builder(builder: (context) {
-                        return Icon(
-                          context.watch<SearchBloc>().state.enableFilters
-                              ? IconlyBold.filter
-                              : IconlyLight.filter,
-                          color: kcIconColorSelected,
-                        );
-                      }),
+                      icon: Builder(
+                        builder: (context) {
+                          return Icon(
+                            context.watch<SearchBloc>().state.enableFilters
+                                ? IconlyBold.filter
+                                : IconlyLight.filter,
+                            color: kcIconColorSelected,
+                          );
+                        },
+                      ),
                     ),
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/screens/setup_account_screen.dart';
 import 'package:flutter_woocommerce/features/home/presentation/screens/home_screen.dart';
-import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/settings_screen.dart';
 import 'package:iconly/iconly.dart';
 import 'features/cart/presentation/screens/cart_screen.dart';
@@ -33,7 +31,10 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SetupAccountScreen()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const SetupAccountScreen()));
         },
         child: Icon(
           Icons.add,

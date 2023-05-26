@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
-import 'package:flutter_woocommerce/features/authentication/data/repositories/auth_repository.dart';
-import 'package:flutter_woocommerce/features/authentication/presentation/bloc/auth_bloc.dart';
+import 'package:flutter_woocommerce/core/widgets/custome_text_field.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/sign_from/bloc.dart';
-import 'package:flutter_woocommerce/locator.dart';
+import 'package:flutter_woocommerce/main_screen.dart';
 import 'package:iconly/iconly.dart';
 
 class SetupAccountScreen extends StatefulWidget {
@@ -31,7 +30,7 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Fill Your Profile'),
@@ -46,106 +45,43 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    TextFormField(
+                    CustomTextField(
                       controller: _nameController,
                       keyboardType: TextInputType.name,
+                      hint: 'Full Name',
+                      icon: IconlyBold.profile,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
                         }
                         return null;
                       },
-                      style: theme.textTheme.bodyMedium,
-                      decoration: InputDecoration(
-                        hintText: 'Full Name',
-                        hintStyle: Theme.of(context).textTheme.titleMedium,
-                        prefixIcon: Icon(
-                          IconlyBold.profile,
-                          color: kcIconColorSelected,
-                        ),
-                        filled: true,
-                        fillColor: kcSecondaryColor,
-                        border: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcSecondaryColor),
-                        ),
-                        errorBorder: circularBorder.copyWith(
-                          borderSide: const BorderSide(color: Colors.red),
-                        ),
-                        focusedBorder: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcPrimaryColor),
-                        ),
-                        enabledBorder: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcSecondaryColor),
-                        ),
-                      ),
                     ),
                     SizedBox(height: screenHeight(context) * .02),
-                    TextFormField(
+                    CustomTextField(
                       controller: _addressController,
                       keyboardType: TextInputType.streetAddress,
+                      hint: 'Address',
+                      icon: IconlyBold.location,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
                         }
                         return null;
                       },
-                      style: theme.textTheme.bodyMedium,
-                      decoration: InputDecoration(
-                        hintText: 'Address',
-                        hintStyle: Theme.of(context).textTheme.titleMedium,
-                        prefixIcon: Icon(
-                          IconlyBold.location,
-                          color: kcIconColorSelected,
-                        ),
-                        filled: true,
-                        fillColor: kcSecondaryColor,
-                        border: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcSecondaryColor),
-                        ),
-                        errorBorder: circularBorder.copyWith(
-                          borderSide: const BorderSide(color: Colors.red),
-                        ),
-                        focusedBorder: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcPrimaryColor),
-                        ),
-                        enabledBorder: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcSecondaryColor),
-                        ),
-                      ),
                     ),
                     SizedBox(height: screenHeight(context) * .02),
-                    TextFormField(
+                    CustomTextField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
+                      hint: 'Phone number',
+                      icon: IconlyBold.call,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        } 
+                          return 'Please enter your number';
+                        }
                         return null;
                       },
-                      style: theme.textTheme.bodyMedium,
-                      decoration: InputDecoration(
-                        hintText: 'Phone number',
-                        hintStyle: Theme.of(context).textTheme.titleMedium,
-                        prefixIcon: Icon(
-                          IconlyBold.call,
-                          color: kcIconColorSelected,
-                        ),
-                        filled: true,
-                        fillColor: kcSecondaryColor,
-                        border: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcSecondaryColor),
-                        ),
-                        errorBorder: circularBorder.copyWith(
-                          borderSide: const BorderSide(color: Colors.red),
-                        ),
-                        focusedBorder: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcPrimaryColor),
-                        ),
-                        enabledBorder: circularBorder.copyWith(
-                          borderSide: BorderSide(color: kcSecondaryColor),
-                        ),
-                      ),
                     ),
                     SizedBox(height: screenHeight(context) * .04),
                   ],
@@ -168,14 +104,25 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                   },
                 ),
                 verticalSpaceTiny,
-                Text(
-                  'Skip',
-                  style: TextStyle(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Skip',
+                    style: TextStyle(
                       decoration: TextDecoration.underline,
-                      decorationColor: kcPrimaryColor),
+                      decorationColor: kcPrimaryColor,
+                    ),
+                  ),
                 )
               ],
-            )
+            ),
           ],
         ),
       ),
