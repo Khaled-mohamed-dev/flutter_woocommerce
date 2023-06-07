@@ -10,7 +10,8 @@ class SettingsState extends Equatable {
       SettingsState(settingModel ?? this.settingModel);
 
   factory SettingsState.initial() => const SettingsState(
-      SettingModel(theme: 'light', language: 'en', address: ''));
+        SettingModel(theme: 'light', language: 'en', address: ''),
+      );
   @override
   List<Object?> get props => [settingModel];
 }

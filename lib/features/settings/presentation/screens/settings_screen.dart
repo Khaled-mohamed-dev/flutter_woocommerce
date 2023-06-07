@@ -10,12 +10,15 @@ import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dar
 import 'package:flutter_woocommerce/features/settings/presentation/screens/address_screen.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     var auth = locator<AuthRepository>();
     bool isLoggedIn = auth.isLoggedIn();
     User user;
@@ -24,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(localization.profile),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -38,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {},
                     leading: const Icon(IconlyLight.profile),
                     title: Text(
-                      'Edit Profile',
+                      localization.edit_profile,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -53,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
                     },
                     leading: const Icon(IconlyLight.location),
                     title: Text(
-                      'Address',
+                      localization.address,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -62,7 +65,7 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {},
                     leading: const Icon(Icons.policy_outlined),
                     title: Text(
-                      'Refund Policy',
+                      localization.refund_policy,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -71,7 +74,7 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {},
                     leading: const Icon(IconlyLight.call),
                     title: Text(
-                      'Contact us',
+                      localization.contact_us,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -82,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
                     },
                     leading: const Icon(Icons.remove_red_eye_outlined),
                     title: Text(
-                      'Dark Mode',
+                      localization.dark_mode,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     trailing: CupertinoSwitch(
@@ -109,7 +112,7 @@ class SettingsScreen extends StatelessWidget {
                       color: Colors.red,
                     ),
                     title: Text(
-                      'Logout',
+                      localization.logout,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             color: Colors.red,
                           ),

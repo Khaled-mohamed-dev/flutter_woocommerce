@@ -36,11 +36,11 @@ class _SignupScreenState extends State<SignupScreen> {
             (l) {
               var message = '';
               if (l == AuthFailure(AuthFailureType.userNameAlreadyTaken)) {
-                message = 'User Name already in use';
+                message = 'User Name already exists';
               } else if (l == AuthFailure(AuthFailureType.serverError)) {
                 message = 'Server error';
               } else if (l == AuthFailure(AuthFailureType.emailAlreadyTaken)) {
-                message = 'Email already in use';
+                message = 'Email already exists';
               }
               showToast(message);
             },
@@ -75,11 +75,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         children: [
                           CustomTextField(
                             controller: _nameController,
-                            hint: 'Name',
+                            hint: 'User Name',
                             icon: IconlyBold.profile,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
+                                return 'This Field is required';
                               }
                               return null;
                             },

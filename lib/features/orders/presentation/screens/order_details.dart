@@ -3,14 +3,17 @@ import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/features/orders/data/models/order.dart';
 import 'package:flutter_woocommerce/features/reviews/presentation/widgets/create_review.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersDetails extends StatelessWidget {
   const OrdersDetails({Key? key, required this.order}) : super(key: key);
   final Order order;
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: Text('order #${order.id}')),
+      appBar: AppBar(title: Text('${localization.order} #${order.id}')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -21,7 +24,7 @@ class OrdersDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Order Status',
+                  localization.order_status,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Container(
@@ -46,7 +49,7 @@ class OrdersDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Order List',
+                  localization.order_items,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 verticalSpaceRegular,
@@ -70,6 +73,8 @@ class LineItemTile extends StatelessWidget {
   final bool isCompleted;
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
@@ -111,7 +116,7 @@ class LineItemTile extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(6),
                         child: Text(
-                          "Leave a Review",
+                          localization.leave_review,
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
@@ -123,7 +128,7 @@ class LineItemTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "total: ${item.total}",
+                  "${localization.total}: ${item.total}",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Container(

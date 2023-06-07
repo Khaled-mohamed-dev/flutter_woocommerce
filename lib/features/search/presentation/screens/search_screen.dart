@@ -8,16 +8,19 @@ import 'package:flutter_woocommerce/features/product/presentation/widgets/produc
 import 'package:flutter_woocommerce/features/search/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'search',
+          localization.search,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
@@ -87,7 +90,7 @@ class SearchScreen extends StatelessWidget {
                     hintStyle: Theme.of(context).textTheme.titleSmall,
                     filled: true,
                     fillColor: kcSecondaryColor,
-                    hintText: 'Search..',
+                    hintText: '${localization.search}..',
                   ),
                 );
               }),
@@ -117,7 +120,7 @@ class SearchScreen extends StatelessWidget {
                                   Image.asset('assets/$notFoundImage.png'),
                                   verticalSpaceRegular,
                                   Text(
-                                    'Sorry, the keyword you entered cannot be found, please check again or search with another keyword.',
+                                    localization.no_results,
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.bodyMedium,
@@ -145,7 +148,7 @@ class SearchScreen extends StatelessWidget {
                             ),
                             verticalSpaceRegular,
                             Text(
-                              'Start Search',
+                              localization.search,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
@@ -169,6 +172,8 @@ class FilterBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return Container(
@@ -192,9 +197,9 @@ class FilterBottomSheet extends StatelessWidget {
                               BlocProvider.of<SearchBloc>(context)
                                   .add(ClearFilters());
                             },
-                            child: const Text('Clear'),
+                            child: Text(localization.clear),
                           ),
-                          const Text('Filters'),
+                          Text(localization.filters),
                           IconButton(
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -212,9 +217,9 @@ class FilterBottomSheet extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Category',
-                            style: TextStyle(
+                          Text(
+                            localization.category,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -231,9 +236,9 @@ class FilterBottomSheet extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Sort by',
-                            style: TextStyle(
+                          Text(
+                            localization.sort_by,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -248,7 +253,7 @@ class FilterBottomSheet extends StatelessWidget {
                     ),
                     PricingSection(height: height),
                     BaseButton(
-                      title: 'Apply Filters',
+                      title: localization.apply_filters,
                       callback: () {
                         (BlocProvider.of<SearchBloc>(context)
                               ..add(ApplyFilters()))
@@ -277,6 +282,8 @@ class PricingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     var state = BlocProvider.of<SearchBloc>(context).state;
     var params = state.searchParmas;
     RangeValues currentRangeValues = RangeValues(
@@ -294,7 +301,8 @@ class PricingSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Pricing', style: Theme.of(context).textTheme.headlineSmall),
+              Text(localization.pricing,
+                  style: Theme.of(context).textTheme.headlineSmall),
               Text('\$$firstRangePoint-\$$secondRangePoint',
                   style: Theme.of(context).textTheme.headlineSmall),
             ],
@@ -383,6 +391,14 @@ class OrderbyOptionsList extends StatelessWidget {
   OrderbyOptionsList({super.key});
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
+    var langTypes = {
+      'Popular': localization.popular,
+      'Most Recent': localization.most_recent,
+      'rating': localization.rating
+    };
+
     var state = BlocProvider.of<SearchBloc>(context).state;
     String selected = state.searchParmas.orderBy ?? '';
     return ListView(
@@ -412,7 +428,7 @@ class OrderbyOptionsList extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 6),
                     child: Text(
-                      e,
+                      langTypes[e]!,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: selected == e ? kcButtonIconColor : null,
                             fontWeight: selected == e ? FontWeight.bold : null,

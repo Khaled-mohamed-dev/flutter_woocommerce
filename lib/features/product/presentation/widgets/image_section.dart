@@ -30,13 +30,20 @@ class _ImageSectionState extends State<ImageSection> {
             if (images.isEmpty) {
               images.add(state.variationImage!);
             } else {
-              images.insert(0, state.variationImage!);
-              carouselController.jumpToPage(0);
+              if (!widget.images.contains(images[0])) {
+                images.removeAt(0);
+              }
+              if (!images.contains(state.variationImage)) {
+                images.insert(0, state.variationImage!);
+                carouselController.jumpToPage(0);
+              }
             }
           } else {
-            images.removeAt(0);
-            if (page > 0) {
-              carouselController.jumpToPage(page - 1);
+            if (images.length > widget.images.length) {
+              images.removeAt(0);
+              if (page > 0) {
+                carouselController.jumpToPage(page - 1);
+              }
             }
           }
         }),

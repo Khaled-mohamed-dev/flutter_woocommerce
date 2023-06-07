@@ -7,22 +7,25 @@ import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dar
 import 'package:flutter_woocommerce/features/settings/presentation/screens/shipping_address_screen.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddressScreen extends StatelessWidget {
   const AddressScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     var user = locator<SharedPrefService>().user;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Address'),
+        title: Text(localization.address),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: user == null
-            ? const Center(
-                child: Text('You need to sign in to show these details'),
+            ? Center(
+                child: Text(localization.sign_in_for_details),
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

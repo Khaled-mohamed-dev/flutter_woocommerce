@@ -9,14 +9,17 @@ import 'package:flutter_woocommerce/features/cart/presentation/widgets/cart_list
 import 'package:flutter_woocommerce/features/checkout/presentation/screens/checkout_screen.dart';
 import 'package:hive_flutter/adapters.dart';
 import '../../../../core/widgets/base_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Cart')),
+      appBar: AppBar(title: Text(localization.cart)),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           switch (state.status) {
@@ -82,7 +85,7 @@ class CartScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Total Price',
+                                      localization.total_price,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall,
@@ -99,7 +102,7 @@ class CartScreen extends StatelessWidget {
                                 Expanded(
                                   child: BaseButton(
                                     // icon: ,
-                                    title: 'Checkout',
+                                    title: localization.checkout,
                                     callback: () {
                                       if (cartItems.isNotEmpty) {
                                         Navigator.of(context).push(
@@ -111,7 +114,8 @@ class CartScreen extends StatelessWidget {
                                           ),
                                         );
                                       } else {
-                                        showToast('Your Cart is empty \ncan\'t checkout');
+                                        showToast(
+                                            localization.empty_cart_message);
                                       }
                                     },
                                   ),

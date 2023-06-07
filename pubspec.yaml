@@ -56,8 +56,14 @@ dependencies:
   fluttertoast: ^8.2.1
   carousel_slider: ^4.2.1
   url_launcher: ^6.1.11
-  intl: ^0.18.1
-  timeago: ^3.4.0
+  intl:
+  timeago: 
+
+  flutter_localizations:
+    sdk: flutter
+    version: ^0.0.0
+  html_unescape: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +86,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

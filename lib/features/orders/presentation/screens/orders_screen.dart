@@ -6,12 +6,15 @@ import 'package:flutter_woocommerce/features/orders/presentation/bloc/bloc.dart'
 import 'package:flutter_woocommerce/features/orders/presentation/widgets/order_list_tile.dart';
 
 import '../../../../core/ui_helpers.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     Theme.of(context);
     return DefaultTabController(
       length: 2,
@@ -19,9 +22,9 @@ class OrdersScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Orders'),
           bottom: TabBar(
-            tabs: const <Widget>[
-              Tab(icon: Text("processing")),
-              Tab(icon: Text("Completed")),
+            tabs: <Widget>[
+              Tab(icon: Text(localization.processing)),
+              Tab(icon: Text(localization.completed)),
             ],
             indicatorWeight: 2,
             indicatorColor: kcPrimaryColor,
@@ -54,7 +57,7 @@ class OrdersScreen extends StatelessWidget {
                                 Image.asset('assets/$notFoundImage.png'),
                                 verticalSpaceRegular,
                                 Text(
-                                  'You don\'t have any orders yet.',
+                                  localization.no_orders,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
@@ -77,7 +80,7 @@ class OrdersScreen extends StatelessWidget {
                                 Image.asset('assets/$notFoundImage.png'),
                                 verticalSpaceRegular,
                                 Text(
-                                  'You don\'t have any orders yet.',
+                                  localization.no_orders,
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),

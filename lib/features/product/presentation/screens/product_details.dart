@@ -16,6 +16,8 @@ import 'package:iconly/iconly.dart';
 import '../../../../locator.dart';
 import '../../data/models/product.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 final ScrollController _controller = ScrollController();
 
 class ProductDetails extends StatelessWidget {
@@ -23,6 +25,8 @@ class ProductDetails extends StatelessWidget {
   final Product product;
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     double ratePercentage = double.parse(product.averageRating) / 5;
     var images = product.images;
     return Scaffold(
@@ -89,7 +93,7 @@ class ProductDetails extends StatelessWidget {
                                                   padding:
                                                       const EdgeInsets.all(6),
                                                   child: Text(
-                                                    "${product.totalSales} sold",
+                                                    "${product.totalSales} ${localization.sold}",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .titleSmall,
@@ -148,7 +152,7 @@ class ProductDetails extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Description',
+                                            localization.description,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineSmall,
@@ -184,7 +188,7 @@ class ProductDetails extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            'Quantity',
+                                            localization.quantity,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headlineSmall,
@@ -259,7 +263,7 @@ class ProductDetails extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Total Price',
+                                          localization.total_price,
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleSmall,
@@ -281,8 +285,8 @@ class ProductDetails extends StatelessWidget {
                                                 : IconlyBold.bag,
                                         title:
                                             product.type == ProductType.external
-                                                ? 'Buy Product'
-                                                : 'Add to cart',
+                                                ? product.buttonText
+                                                : localization.add_to_cart,
                                         callback: () {
                                           BlocProvider.of<ProductsBloc>(context)
                                               .add(HandleButtonClick(product));
@@ -332,6 +336,8 @@ class ProductsCollection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
         // ------------------------------------------ // ------------------------------------------ //
@@ -370,7 +376,7 @@ class ProductsCollection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Products Collection',
+              localization.products_collection,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             verticalSpaceTiny,
@@ -458,7 +464,7 @@ class ProductsCollection extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: Text(
-                                            'Select a variation',
+                                            localization.select_variation,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .titleSmall,
@@ -527,6 +533,8 @@ class _VariationSelectionPopupState extends State<VariationSelectionPopup> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     var height = screenHeight(context) -
         screenWidthPercentage(context, percentage: .5) -
         MediaQuery.of(context).padding.top -
@@ -614,7 +622,7 @@ class _VariationSelectionPopupState extends State<VariationSelectionPopup> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Total Price',
+                                  localization.total_price,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 Text(
@@ -627,7 +635,7 @@ class _VariationSelectionPopupState extends State<VariationSelectionPopup> {
                             horizontalSpaceRegular,
                             Expanded(
                               child: BaseButton(
-                                title: 'Confirm',
+                                title: localization.confirm,
                                 callback: () {
                                   Navigator.pop(context);
                                 },

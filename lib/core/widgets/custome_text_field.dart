@@ -31,6 +31,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       readOnly: readOnly,
+      obscureText: isPassword,
       validator: (value) {
         if (validator != null) {
           return validator!(value);

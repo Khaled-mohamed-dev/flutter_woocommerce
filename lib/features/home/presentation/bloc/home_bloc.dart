@@ -33,9 +33,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           faliureOrResopnse.fold(
             (l) => state.copyWith(status: HomeStatus.failure),
             (r) {
+              var productsHasReachedMax = r.products.length < 10 ? true : false;
               return state.copyWith(
                 products: r.products,
                 categories: r.categories,
+                productsHasReachedMax: productsHasReachedMax,
                 status: HomeStatus.success,
               );
             },
@@ -49,6 +51,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         if (state.products.length < 10) {
           emit(state.copyWith(productsHasReachedMax: true));
         }
+
         if (state.productsHasReachedMax) return;
         logger.d('fetch more products');
 

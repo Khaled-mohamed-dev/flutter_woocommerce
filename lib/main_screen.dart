@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
-import 'package:flutter_woocommerce/features/authentication/presentation/screens/setup_account_screen.dart';
 import 'package:flutter_woocommerce/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/settings_screen.dart';
 import 'package:iconly/iconly.dart';
 import 'features/cart/presentation/screens/cart_screen.dart';
 import 'features/orders/presentation/screens/orders_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -23,6 +23,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: PageStorage(
@@ -31,10 +33,10 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const SetupAccountScreen()));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => const SetupAccountScreen()));
         },
         child: Icon(
           Icons.add,
@@ -71,7 +73,7 @@ class _MainScreenState extends State<MainScreen> {
                               : kcIconColor,
                         ),
                         Text(
-                          'Home',
+                          localization.home,
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -111,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
                         ],
                       ),
                       Text(
-                        'Cart',
+                        localization.cart,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
@@ -142,7 +144,7 @@ class _MainScreenState extends State<MainScreen> {
                             currentTab == 2 ? kcIconColorSelected : kcIconColor,
                       ),
                       Text(
-                        'Orders',
+                        localization.orders,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
@@ -175,7 +177,7 @@ class _MainScreenState extends State<MainScreen> {
                             currentTab == 3 ? kcIconColorSelected : kcIconColor,
                       ),
                       Text(
-                        'Profile',
+                        localization.profile,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 10,

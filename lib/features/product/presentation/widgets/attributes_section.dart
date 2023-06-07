@@ -7,6 +7,8 @@ import '../../../../core/ui_helpers.dart';
 import '../../data/models/product.dart';
 import '../../data/models/product_variation.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AttributesSection extends StatefulWidget {
   const AttributesSection(
       {super.key,
@@ -67,6 +69,8 @@ class _AttributesSectionState extends State<AttributesSection> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -86,7 +90,7 @@ class _AttributesSectionState extends State<AttributesSection> {
               child: Padding(
                 padding: const EdgeInsets.all(6.0),
                 child: Text(
-                  'select a variation to display price',
+                  localization.select_variation_display_price,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),

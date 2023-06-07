@@ -10,6 +10,8 @@ import 'package:iconly/iconly.dart';
 
 import '../../../../core/colors.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -28,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -37,7 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Welcome', style: Theme.of(context).textTheme.titleSmall),
+              Text(localization.welcome,
+                  style: Theme.of(context).textTheme.titleSmall),
               Text('Khaled', style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
@@ -93,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           hintStyle: Theme.of(context).textTheme.titleSmall,
                           filled: true,
                           fillColor: kcSecondaryColor,
-                          hintText: 'Search..',
+                          hintText: '${localization.search}..',
                         ),
                       ),
                       verticalSpaceRegular,
@@ -119,16 +124,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const EdgeInsetsDirectional.only(end: 12),
                                 child: Column(
                                   children: [
-                                    Container(
-                                      height: 60,
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: kcSecondaryColor,
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: Container(
+                                        height: 60,
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: kcSecondaryColor,
+                                        ),
+                                        child: category.image != null
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Image.network(
+                                                  category.image!,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : const Icon(Icons.image),
                                       ),
-                                      child: category.image != null
-                                          ? Image.network(category.image!)
-                                          : const Icon(Icons.image),
                                     ),
                                     verticalSpaceTiny,
                                     Text(
@@ -157,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             case HomeStatus.failure:
-              return const Center(child: Text('failed to fetch posts'));
+              return const Center(child: Text('some thing went wrong'));
           }
         },
       ),

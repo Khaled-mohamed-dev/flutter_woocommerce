@@ -18,8 +18,7 @@ class SharedPrefService {
   SharedPrefService({required this.sharedPreferences});
 
   void _removeFromDisk(String key) {
-    logger.d(
-        '(TRACE) LocalStorageService:_removeFromDisk. key: $key');
+    logger.d('(TRACE) LocalStorageService:_removeFromDisk. key: $key');
     sharedPreferences.remove(key);
   }
 
@@ -95,6 +94,16 @@ class SharedPrefService {
 
   set theme(String theme) {
     _saveToDisk(themeKey, theme);
+  }
+
+  static const String langKey = 'lang';
+
+  String get lang {
+    return _getFromDisk(langKey) ?? 'ar';
+  }
+
+  set lang(String lang) {
+    _saveToDisk(langKey, lang);
   }
 }
 

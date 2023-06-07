@@ -16,6 +16,12 @@ import 'features/authentication/presentation/bloc/sign_from/sign_form_bloc.dart'
 import 'features/authentication/presentation/screens/sign_up_screen.dart';
 import 'locator.dart';
 
+// Localization imports
+import 'package:flutter_woocommerce/l10n/l10n.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+
 var logger = Logger();
 
 void main() async {
@@ -55,7 +61,6 @@ class MyApp extends StatelessWidget {
         var theme = state.settingModel.theme == 'light'
             ? ThemeConfig.lightTheme
             : ThemeConfig.darkTheme;
-        print(state.settingModel.address);
         return MaterialApp(
           builder: (context, child) {
             return ScrollConfiguration(
@@ -65,6 +70,14 @@ class MyApp extends StatelessWidget {
           },
           title: 'Flutter Woocommerce',
           theme: theme,
+          supportedLocales: L10n.all,
+          locale: Locale(state.settingModel.language),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
+          ],
           home: BlocListener<AuthBloc, AuthState>(
             bloc: BlocProvider.of<AuthBloc>(context)
               ..add(AuthenticationStarted()),

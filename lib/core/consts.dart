@@ -1,9 +1,9 @@
-const String siteUrl = 'https://simplewebsite-cd75ed.ingress-daribow.ewp.live/';
+const String siteUrl = 'https://flucommerce-cd75ed.ingress-baronn.ewp.live/';
 const String wcAPI = "${siteUrl}wp-json/wc/v3/";
 
 // WOOCOMMERCE credentials
-const String consumerKey = 'ck_0fd5cecc2cc1e3fc6f72334810c4d1422b62aa5e';
-const String consumerSecret = 'cs_7d7d4f603dea9174b4a485edbca46dc0d929d207';
+const String consumerKey = 'ck_b87abc77bdef2702166e14d64c9841070b70f6c8';
+const String consumerSecret = 'cs_73525119f4ce632cbc5b0839bac8166bd8fdfcad';
 const String wcCred =
     'consumer_key=$consumerKey&consumer_secret=$consumerSecret';
 
