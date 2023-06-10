@@ -127,8 +127,8 @@ class _AttributesSectionState extends State<AttributesSection> {
                             if (!selectedCombination
                                 .any((element) => element == '')) {
                               if (widget.controller != null) {
-                                widget.controller!.jumpTo(widget
-                                    .controller!.position.minScrollExtent);
+                                // widget.controller!.jumpTo(widget
+                                //     .controller!.position.minScrollExtent);
                               }
                             }
                             BlocProvider.of<ProductsBloc>(context)

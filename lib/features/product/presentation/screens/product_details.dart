@@ -161,11 +161,25 @@ class ProductDetails extends StatelessWidget {
                                           Html(
                                             data: product.description,
                                             style: {
-                                              'p': Style(
+                                              'div': Style(
                                                 fontSize: FontSize(
                                                   Theme.of(context)
                                                       .textTheme
-                                                      .titleMedium!
+                                                      .titleLarge!
+                                                      .fontSize,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                margin: const EdgeInsets.all(0),
+                                              ),
+                                              'p': Style(
+                                                padding:
+                                                    const EdgeInsets.all(0),
+                                                margin: const EdgeInsets.all(0),
+                                                fontSize: FontSize(
+                                                  Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge!
                                                       .fontSize,
                                                 ),
                                               )

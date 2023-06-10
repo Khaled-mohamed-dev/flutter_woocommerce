@@ -23,68 +23,74 @@ class _ImageSectionState extends State<ImageSection> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProductsBloc, ProductsState>(
-        listenWhen: (previous, current) =>
-            previous.variationImage != current.variationImage,
-        listener: ((context, state) {
-          if (state.variationImage != null) {
-            if (images.isEmpty) {
-              images.add(state.variationImage!);
-            } else {
-              if (!widget.images.contains(images[0])) {
-                images.removeAt(0);
-              }
-              if (!images.contains(state.variationImage)) {
-                images.insert(0, state.variationImage!);
-                carouselController.jumpToPage(0);
-              }
-            }
+      listenWhen: (previous, current) =>
+          previous.variationImage != current.variationImage,
+      listener: ((context, state) {
+        if (state.variationImage != null) {
+          if (images.isEmpty) {
+            images.add(state.variationImage!);
           } else {
-            if (images.length > widget.images.length) {
+            if (!widget.images.contains(images[0])) {
               images.removeAt(0);
-              if (page > 0) {
-                carouselController.jumpToPage(page - 1);
-              }
+            }
+            if (!images.contains(state.variationImage)) {
+              images.insert(0, state.variationImage!);
+              carouselController.jumpToPage(0);
             }
           }
-        }),
-        child: Container(
-          color: kcSecondaryColor,
-          width: screenWidth(context),
-          height: screenWidth(context),
-          child: images.isNotEmpty
-              ? Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CarouselSlider(
-                      carouselController: carouselController,
-                      items: images
-                          .map(
-                            (image) => Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: Image.network(image),
+        } else {
+          if (images.length > widget.images.length) {
+            images.removeAt(0);
+            if (page > 0) {
+              carouselController.jumpToPage(page - 1);
+            }
+          }
+        }
+      }),
+      child: Container(
+        color: kcSecondaryColor,
+        width: screenWidth(context),
+        height: screenWidth(context) / 1.2,
+        child: images.isNotEmpty
+            ? Stack(
+                alignment: Alignment.center,
+                children: [
+                  CarouselSlider(
+                    carouselController: carouselController,
+                    items: images
+                        .map(
+                          (image) => Padding(
+                            padding:
+                                const EdgeInsets.all(24.0).copyWith(bottom: 34),
+                            child: Image.network(
+                              image,
+                              fit: BoxFit.fitHeight,
                             ),
-                          )
-                          .toList(),
-                      options: CarouselOptions(
-                        enableInfiniteScroll: false,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            page = index;
-                          });
-                        },
-                      ),
+                          ),
+                        )
+                        .toList(),
+                    options: CarouselOptions(
+                      aspectRatio: 1,
+                      enableInfiniteScroll: false,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          page = index;
+                        });
+                      },
                     ),
-                    Positioned(
-                      bottom: 20,
-                      child: DotsIndicator(
-                        length: images.length,
-                        page: page,
-                      ),
-                    )
-                  ],
-                )
-              : const Icon(Icons.image),
-        ));
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    child: DotsIndicator(
+                      length: images.length,
+                      page: page,
+                    ),
+                  )
+                ],
+              )
+            : const Icon(Icons.image),
+      ),
+    );
   }
 }
 

@@ -30,7 +30,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
               status: CheckoutStatus.success,
               shippingZones: r[0],
               countries: r[1],
-              selectedCountry: r[1].first,
+              selectedCountry: null,
             ),
           ),
         );

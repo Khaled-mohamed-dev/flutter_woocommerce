@@ -11,6 +11,7 @@ import "package:flutter_woocommerce/features/authentication/presentation/screens
 import "package:iconly/iconly.dart";
 import "../../../../core/error/failures.dart";
 import "../bloc/bloc.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -28,6 +29,8 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     Theme.of(context);
+    var localization = AppLocalizations.of(context)!;
+
     return BlocConsumer<SignFormBloc, SignFormState>(
       listener: (context, state) {
         state.authFailureOrSuccessOption.fold(
@@ -36,11 +39,11 @@ class _SignupScreenState extends State<SignupScreen> {
             (l) {
               var message = '';
               if (l == AuthFailure(AuthFailureType.userNameAlreadyTaken)) {
-                message = 'User Name already exists';
+                message = localization.username_aleady_exists;
               } else if (l == AuthFailure(AuthFailureType.serverError)) {
                 message = 'Server error';
               } else if (l == AuthFailure(AuthFailureType.emailAlreadyTaken)) {
-                message = 'Email already exists';
+                message = localization.email_aleady_exists;
               }
               showToast(message);
             },
@@ -66,7 +69,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Column(
                   children: [
                     verticalSpaceLarge,
-                    Text('Sign up',
+                    Text(localization.sign_up,
                         style: Theme.of(context).textTheme.bodyLarge),
                     verticalSpaceLarge,
                     Form(
@@ -75,11 +78,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         children: [
                           CustomTextField(
                             controller: _nameController,
-                            hint: 'User Name',
+                            hint: localization.username,
                             icon: IconlyBold.profile,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'This Field is required';
+                                return localization.required_field;
                               }
                               return null;
                             },
@@ -88,16 +91,16 @@ class _SignupScreenState extends State<SignupScreen> {
                           CustomTextField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
-                            hint: 'Email',
+                            hint: localization.email,
                             icon: IconlyBold.message,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
+                                return localization.required_field;
                               } else if (RegExp(
                                     r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$',
                                   ).hasMatch(value) ==
                                   false) {
-                                return "email is not valid";
+                                return localization.email_not_valid;
                               }
                               return null;
                             },
@@ -105,14 +108,14 @@ class _SignupScreenState extends State<SignupScreen> {
                           SizedBox(height: screenHeight(context) * .02),
                           CustomTextField(
                             controller: _passwordController,
-                            hint: 'Password',
+                            hint: localization.password,
                             icon: IconlyBold.lock,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
+                                return localization.required_field;
                               } else if (RegExp(r'^.{6,}$').hasMatch(value) ==
                                   false) {
-                                return "password is too short";
+                                return localization.short_password;
                               }
                               return null;
                             },
@@ -127,7 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       children: [
                         BaseButton(
                           icon: Icons.arrow_forward_sharp,
-                          title: "CREATE ACCOUNT",
+                          title: localization.create_account,
                           callback: () {
                             if (_formKey.currentState!.validate()) {
                               BlocProvider.of<SignFormBloc>(context).add(
@@ -151,9 +154,9 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                             );
                           },
-                          child: const Text(
-                            'OR SIGN IN',
-                            style: TextStyle(
+                          child: Text(
+                            localization.or_sign_in,
+                            style: const TextStyle(
                               color: kcMediumGreyColorLightTheme,
                               decoration: TextDecoration.underline,
                               decorationStyle: TextDecorationStyle.dotted,

@@ -4,14 +4,17 @@ import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/screens/successful_order.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentMethodsScreen extends StatelessWidget {
   const PaymentMethodsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Payment Methods')),
+      appBar: AppBar(title: Text(localization.payment_methods)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -40,7 +43,7 @@ class PaymentMethodsScreen extends StatelessWidget {
                           color: kcPrimaryColor,
                         ),
                         horizontalSpaceSmall,
-                        const Text('Cash on Delivery'),
+                        Text(localization.cod),
                       ],
                     ),
                   ),
@@ -48,7 +51,7 @@ class PaymentMethodsScreen extends StatelessWidget {
               ),
             ),
             BaseButton(
-              title: 'Confirm Payment',
+              title: localization.confirm_payment,
               callback: () {
                 Navigator.pushAndRemoveUntil(
                     context,

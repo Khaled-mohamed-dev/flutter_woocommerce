@@ -13,6 +13,7 @@ import "../bloc/sign_from/sign_form_bloc.dart";
 import "../bloc/sign_from/sign_form_event.dart";
 import "../bloc/sign_from/sign_form_state.dart";
 import "../bloc/bloc.dart";
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({Key? key}) : super(key: key);
@@ -28,6 +29,8 @@ class _SignupViewState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     Theme.of(context);
     return BlocConsumer<SignFormBloc, SignFormState>(
       listener: (context, state) {
@@ -65,7 +68,8 @@ class _SignupViewState extends State<SigninScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('Sign in', style: Theme.of(context).textTheme.bodyLarge),
+                Text(localization.sign_in,
+                    style: Theme.of(context).textTheme.bodyLarge),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -74,7 +78,7 @@ class _SignupViewState extends State<SigninScreen> {
                       CustomTextField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        hint: 'Email',
+                        hint: localization.email,
                         icon: IconlyBold.message,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -86,7 +90,7 @@ class _SignupViewState extends State<SigninScreen> {
                       SizedBox(height: screenHeight(context) * .02),
                       CustomTextField(
                         controller: _passwordController,
-                        hint: 'Password',
+                        hint: localization.password,
                         icon: IconlyBold.lock,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -104,7 +108,7 @@ class _SignupViewState extends State<SigninScreen> {
                   children: [
                     BaseButton(
                       icon: Icons.arrow_forward_sharp,
-                      title: "SIGN IN",
+                      title: localization.sign_in,
                       callback: () {
                         if (_formKey.currentState!.validate()) {
                           BlocProvider.of<SignFormBloc>(context).add(
@@ -127,9 +131,9 @@ class _SignupViewState extends State<SigninScreen> {
                           ),
                         );
                       },
-                      child: const Text(
-                        'OR SIGN UP',
-                        style: TextStyle(
+                      child: Text(
+                        localization.or_sign_up,
+                        style: const TextStyle(
                           color: kcMediumGreyColorLightTheme,
                           decoration: TextDecoration.underline,
                           decorationStyle: TextDecorationStyle.dotted,

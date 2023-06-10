@@ -232,6 +232,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           } else {
             ProductVariation variation =
                 state.combinations![event.selectedCombination.toString()];
+            print(variation.image);
             var image = variation.image;
             emit(state.copyWith(
                 price: variation.price,

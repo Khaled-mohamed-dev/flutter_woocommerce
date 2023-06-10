@@ -91,5 +91,6 @@
     "empty_cart_message": "Your Cart is empty \ncan't checkout",
     "remove_cart_item_confirmation": "Remove from cart?",
     "confirm_delete": "Yes, Remove",
-    "home" : "home"
+    "home" : "home",
+    "shipping" : "shipping"
 }

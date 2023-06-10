@@ -31,7 +31,8 @@ class CartListTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 12.0),
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0, 12.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: Container(
@@ -47,7 +48,8 @@ class CartListTile extends StatelessWidget {
               horizontalSpaceSmall,
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 24.0, 12.0, 12.0),
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(0, 24.0, 12.0, 12.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -97,48 +99,76 @@ class CartListTile extends StatelessWidget {
                           ],
                         ),
                       verticalSpaceSmall,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${item.productPrice}\$",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: kcSecondaryColor,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
+                      !deleteItem
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                IconButton(
-                                  iconSize: 12,
-                                  onPressed: () {
-                                    BlocProvider.of<CartBloc>(context)
-                                        .add(DecrementQuantity(cartItem: item));
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                  splashRadius: 0.1,
-                                ),
                                 Text(
-                                  item.quantity.toString(),
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
+                                  "${item.productPrice}\$",
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
-                                IconButton(
-                                  iconSize: 12,
-                                  onPressed: () {
-                                    BlocProvider.of<CartBloc>(context)
-                                        .add(IncrementQuantity(cartItem: item));
-                                  },
-                                  icon: const Icon(Icons.add),
-                                  splashRadius: 0.1,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: kcSecondaryColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        iconSize: 12,
+                                        onPressed: () {
+                                          BlocProvider.of<CartBloc>(context)
+                                              .add(DecrementQuantity(
+                                                  cartItem: item));
+                                        },
+                                        icon: const Icon(Icons.remove),
+                                        splashRadius: 0.1,
+                                      ),
+                                      Text(
+                                        item.quantity.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall,
+                                      ),
+                                      IconButton(
+                                        iconSize: 12,
+                                        onPressed: () {
+                                          BlocProvider.of<CartBloc>(context)
+                                              .add(IncrementQuantity(
+                                                  cartItem: item));
+                                        },
+                                        icon: const Icon(Icons.add),
+                                        splashRadius: 0.1,
+                                      )
+                                    ],
+                                  ),
                                 )
                               ],
-                            ),
-                          )
-                        ],
-                      )
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "${item.productPrice}\$",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: kcSecondaryColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Text(
+                                      item.quantity.toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
                     ],
                   ),
                 ),

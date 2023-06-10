@@ -6,14 +6,17 @@ import 'package:flutter_woocommerce/core/widgets/base_button.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
 
 import '../../data/models/country_data.dart' as data;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShippingMethodsScreen extends StatelessWidget {
   const ShippingMethodsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Shipping Methods')),
+      appBar: AppBar(title: Text(localization.shipping_methods)),
       body: BlocBuilder<CheckoutBloc, CheckoutState>(
         builder: (context, state) {
           switch (state.status) {
@@ -22,9 +25,10 @@ class ShippingMethodsScreen extends StatelessWidget {
                   child: CircularProgressIndicator(color: kcPrimaryColor));
             case CheckoutStatus.success:
               var countries = state.countries;
-              var selectedCountry = state.selectedCountry ?? countries.first;
-              var selectedState =
-                  selectedCountry.states.isEmpty ? null : state.selectedState;
+              var selectedCountry = state.selectedCountry;
+              // var selectedState =
+              //     selectedCountry.states.isEmpty  ? null : state.selectedState;
+              var selectedState = state.selectedState;
               return Column(
                 children: [
                   Expanded(
@@ -38,6 +42,8 @@ class ShippingMethodsScreen extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
+                                  begin: AlignmentDirectional.centerStart,
+                                  end: AlignmentDirectional.centerEnd,
                                   stops: const [0.015, 0.015],
                                   colors: [kcPrimaryColor, kcSecondaryColor],
                                 ),
@@ -49,7 +55,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(6.0),
                                   child: Text(
-                                    'Select your city to display the available shipping methods.',
+                                    localization.select_city_display_methods,
                                     style:
                                         Theme.of(context).textTheme.titleSmall,
                                   ),
@@ -61,7 +67,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Country',
+                                  localization.country,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 verticalSpaceRegular,
@@ -108,7 +114,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'City',
+                                  localization.city,
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 verticalSpaceRegular,
@@ -130,7 +136,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                                         alignment: AlignmentDirectional.center,
                                         isExpanded: true,
                                         value: selectedState,
-                                        items: selectedCountry.states
+                                        items: selectedCountry?.states
                                             .map(
                                               (e) =>
                                                   DropdownMenuItem<data.State>(
@@ -170,7 +176,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                                         Divider(color: kcSecondaryColor),
                                         verticalSpaceRegular,
                                         Text(
-                                          'Shipping Methods',
+                                          localization.shipping_methods,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium,
@@ -213,10 +219,10 @@ class ShippingMethodsScreen extends StatelessWidget {
                                     )
                                   : state.noShippingMethods
                                       ? Column(
-                                          children: const [
+                                          children: [
                                             verticalSpaceRegular,
-                                            Text(
-                                                'This Location doesn\'t have any shipping methods,  contact us for more details'),
+                                            Text(localization
+                                                .no_available_shipping_methods),
                                           ],
                                         )
                                       : const SizedBox()
@@ -228,7 +234,7 @@ class ShippingMethodsScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: BaseButton(
-                      title: 'Continue',
+                      title: localization.resume,
                       callback: () {
                         Navigator.of(context).pop();
                       },

@@ -7,6 +7,7 @@ import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/widgets/cart_list_tile.dart';
 
 import '../bloc/bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConfirmDeleteBottomSheet extends StatelessWidget {
   const ConfirmDeleteBottomSheet({Key? key, required this.item})
@@ -14,13 +15,15 @@ class ConfirmDeleteBottomSheet extends StatelessWidget {
   final CartItem item;
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Remove from cart?',
+            localization.remove_cart_item_confirmation,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           Divider(color: kcSecondaryColor),
@@ -35,7 +38,7 @@ class ConfirmDeleteBottomSheet extends StatelessWidget {
                   callback: () {
                     Navigator.of(context).pop();
                   },
-                  title: 'cancel',
+                  title: localization.cancel,
                   iconColor: Colors.grey,
                 ),
               ),
@@ -48,7 +51,7 @@ class ConfirmDeleteBottomSheet extends StatelessWidget {
                     );
                     Navigator.of(context).pop();
                   },
-                  title: 'Yes, Remove',
+                  title: localization.confirm_delete,
                 ),
               )
             ],

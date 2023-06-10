@@ -14,6 +14,7 @@ import 'package:flutter_woocommerce/features/settings/presentation/screens/shipp
 
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckoutScreen extends StatelessWidget {
   const CheckoutScreen({Key? key, required this.cartItems}) : super(key: key);
@@ -21,12 +22,14 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     var price = cartItems
         .map((e) => double.parse(e.productPrice) * e.quantity)
         .reduce((a, b) => a + b);
     var address = context.watch<SettingsBloc>().state.settingModel.address;
     return Scaffold(
-      appBar: AppBar(title: const Text('Checkout')),
+      appBar: AppBar(title: Text(localization.checkout)),
       body: BlocProvider(
         create: (context) => locator<CheckoutBloc>()..add(LoadCheckout()),
         lazy: false,
@@ -58,14 +61,14 @@ class CheckoutScreen extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(6.0),
                                 child: Text(
-                                  'You have to write your address to continue with payment',
+                                  localization.address_required_message,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                               ),
                             ),
                           ),
                         Text(
-                          'Shipping Address',
+                          localization.shipping_address,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         verticalSpaceSmall,
@@ -108,7 +111,7 @@ class CheckoutScreen extends StatelessWidget {
                                   Expanded(
                                     child: Text(
                                       address.isEmpty
-                                          ? 'No Address Has Been Entered'
+                                          ? localization.no_address
                                           : address,
                                       style: Theme.of(context)
                                           .textTheme
@@ -134,7 +137,7 @@ class CheckoutScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Order List',
+                          localization.order_items,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         verticalSpaceSmall,
@@ -164,14 +167,14 @@ class CheckoutScreen extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(6.0),
                                 child: Text(
-                                  'You have select shipping method to continue with payment',
+                                  localization.shipping_method_required_message,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                               ),
                             ),
                           ),
                         Text(
-                          'Shipping Methods',
+                          localization.shipping_methods,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         verticalSpaceSmall,
@@ -208,7 +211,8 @@ class CheckoutScreen extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           state.selectedShippingMethod == null
-                                              ? 'Choose Shipping Method'
+                                              ? localization
+                                                  .choose_shipping_method
                                               : state.selectedShippingMethod!
                                                   .title,
                                           style: Theme.of(context)
@@ -243,7 +247,7 @@ class CheckoutScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Amount'),
+                                Text(localization.amount),
                                 Text('$price\$')
                               ],
                             ),
@@ -251,7 +255,7 @@ class CheckoutScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Shipping'),
+                                Text(localization.shipping),
                                 Text(state.selectedShippingMethod == null
                                     ? '_'
                                     : "${double.parse(state.selectedShippingMethod!.cost)} \$")
@@ -263,7 +267,7 @@ class CheckoutScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Total'),
+                                Text(localization.total),
                                 Text(
                                     '${price + double.parse(state.selectedShippingMethod?.cost ?? '0')}\$')
                               ],
@@ -276,12 +280,11 @@ class CheckoutScreen extends StatelessWidget {
                     Builder(
                       builder: (context) {
                         return BaseButton(
-                          title: 'Continue to Payment',
+                          title: localization.continue_payment,
                           callback: () {
                             if (state.shippingAddress.isEmpty ||
                                 state.selectedShippingMethod == null) {
-                              showToast(
-                                  'Make sure to select an address and a shipping method');
+                              showToast(localization.missing_address_method);
                             } else {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

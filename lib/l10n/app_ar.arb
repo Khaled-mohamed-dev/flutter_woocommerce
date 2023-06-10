@@ -91,5 +91,6 @@
     "empty_cart_message": "السلة فارغة\nلا تستطيع الدفع",
     "remove_cart_item_confirmation": "متأكد من إزالة المنتج؟",
     "confirm_delete": "نعم، إزالة المنتج",
-    "home" : "الرئيسية"
+    "home" : "الرئيسية",
+    "shipping": "التوصيل"
 }
