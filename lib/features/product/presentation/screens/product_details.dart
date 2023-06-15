@@ -12,6 +12,7 @@ import 'package:flutter_woocommerce/features/product/presentation/widgets/attrib
 import 'package:flutter_woocommerce/features/product/presentation/widgets/image_section.dart';
 import 'package:flutter_woocommerce/features/reviews/presentation/screens/reviews_screen.dart';
 import 'package:iconly/iconly.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../locator.dart';
 import '../../data/models/product.dart';
@@ -26,6 +27,11 @@ class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localization = AppLocalizations.of(context)!;
+
+    var stockStatuses = {
+      "instock": localization.instock,
+      "outofstock": localization.outofstock
+    };
 
     double ratePercentage = double.parse(product.averageRating) / 5;
     var images = product.images;
@@ -51,7 +57,34 @@ class ProductDetails extends StatelessWidget {
                             child: ListView(
                               controller: _controller,
                               children: [
-                                ImageSection(images: images),
+                                Stack(
+                                  children: [
+                                    ImageSection(images: images),
+                                    if (product.onSale &&
+                                        product.type != ProductType.grouped)
+                                      PositionedDirectional(
+                                        end: 30,
+                                        top: 30,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              "${(int.parse(product.salePrice) / int.parse(product.regularPrice) * 100).toInt()}%",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                  ],
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 24.0, vertical: 12),
@@ -59,11 +92,13 @@ class ProductDetails extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Column(
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               SizedBox(
                                                 width: screenWidthPercentage(
@@ -77,72 +112,97 @@ class ProductDetails extends StatelessWidget {
                                                       .headlineMedium,
                                                 ),
                                               ),
-                                              FavoriteButton(product: product)
-                                            ],
-                                          ),
-                                          verticalSpaceTiny,
-                                          Row(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: kcSecondaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(6),
-                                                  child: Text(
-                                                    "${product.totalSales} ${localization.sold}",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall,
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: kcSecondaryColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              6),
+                                                      child: Text(
+                                                        "${product.totalSales} ${localization.sold}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleSmall,
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                              horizontalSpaceSmall,
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ReviewsScreen(
-                                                              product: product),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    ShaderMask(
-                                                      blendMode:
-                                                          BlendMode.srcIn,
-                                                      shaderCallback:
-                                                          (Rect bounds) =>
+                                                  horizontalSpaceSmall,
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ReviewsScreen(
+                                                                  product:
+                                                                      product),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        ShaderMask(
+                                                          blendMode:
+                                                              BlendMode.srcIn,
+                                                          shaderCallback: (Rect
+                                                                  bounds) =>
                                                               LinearGradient(
-                                                        stops: [
-                                                          ratePercentage,
-                                                          ratePercentage
-                                                        ],
-                                                        colors: [
-                                                          kcIconColorSelected,
-                                                          kcSecondaryColor,
-                                                        ],
-                                                      ).createShader(bounds),
-                                                      child: const Icon(
-                                                          IconlyBold.star),
+                                                            stops: [
+                                                              ratePercentage,
+                                                              ratePercentage
+                                                            ],
+                                                            colors: [
+                                                              kcIconColorSelected,
+                                                              kcSecondaryColor,
+                                                            ],
+                                                          ).createShader(
+                                                                  bounds),
+                                                          child: const Icon(
+                                                              IconlyBold.star),
+                                                        ),
+                                                        horizontalSpaceTiny,
+                                                        Text(
+                                                          "${product.averageRating} (${product.ratingCount})",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium,
+                                                        )
+                                                      ],
                                                     ),
-                                                    horizontalSpaceTiny,
-                                                    Text(
-                                                      "${product.averageRating} (${product.ratingCount})",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium,
-                                                    )
-                                                  ],
-                                                ),
+                                                  )
+                                                ],
+                                              ),
+                                              verticalSpaceTiny,
+                                              Text(
+                                                stockStatuses[
+                                                        product.stockStatus] ??
+                                                    product.stockStatus,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium,
                                               )
                                             ],
                                           ),
+                                          Column(
+                                            children: [
+                                              FavoriteButton(product: product),
+                                              IconButton(
+                                                onPressed: () {
+                                                  Share.share(
+                                                      product.permalink);
+                                                },
+                                                icon: const Icon(Icons.share),
+                                              )
+                                            ],
+                                          )
                                         ],
                                       ),
                                       verticalSpaceSmall,
@@ -282,11 +342,32 @@ class ProductDetails extends StatelessWidget {
                                               .textTheme
                                               .titleSmall,
                                         ),
-                                        Text(
-                                          '${state.price}\$',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall,
+                                        Row(
+                                          children: [
+                                            if (product.onSale)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsetsDirectional
+                                                        .only(end: 4.0),
+                                                child: Text(
+                                                  '${product.regularPrice}\$',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium!
+                                                      .copyWith(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                      ),
+                                                ),
+                                              ),
+                                            Text(
+                                              '${state.price}\$',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall,
+                                            )
+                                          ],
                                         )
                                       ],
                                     ),
@@ -323,7 +404,7 @@ class ProductDetails extends StatelessWidget {
                           },
                           icon: const Icon(Icons.arrow_back),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 );

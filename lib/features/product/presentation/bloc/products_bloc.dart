@@ -1,11 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
 import 'package:flutter_woocommerce/core/widgets/toast.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/cart/data/repositories/cart_repository.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product.dart';
 import 'package:flutter_woocommerce/features/product/data/repositories/products_repository.dart';
 import 'package:flutter_woocommerce/features/product/presentation/bloc/bloc.dart';
+import 'package:flutter_woocommerce/locator.dart';
 import 'package:flutter_woocommerce/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -174,7 +176,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
             break;
         }
         if (product.type != ProductType.external) {
-          showToast('Product was added to cart');
+          showToast(locator<SharedPrefService>().lang == "en" ? "Product was added to cart" : "تمت الإضافة للسلة");
         }
       },
     );

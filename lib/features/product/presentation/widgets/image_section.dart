@@ -50,7 +50,7 @@ class _ImageSectionState extends State<ImageSection> {
       child: Container(
         color: kcSecondaryColor,
         width: screenWidth(context),
-        height: screenWidth(context) / 1.2,
+        height: screenWidth(context),
         child: images.isNotEmpty
             ? Stack(
                 alignment: Alignment.center,

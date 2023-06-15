@@ -26,4 +26,4 @@ enum AuthFailureType {
   invalidPassword,
 }
 
-const List errorStatusCodes = [400, 401, 404, 500];
+const List errorStatusCodes = [400, 401, 404, 403,500];

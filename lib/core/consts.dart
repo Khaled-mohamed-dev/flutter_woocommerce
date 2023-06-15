@@ -8,3 +8,7 @@ const String wcCred =
     'consumer_key=$consumerKey&consumer_secret=$consumerSecret';
 
 const String jwtAuth = "${siteUrl}wp-json/jwt-auth/v1/";
+
+const String language = 'ar';
+
+const webviewCheckout = true;

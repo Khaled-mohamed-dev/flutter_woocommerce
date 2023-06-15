@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:flutter_woocommerce/core/consts.dart';
 import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
 import 'package:flutter_woocommerce/features/authentication/data/repositories/auth_repository.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/bloc.dart';
@@ -9,8 +9,8 @@ import 'package:flutter_woocommerce/features/cart/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/category/data/repositories/category_repository.dart';
 import 'package:flutter_woocommerce/features/category/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
+import 'package:flutter_woocommerce/features/favorites/data/models/favorite.dart';
 import 'package:flutter_woocommerce/features/favorites/data/repositories/favorites_repository.dart';
-import 'package:flutter_woocommerce/features/favorites/presentation/bloc/favorites_bloc.dart';
 import 'package:flutter_woocommerce/features/home/data/repository/home_repository.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/orders/data/repositories/orders_repository.dart';
@@ -29,6 +29,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/checkout/data/repositories/checkout_repository.dart';
 
+import 'package:http/http.dart' as http;
+
 final locator = GetIt.instance;
 
 Future setupLocator() async {
@@ -36,7 +38,7 @@ Future setupLocator() async {
 
   locator.registerLazySingleton<HomeRepository>(
     () => HomeRepositoryImpl(
-      dio: locator(),
+      client: locator(),
     ),
   );
 
@@ -49,7 +51,7 @@ Future setupLocator() async {
   //Feature - Order
 
   locator.registerLazySingleton<OrdersRepository>(
-    () => OrdersRepositoryImpl(dio: locator(), sharedPrefService: locator()),
+    () => OrdersRepositoryImpl(client: locator(), sharedPrefService: locator()),
   );
 
   locator.registerFactory<OrdersBloc>(
@@ -60,7 +62,7 @@ Future setupLocator() async {
 
   locator.registerLazySingleton<ReviewsRepository>(
     () => ReviewsRepositoryImpl(
-      dio: locator(),
+      client: locator(),
     ),
   );
 
@@ -78,7 +80,7 @@ Future setupLocator() async {
 
   locator.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
-      dio: locator(),
+      client: locator(),
       sharedPrefService: locator(),
     ),
   );
@@ -87,7 +89,7 @@ Future setupLocator() async {
 
   locator.registerLazySingleton<SearchRepository>(
     () => SearchRepositoryImpl(
-      dio: locator(),
+      client: locator(),
     ),
   );
 
@@ -104,7 +106,7 @@ Future setupLocator() async {
   locator.registerLazySingleton<CartRepository>(
     () => CartRepositoryImpl(
       cartBox: box,
-      dio: locator(),
+      client: locator(),
     ),
   );
 
@@ -114,21 +116,22 @@ Future setupLocator() async {
 
   //Feature - favorites
 
+  Box<Favorite> favoritesBox = await Hive.openBox('favorites');
+
   locator.registerLazySingleton<FavoritesRepository>(
     () => FavoritesRepositoryImpl(
-      sharedPrefService: locator(),
-      dio: locator(),
+      favoritesBox: favoritesBox,
     ),
   );
 
-  locator.registerFactory<FavoritesBloc>(
-    () => FavoritesBloc(favoritesRepository: locator()),
-  );
+  // locator.registerFactory<FavoritesBloc>(
+  //   () => FavoritesBloc(favoritesRepository: locator()),
+  // );
 
   //Feature - Checkout
 
   locator.registerLazySingleton<CheckoutRepository>(
-    () => CheckoutRepositoryImpl(dio: locator(), prefs: locator()),
+    () => CheckoutRepositoryImpl(client: locator(), prefs: locator()),
   );
 
   locator.registerFactory<CheckoutBloc>(
@@ -142,7 +145,7 @@ Future setupLocator() async {
 
   locator.registerLazySingleton<ProductsRepository>(
     () => ProductsRepositoryImpl(
-      dio: locator(),
+      client: locator(),
     ),
   );
 
@@ -155,7 +158,7 @@ Future setupLocator() async {
 
   locator.registerLazySingleton<CategoryRepository>(
     () => CategoryRepositoryImpl(
-      dio: locator(),
+      client: locator(),
     ),
   );
 
@@ -187,5 +190,5 @@ Future setupLocator() async {
 
   //External
 
-  locator.registerSingleton<Dio>(Dio());
+  locator.registerSingleton<http.Client>(http.Client());
 }

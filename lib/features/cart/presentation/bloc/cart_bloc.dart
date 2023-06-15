@@ -49,5 +49,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         cartRepository.updateCartItem(updatedCartItem);
       },
     );
+
+    on<ClearCartItems>((event, emit) => cartRepository.clearCartItems());
   }
 }

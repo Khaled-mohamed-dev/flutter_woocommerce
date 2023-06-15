@@ -7,7 +7,7 @@ import '../../../../core/consts.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../main.dart';
 import '../models/user.dart';
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 abstract class AuthRepository {
   bool isLoggedIn();
@@ -31,10 +31,10 @@ abstract class AuthRepository {
 }
 
 class AuthRepositoryImpl implements AuthRepository {
-  final Dio dio;
+  final http.Client client;
   final SharedPrefService sharedPrefService;
 
-  AuthRepositoryImpl({required this.dio, required this.sharedPrefService});
+  AuthRepositoryImpl({required this.client, required this.sharedPrefService});
 
   @override
   User? getSignedInUser() {
@@ -51,8 +51,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  var responseType = ResponseType.plain;
-
   @override
   Future<Either<Failure, Unit>> register({
     required String emailAddress,
@@ -61,23 +59,15 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       // Check if the email is already taken
-      var userResponse = await dio.get(
-        '${wcAPI}customers?email=$emailAddress&$wcCred',
-        options: Options(
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-          responseType: responseType,
-        ),
-      );
+      var userResponse = await client
+          .get(Uri.parse('${wcAPI}customers?email=$emailAddress&$wcCred'));
 
-      if ([400, 401, 404, 500].contains(userResponse.statusCode)) {
-        logger.e(userResponse.data);
+      if (errorStatusCodes.contains(userResponse.statusCode)) {
+        logger.e(userResponse.body);
         return Left(ServerFailure());
       }
 
-      List<User> userResult = userFromJson(userResponse.data);
+      List<User> userResult = userFromJson(userResponse.body);
 
       if (userResult.isNotEmpty) {
         logger.e(AuthFailure(AuthFailureType.emailAlreadyTaken));
@@ -86,23 +76,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
       // check if the userName is already taken
 
-      var userNameResponse = await dio.get(
-        '${wcAPI}customers?search=$userName&$wcCred',
-        options: Options(
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-          responseType: responseType,
-        ),
-      );
+      var userNameResponse = await client
+          .get(Uri.parse('${wcAPI}customers?search=$userName&$wcCred'));
 
-      if ([400, 401, 404, 500].contains(userNameResponse.statusCode)) {
-        logger.e(userNameResponse.data);
+      if (errorStatusCodes.contains(userNameResponse.statusCode)) {
+        logger.e(userNameResponse.body);
         return Left(ServerFailure());
       }
 
-      List<User> userNameResult = userFromJson(userNameResponse.data);
+      List<User> userNameResult = userFromJson(userNameResponse.body);
 
       if (userNameResult.firstWhereOrNull((element) =>
               element.username!.toLowerCase() == userName.toLowerCase()) !=
@@ -113,24 +95,23 @@ class AuthRepositoryImpl implements AuthRepository {
 
       // if everything checks out and the email and userName are not taken then add the customer to the database
 
-      var registeredUser = await dio.post(
-        '${wcAPI}customers?$wcCred',
-        data: {
-          'email': emailAddress,
-          'username': userName,
-          'password': password,
-          'billing': {'email': emailAddress},
-          'shipping': {'email': emailAddress}
-        },
-        options: Options(
-          headers: {
-            "Accept": "application/json",
+      var registeredUser = await client.post(
+        Uri.parse('${wcAPI}customers?$wcCred'),
+        body: json.encode(
+          {
+            'email': emailAddress,
+            'username': userName,
+            'password': password,
+            'billing': {'email': emailAddress},
+            'shipping': {'email': emailAddress}
           },
-          responseType: responseType,
         ),
+        headers: {
+          "content-type": "application/json",
+        },
       );
 
-      sharedPrefService.user = User.fromJson(jsonDecode(registeredUser.data));
+      sharedPrefService.user = User.fromJson(jsonDecode(registeredUser.body));
 
       return const Right(unit);
     } catch (e) {
@@ -142,24 +123,26 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, Unit>> setupAccount({required User user}) async {
     try {
-      var updatedUser = await dio.put(
-        '${wcAPI}customers/${user.id}?$wcCred',
-        data: user.toJson(),
-        options: Options(
-          headers: {
-            "Accept": "application/json",
-          },
-          responseType: responseType,
-        ),
+      var updatedUser = await client.put(
+        Uri.parse('${wcAPI}customers/${user.id}?$wcCred'),
+        body: json.encode(user.toJson()),
+        headers: {
+          "content-type": "application/json",
+        },
       );
 
-      logger.w(updatedUser.data);
+      if (errorStatusCodes.contains(updatedUser.statusCode)) {
+        logger.e(updatedUser.body);
+        return Left(ServerFailure());
+      }
 
-      sharedPrefService.user = User.fromJson(jsonDecode(updatedUser.data));
+      logger.w(updatedUser.body);
+
+      sharedPrefService.user = User.fromJson(jsonDecode(updatedUser.body));
 
       return const Right(unit);
-    } on DioError catch (e) {
-      logger.e(e.response);
+    } catch (e) {
+      logger.e(e);
       return Left(ServerFailure());
     }
   }
@@ -168,34 +151,47 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, Unit>> signInWithEmailAndPassword(
       {required String userName, required String password}) async {
     try {
-      var response = await dio.post(
-        '${jwtAuth}token',
-        data: {
+      var response = await client.post(
+        Uri.parse('${jwtAuth}token'),
+        body: json.encode({
           "username": userName,
           "password": password,
+        }),
+        headers: {
+          "content-type": "application/json",
         },
-        options: Options(
-          headers: {
-            "Accept": "application/json",
-          },
-          receiveDataWhenStatusError: true,
-          responseType: responseType,
-        ),
       );
 
-      var userResponse = await dio.get(
-        '${wcAPI}customers?search=$userName&$wcCred',
-        options: Options(
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-          responseType: responseType,
-        ),
-      );
-      logger.w(userResponse.data);
+      logger.wtf(response.body);
 
-      List<User> userResult = userFromJson(userResponse.data);
+      if (errorStatusCodes.contains(response.statusCode)) {
+        logger.e(response.body);
+        String code = jsonDecode(response.body)['code'];
+        if (code.contains('invalid_username')) {
+          return Left(AuthFailure(AuthFailureType.invalidUserName));
+        } else if (code.contains('incorrect_password')) {
+          return Left(AuthFailure(AuthFailureType.invalidPassword));
+        } else if (code.contains('invalid_email')) {
+          return Left(AuthFailure(AuthFailureType.invalidUserName));
+        }
+        return Left(ServerFailure());
+      }
+
+      var userResponse = await client.get(
+        Uri.parse('${wcAPI}customers?search=$userName&$wcCred'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (errorStatusCodes.contains(userResponse.statusCode)) {
+        logger.e(userResponse.body);
+        return Left(ServerFailure());
+      }
+
+      logger.w(userResponse.body);
+
+      List<User> userResult = userFromJson(userResponse.body);
 
       if (userResult.firstWhereOrNull((element) =>
               element.email!.toLowerCase() == userName.toLowerCase()) !=
@@ -207,18 +203,12 @@ class AuthRepositoryImpl implements AuthRepository {
             element.username!.toLowerCase() == userName.toLowerCase());
       }
 
-      var result = response.data;
+      var result = response.body;
       logger.d(result);
       return const Right(unit);
-    } on DioError catch (e) {
-      logger.e(e.response);
-      String code = jsonDecode(e.response.toString())["code"];
-      if (code.contains('invalid_username')) {
-        return Left(AuthFailure(AuthFailureType.invalidUserName));
-      } else if (code.contains('incorrect_password')) {
-        return Left(AuthFailure(AuthFailureType.invalidPassword));
-      }
-      logger.wtf(e.response);
+    } catch (e) {
+      logger.e(e);
+      
       logger.e('$e');
       return Left(ServerFailure());
     }

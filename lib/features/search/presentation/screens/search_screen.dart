@@ -57,8 +57,11 @@ class SearchScreen extends StatelessWidget {
                         await showModalBottomSheet(
                           isScrollControlled: true,
                           context: context,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
+                            ),
                           ),
                           backgroundColor: kcButtonIconColor,
                           builder: (_) {
@@ -177,7 +180,6 @@ class FilterBottomSheet extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return Container(
-          height: screenHeightPercentage(context, percentage: 0.7),
           color: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -185,73 +187,65 @@ class FilterBottomSheet extends StatelessWidget {
               builder: (context, constraints) {
                 var height = constraints.maxHeight;
                 return Column(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: height * .1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              BlocProvider.of<SearchBloc>(context)
-                                  .add(ClearFilters());
-                            },
-                            child: Text(localization.clear),
-                          ),
-                          Text(localization.filters),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            icon: const Icon(IconlyBold.close_square),
-                          )
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<SearchBloc>(context)
+                                .add(ClearFilters());
+                          },
+                          child: Text(localization.clear),
+                        ),
+                        Text(localization.filters),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(IconlyBold.close_square),
+                        )
+                      ],
                     ),
                     const Divider(),
                     verticalSpaceSmall,
-                    SizedBox(
-                      height: height * .2,
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            localization.category,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localization.category,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          verticalSpaceTiny,
-                          SizedBox(height: height * .1, child: CategoriesList())
-                        ],
-                      ),
+                        ),
+                        verticalSpaceTiny,
+                        SizedBox(height: height * .1, child: CategoriesList())
+                      ],
                     ),
                     verticalSpaceRegular,
-                    SizedBox(
-                      height: height * .2,
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            localization.sort_by,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localization.sort_by,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
-                          verticalSpaceTiny,
-                          SizedBox(
-                            height: height * .1,
-                            child: OrderbyOptionsList(),
-                          )
-                        ],
-                      ),
+                        ),
+                        verticalSpaceTiny,
+                        SizedBox(
+                          height: height * .1,
+                          child: OrderbyOptionsList(),
+                        )
+                      ],
                     ),
+                    verticalSpaceRegular,
                     PricingSection(height: height),
+                    verticalSpaceRegular,
                     BaseButton(
                       title: localization.apply_filters,
                       callback: () {
@@ -284,7 +278,7 @@ class PricingSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var localization = AppLocalizations.of(context)!;
 
-    var state = BlocProvider.of<SearchBloc>(context).state;
+    var state = context.watch<SearchBloc>().state;
     var params = state.searchParmas;
     RangeValues currentRangeValues = RangeValues(
         double.parse(params.minPrice ?? '400'),
@@ -292,45 +286,41 @@ class PricingSection extends StatelessWidget {
 
     var firstRangePoint = currentRangeValues.start.round().toString();
     var secondRangePoint = currentRangeValues.end.round().toString();
-    return SizedBox(
-      height: height * .25,
-      width: double.infinity,
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(localization.pricing,
-                  style: Theme.of(context).textTheme.headlineSmall),
-              Text('\$$firstRangePoint-\$$secondRangePoint',
-                  style: Theme.of(context).textTheme.headlineSmall),
-            ],
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(localization.pricing,
+                style: Theme.of(context).textTheme.headlineSmall),
+            Text('\$$firstRangePoint-\$$secondRangePoint',
+                style: Theme.of(context).textTheme.headlineSmall),
+          ],
+        ),
+        verticalSpaceRegular,
+        RangeSlider(
+          values: currentRangeValues,
+          activeColor: kcPrimaryColor,
+          max: 1000,
+          divisions: 20,
+          labels: RangeLabels(
+            currentRangeValues.start.round().toString(),
+            currentRangeValues.end.round().toString(),
           ),
-          verticalSpaceRegular,
-          RangeSlider(
-            values: currentRangeValues,
-            activeColor: kcPrimaryColor,
-            max: 1000,
-            divisions: 20,
-            labels: RangeLabels(
-              currentRangeValues.start.round().toString(),
-              currentRangeValues.end.round().toString(),
-            ),
-            onChanged: (value) {
-              currentRangeValues = value;
-              BlocProvider.of<SearchBloc>(context).add(
-                SetFilters(
-                  state.searchParmas.copyWith(
-                    minPrice: currentRangeValues.start.round().toString(),
-                    maxPrice: currentRangeValues.end.round().toString(),
-                  ),
+          onChanged: (value) {
+            currentRangeValues = value;
+            BlocProvider.of<SearchBloc>(context).add(
+              SetFilters(
+                state.searchParmas.copyWith(
+                  minPrice: currentRangeValues.start.round().toString(),
+                  maxPrice: currentRangeValues.end.round().toString(),
                 ),
-              );
-            },
-          )
-        ],
-      ),
+              ),
+            );
+          },
+        )
+      ],
     );
   }
 }

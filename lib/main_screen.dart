@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/consts.dart';
+import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
 import 'package:flutter_woocommerce/features/home/presentation/screens/home_screen.dart';
+import 'package:flutter_woocommerce/features/orders/data/models/order.dart';
+import 'package:flutter_woocommerce/features/reviews/data/models/review.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/settings_screen.dart';
+import 'package:flutter_woocommerce/locator.dart';
+import 'package:flutter_woocommerce/main.dart';
 import 'package:iconly/iconly.dart';
 import 'features/cart/presentation/screens/cart_screen.dart';
 import 'features/orders/presentation/screens/orders_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -32,12 +39,7 @@ class _MainScreenState extends State<MainScreen> {
         child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => const SetupAccountScreen()));
-        },
+        onPressed: () async {},
         child: Icon(
           Icons.add,
           color: kcButtonIconColor,

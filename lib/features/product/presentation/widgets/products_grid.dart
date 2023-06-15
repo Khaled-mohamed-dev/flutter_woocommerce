@@ -94,7 +94,28 @@ class ProductCard extends StatelessWidget {
                         child: FavoriteButton(product: product),
                       ),
                     ),
-                  )
+                  ),
+                  if (product.onSale && product.type != ProductType.grouped)
+                    PositionedDirectional(
+                      start: 10,
+                      top: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            "${(int.parse(product.salePrice) / int.parse(product.regularPrice) * 100).toInt()}%",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
               verticalSpaceTiny,
@@ -142,12 +163,31 @@ class ProductCard extends StatelessWidget {
                 fit: BoxFit.fitHeight,
                 child: SizedBox(
                   height: per / 3,
-                  child: Text(
-                    "\$${product.htmlPrice}",
-                    style: Theme.of(context).textTheme.bodySmall,
+                  child: Row(
+                    children: [
+                      if (product.onSale && product.type != ProductType.grouped)
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 4.0),
+                          child: Text(
+                            '${product.regularPrice}\$',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                          ),
+                        ),
+                      Text(
+                        product.onSale && product.type != ProductType.grouped
+                            ? product.price
+                            : product.htmlPrice,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      )
+                    ],
                   ),
                 ),
-              )
+              ),
             ],
           );
         },

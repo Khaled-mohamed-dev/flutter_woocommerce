@@ -27,6 +27,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadHome>(
       (event, emit) async {
         if (state.status == HomeStatus.success) return;
+        emit(state.copyWith(status: HomeStatus.initial));
         final Either<Failure, HomeData> faliureOrResopnse =
             await homeRepository.loadHomeData();
         emit(

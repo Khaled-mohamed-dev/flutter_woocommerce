@@ -32,7 +32,7 @@
     "confirm": "تأكيد",
     "select_variation_display_price": "select a variation to display price",
     "orders": "الطلبات",
-    "processing": "processing",
+    "processing": "قيد التجهيز",
     "completed": "مكتمل",
     "no_orders": "ليس لديك أي طلب بعد",
     "order": "طلب",
@@ -92,5 +92,13 @@
     "remove_cart_item_confirmation": "متأكد من إزالة المنتج؟",
     "confirm_delete": "نعم، إزالة المنتج",
     "home" : "الرئيسية",
-    "shipping": "التوصيل"
+    "shipping": "التوصيل",
+    "pending" : "قيد الانتظار",
+    "on_hold" : "في الانتظار",
+    "cancelled" : "ملغى",
+    "refunded" : "مسترجع", 
+    "failed" : "فشل",
+    "trash": "trash",
+    "instock": "متوفر",
+    "outofstock": "نفدت الكمية"
 }

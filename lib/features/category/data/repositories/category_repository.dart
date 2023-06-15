@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_woocommerce/core/consts.dart';
 import 'package:flutter_woocommerce/core/error/failures.dart';
 
 import '../../../../main.dart';
 import '../../../product/data/models/product.dart';
+import 'package:http/http.dart' as http;
 
 abstract class CategoryRepository {
   Future<Either<Failure, List<Product>>> fetchProductsByCategory(
@@ -12,17 +12,9 @@ abstract class CategoryRepository {
 }
 
 class CategoryRepositoryImpl implements CategoryRepository {
-  final Dio dio;
+  final http.Client client;
 
-  CategoryRepositoryImpl({required this.dio});
-
-  var options = Options(
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    responseType: ResponseType.plain,
-  );
+  CategoryRepositoryImpl({required this.client});
 
   @override
   Future<Either<Failure, List<Product>>> fetchProductsByCategory(
@@ -30,12 +22,16 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final stopwatch = Stopwatch()..start();
 
-      var response = await dio.get(
-        '${wcAPI}products?category=$categoryID&page=$page&$wcCred',
-        options: options,
+      var response = await client.get(
+        Uri.parse('${wcAPI}products?category=$categoryID&page=$page&$wcCred'),
       );
 
-      var result = productFromJson(response.data);
+      if (errorStatusCodes.contains(response.statusCode)) {
+        logger.e(response.body);
+        return Left(ServerFailure());
+      }
+
+      var result = productFromJson(response.body);
 
       logger.d(result);
 
@@ -43,7 +39,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
       stopwatch.stop();
       return Right(result);
-    } on DioError catch (e) {
+    } catch (e) {
       logger.e('$e');
       return Left(ServerFailure());
     }

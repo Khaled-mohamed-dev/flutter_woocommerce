@@ -6,6 +6,7 @@ import 'package:flutter_woocommerce/core/widgets/base_button.dart';
 import 'package:flutter_woocommerce/features/reviews/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReviewBottomSheet extends StatefulWidget {
   const ReviewBottomSheet({Key? key, required this.productID})
@@ -23,6 +24,8 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return BlocProvider(
       create: (context) => locator<ReviewsBloc>(),
       child: Padding(
@@ -30,24 +33,24 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
           24,
           24,
           24,
-          MediaQuery.of(context).viewInsets.bottom + 24,
+          MediaQuery.of(context).viewInsets.bottom + 24 ,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Leave a Review',
+              localization.leave_review,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             Divider(color: kcSecondaryColor),
             verticalSpaceSmall,
             Text(
-              'How is your order?',
+             localization.order_opinion,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             verticalSpaceTiny,
             Text(
-              'Please give your rating & also your review...',
+              localization.review_message,
               style: Theme.of(context).textTheme.titleSmall,
             ),
             verticalSpaceSmall,
@@ -74,7 +77,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
               keyboardType: TextInputType.multiline,
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
-                hintText: 'Your feedback..',
+                hintText: localization.your_feedback,
                 hintStyle: Theme.of(context).textTheme.titleMedium,
                 focusColor: kcPrimaryColor,
                 filled: true,
@@ -104,7 +107,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                     callback: () {
                       Navigator.of(context).pop();
                     },
-                    title: 'cancel',
+                    title: localization.cancel,
                     iconColor: Colors.grey,
                   ),
                 ),
@@ -120,7 +123,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                               rating: rate));
                           Navigator.of(context).pop();
                         },
-                        title: 'Submit',
+                        title: localization.submit,
                       ),
                     );
                   },

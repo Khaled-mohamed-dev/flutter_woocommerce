@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_woocommerce/core/consts.dart';
 import 'package:flutter_woocommerce/core/error/failures.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/main.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:http/http.dart' as http;
 
 abstract class CartRepository {
   Future<Either<Failure, List<CartItem>>> getCartItems();
@@ -21,9 +23,9 @@ abstract class CartRepository {
 class CartRepositoryImpl implements CartRepository {
   final Box<CartItem> cartBox;
 
-  final Dio dio;
+  final http.Client client;
 
-  CartRepositoryImpl({required this.cartBox, required this.dio});
+  CartRepositoryImpl({required this.cartBox, required this.client});
 
   @override
   Future addCartItem(CartItem cartItem) async {
@@ -66,18 +68,26 @@ class CartRepositoryImpl implements CartRepository {
         (cartItem) {
           var productID = cartItem.productID;
           if (cartItem.variationID != null) {
-            return dio.get(
-              '${wcAPI}products/$productID/variations/${cartItem.variationID}?$wcCred',
+            return client.get(
+              Uri.parse(
+                  '${wcAPI}products/$productID/variations/${cartItem.variationID}?$wcCred'),
             );
           } else {
-            return dio.get(
-              '${wcAPI}products/$productID?$wcCred',
-            );
+            return client.get(Uri.parse('${wcAPI}products/$productID?$wcCred'));
           }
         },
       ).toList();
 
       var results = await Future.wait(futures);
+
+      if (results
+          .any(((result) => errorStatusCodes.contains(result.statusCode)))) {
+        logger.e(results
+            .firstWhere(
+                (result) => errorStatusCodes.contains(result.statusCode))
+            .body);
+        return Left(ServerFailure());
+      }
 
       for (var i = 0; i < cartBox.length; i++) {
         late String productPrice;
@@ -85,9 +95,9 @@ class CartRepositoryImpl implements CartRepository {
         var cartItem = cartBox.values.toList()[i];
 
         if (cartItem.variationID != null) {
-          productPrice = results[i].data['price'].toString();
+          productPrice = json.decode(results[i].body)['price'].toString();
         } else {
-          productPrice = results[i].data['price'].toString();
+          productPrice = json.decode(results[i].body)['price'].toString();
         }
 
         cartItems.add(
@@ -102,8 +112,8 @@ class CartRepositoryImpl implements CartRepository {
       stopwatch.stop();
 
       return Right(cartItems);
-    } on DioError catch (e) {
-      logger.wtf(e.message);
+    } catch (e) {
+      logger.wtf(e);
       return Left(ServerFailure());
     }
   }

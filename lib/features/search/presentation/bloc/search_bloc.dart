@@ -96,9 +96,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       transformer: throttleDroppable(throttleDuration),
     );
 
-    on<SetFilters>((event, emit) {
-      emit(state.copyWith(searchParmas: event.searchParmas));
-    });
+    on<SetFilters>(
+      (event, emit) {
+        emit(state.copyWith(searchParmas: event.searchParmas));
+      },
+    );
 
     on<ClearFilters>(
       (event, emit) => emit(

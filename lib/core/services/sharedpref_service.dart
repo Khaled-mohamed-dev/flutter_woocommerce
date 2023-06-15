@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_woocommerce/core/consts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/authentication/data/models/user.dart';
@@ -99,7 +100,7 @@ class SharedPrefService {
   static const String langKey = 'lang';
 
   String get lang {
-    return _getFromDisk(langKey) ?? 'ar';
+    return _getFromDisk(langKey) ?? language;
   }
 
   set lang(String lang) {

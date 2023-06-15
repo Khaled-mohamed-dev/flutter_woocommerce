@@ -11,8 +11,18 @@ class OrdersDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localization = AppLocalizations.of(context)!;
-
+    var statuses = {
+      'processing': localization.processing,
+      'pending': localization.pending,
+      'completed': localization.completed,
+      'on-hold': localization.on_hold,
+      'cancelled': localization.cancelled,
+      'refunded': localization.refunded,
+      'failed': localization.failed,
+      'trash': localization.trash
+    };
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(title: Text('${localization.order} #${order.id}')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -35,7 +45,7 @@ class OrdersDetails extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(6),
                     child: Text(
-                      "${order.status}",
+                      statuses["${order.status}"] ?? '',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
@@ -99,8 +109,11 @@ class LineItemTile extends StatelessWidget {
                       await showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40.0),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.0),
+                            topRight: Radius.circular(40.0),
+                          ),
                         ),
                         backgroundColor: kcButtonIconColor,
                         builder: (_) => ReviewBottomSheet(

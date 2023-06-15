@@ -53,12 +53,12 @@ class PaymentMethodsScreen extends StatelessWidget {
             BaseButton(
               title: localization.confirm_payment,
               callback: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SuccessfulOrderPopup(),
-                    ),
-                    (route) => route.isFirst);
+                // Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const SuccessfulOrderPopup(),
+                //     ),
+                //     (route) => route.isFirst);
               },
             )
           ],

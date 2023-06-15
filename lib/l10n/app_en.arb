@@ -92,5 +92,13 @@
     "remove_cart_item_confirmation": "Remove from cart?",
     "confirm_delete": "Yes, Remove",
     "home" : "home",
-    "shipping" : "shipping"
+    "shipping" : "shipping",
+    "pending" : "pending",
+    "on_hold" : "on-hold",
+    "cancelled" : "cancelled",
+    "refunded" : "refunded", 
+    "failed" : "failed",
+    "trash": "trash",
+    "instock": "instock",
+    "outofstock":"out of stock"
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/skelton.dart';
 import 'package:flutter_woocommerce/features/category/presentation/screens/category_screen.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
@@ -47,24 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 24),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const FavoritesScreen()));
-              },
-              child: const Icon(IconlyBold.heart),
-            ),
-          )
-        ],
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           switch (state.status) {
             case HomeStatus.initial:
-              return const Center(child: CircularProgressIndicator());
+              return const HomeScreenLoading();
             case HomeStatus.success:
               return SingleChildScrollView(
                 controller: _scrollController,
@@ -109,52 +98,57 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: state.categories.length,
                           itemBuilder: (BuildContext context, int index) {
                             var category = state.categories[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryProductsScreen(
-                                            category: category),
-                                  ),
-                                );
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsetsDirectional.only(end: 12),
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: Container(
-                                        height: 60,
-                                        width: 60,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: kcSecondaryColor,
+                            return category.name != 'Uncategorized'
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CategoryProductsScreen(
+                                                  category: category),
                                         ),
-                                        child: category.image != null
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Image.network(
-                                                  category.image!,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )
-                                            : const Icon(Icons.image),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          end: 12),
+                                      child: Column(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Container(
+                                              height: 60,
+                                              width: 60,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: kcSecondaryColor,
+                                              ),
+                                              child: category.image != null
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Image.network(
+                                                        category.image!,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    )
+                                                  : const Icon(Icons.image),
+                                            ),
+                                          ),
+                                          verticalSpaceTiny,
+                                          Text(
+                                            category.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall,
+                                          )
+                                        ],
                                       ),
                                     ),
-                                    verticalSpaceTiny,
-                                    Text(
-                                      category.name,
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
+                                  )
+                                : const SizedBox.shrink();
                           },
                         ),
                       ),
@@ -172,7 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             case HomeStatus.failure:
-              return const Center(child: Text('some thing went wrong'));
+              return ErrorWidget(reload: () {
+                context.read<HomeBloc>().add(LoadHome());
+              });
           }
         },
       ),
@@ -199,6 +195,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+class ErrorWidget extends StatelessWidget {
+  const ErrorWidget({
+    super.key,
+    required this.reload,
+  });
+
+  final Function reload;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/error.png',
+            width: screenWidthPercentage(context, percentage: .5),
+          ),
+          verticalSpaceRegular,
+          const Text(
+            'An error ocured\n Check your internet and try again',
+            textAlign: TextAlign.center,
+          ),
+          verticalSpaceRegular,
+          IconButton(
+            onPressed: (){
+              reload();
+            },
+            icon: Icon(
+              Icons.refresh,
+              color: kcPrimaryColor,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
@@ -216,4 +251,94 @@ Route _createRoute() {
       );
     },
   );
+}
+
+class HomeScreenLoading extends StatelessWidget {
+  const HomeScreenLoading({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        child: Column(
+          children: [
+            Skelton(
+              height: screenHeightPercentage(context, percentage: .07),
+              width: double.infinity,
+            ),
+            verticalSpaceRegular,
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 10,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 12),
+                    child: Column(
+                      children: const [
+                        Skelton(
+                          height: 60,
+                          width: 60,
+                          radius: 100,
+                        ),
+                        verticalSpaceTiny,
+                        Skelton(
+                          height: 20,
+                          width: 60,
+                          radius: 5,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1 / 1.5,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int index) {
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Skelton(
+                            height: constraints.maxWidth,
+                            width: constraints.maxWidth,
+                            radius: 25,
+                          ),
+                          Skelton(
+                            height: 20,
+                            width: constraints.maxWidth / 1.3,
+                            radius: 5,
+                          ),
+                          Skelton(
+                            height: 20,
+                            width: constraints.maxWidth / 1.7,
+                            radius: 5,
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

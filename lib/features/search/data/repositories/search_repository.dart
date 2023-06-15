@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_woocommerce/core/error/failures.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product.dart';
 import 'package:flutter_woocommerce/features/search/data/models/search_params.dart';
 
 import '../../../../core/consts.dart';
 import '../../../../main.dart';
+import 'package:http/http.dart' as http;
 
 abstract class SearchRepository {
   Future<Either<Failure, List<Product>>> searchAndFilterProducts({
@@ -15,17 +15,9 @@ abstract class SearchRepository {
 }
 
 class SearchRepositoryImpl implements SearchRepository {
-  final Dio dio;
+  final http.Client client;
 
-  SearchRepositoryImpl({required this.dio});
-
-  var options = Options(
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    responseType: ResponseType.plain,
-  );
+  SearchRepositoryImpl({required this.client});
 
   @override
   Future<Either<Failure, List<Product>>> searchAndFilterProducts({
@@ -45,15 +37,21 @@ class SearchRepositoryImpl implements SearchRepository {
         ? ''
         : "&category=${searchParmas.categoryID}";
     try {
-      var response = await dio.get(
-        '${wcAPI}products?status=publish&search=${searchParmas.query}&page=$page&${orderFilter + minPriceFilter + maxPriceFilter + categoryIdFilter}&$wcCred',
-        options: options,
+      var response = await client.get(
+        Uri.parse(
+            '${wcAPI}products?status=publish&search=${searchParmas.query}&page=$page&${orderFilter + minPriceFilter + maxPriceFilter + categoryIdFilter}&$wcCred'),
       );
-      var result = productFromJson(response.data);
+
+      if (errorStatusCodes.contains(response.statusCode)) {
+        logger.e(response.body);
+        return Left(ServerFailure());
+      }
+
+      var result = productFromJson(response.body);
       logger.d(result);
       return Right(result);
-    } on DioError catch (e) {
-      logger.e('${e.response}');
+    } catch (e) {
+      logger.e(e);
       return Left(ServerFailure());
     }
   }

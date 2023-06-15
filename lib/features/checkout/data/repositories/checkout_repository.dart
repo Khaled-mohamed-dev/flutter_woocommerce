@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_woocommerce/core/error/failures.dart';
 import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
 import 'package:flutter_woocommerce/features/checkout/data/models/country_data.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_woocommerce/features/checkout/data/models/shipping_zone_
 
 import '../../../../core/consts.dart';
 import '../../../../main.dart';
+import 'package:http/http.dart' as http;
 
 abstract class CheckoutRepository {
   String? fetchUserAddress();
@@ -26,17 +26,9 @@ abstract class CheckoutRepository {
 }
 
 class CheckoutRepositoryImpl implements CheckoutRepository {
-  final Dio dio;
+  final http.Client client;
   final SharedPrefService prefs;
-  CheckoutRepositoryImpl({required this.dio, required this.prefs});
-
-  var options = Options(
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    responseType: ResponseType.plain,
-  );
+  CheckoutRepositoryImpl({required this.client, required this.prefs});
 
   @override
   Future<Either<Failure, List<ShippingMethod>>> fetchShippingMethods(
@@ -44,12 +36,16 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
     try {
       final stopwatch = Stopwatch()..start();
 
-      var response = await dio.get(
-        '${wcAPI}shipping/zones/$shippingZoneID/methods?$wcCred',
-        options: options,
+      var response = await client.get(
+        Uri.parse('${wcAPI}shipping/zones/$shippingZoneID/methods?$wcCred'),
       );
 
-      var result = shippingMethodsFromJson(response.data);
+      if (errorStatusCodes.contains(response.statusCode)) {
+        logger.e(response.body);
+        return Left(ServerFailure());
+      }
+
+      var result = shippingMethodsFromJson(response.body);
 
       logger.wtf('function executed in ${stopwatch.elapsed}');
 
@@ -65,12 +61,15 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
   @override
   Future<Either<Failure, List<ShippingZone>>> fetchShippingZones() async {
     try {
-      var response = await dio.get(
-        '${wcAPI}shipping/zones?$wcCred',
-        options: options,
-      );
+      var response =
+          await client.get(Uri.parse('${wcAPI}shipping/zones?$wcCred'));
 
-      var result = shippingZoneFromJson(response.data);
+      if (errorStatusCodes.contains(response.statusCode)) {
+        logger.e(response.body);
+        return Left(ServerFailure());
+      }
+
+      var result = shippingZoneFromJson(response.body);
 
       return Right(result);
     } catch (e) {
@@ -86,41 +85,42 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
 
       var countriesAndZonesFutures = await Future.wait(
         [
-          dio.get(
-            '${wcAPI}data/countries?$wcCred',
-            options: options,
-          ),
-          dio.get(
-            '${wcAPI}shipping/zones?$wcCred',
-            options: options,
-          )
+          client.get(Uri.parse('${wcAPI}data/countries?$wcCred')),
+          client.get(Uri.parse('${wcAPI}shipping/zones?$wcCred'))
         ],
       );
+
+      if (countriesAndZonesFutures
+          .any(((result) => errorStatusCodes.contains(result.statusCode)))) {
+        logger.e(countriesAndZonesFutures
+            .firstWhere(
+                (result) => errorStatusCodes.contains(result.statusCode))
+            .body);
+        return Left(ServerFailure());
+      }
 
       var countryDataResponse = countriesAndZonesFutures[0];
 
       var responseZones = countriesAndZonesFutures[1];
 
-      var zones = shippingZoneFromJson(responseZones.data);
+      var zones = shippingZoneFromJson(responseZones.body);
 
-      var countryData = countryDataFromJson(countryDataResponse.data);
+      var countryData = countryDataFromJson(countryDataResponse.body);
 
-      List selectedCountriesCodes = await dio
+      List selectedCountriesCodes = await client
           .get(
-            '${wcAPI}settings/general/woocommerce_specific_allowed_countries?$wcCred',
-            options: options,
+            Uri.parse(
+                '${wcAPI}settings/general/woocommerce_specific_allowed_countries?$wcCred'),
           )
-          .then((value) => jsonDecode(value.data)['value']);
+          .then((value) => jsonDecode(value.body)['value']);
 
       List<CountryData> selectedCountries = countryData
           .where((element) => selectedCountriesCodes.contains(element.code))
           .toList();
 
       var futures = zones.map(
-        (zone) => dio.get(
-          '${wcAPI}shipping/zones/${zone.id}/locations?$wcCred',
-          options: options,
-        ),
+        (zone) => client.get(
+            Uri.parse('${wcAPI}shipping/zones/${zone.id}/locations?$wcCred')),
       );
 
       var results = await Future.wait(futures);
@@ -129,7 +129,7 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
 
       for (var i = 0; i < results.length; i++) {
         ultimateReturn[zones[i]] =
-            shippingZoneLocationFromJson(results[i].data).map(
+            shippingZoneLocationFromJson(results[i].body).map(
           (location) {
             var code = location.code;
             if (location.type == 'state') {
@@ -180,12 +180,16 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
   @override
   Future<Either<Failure, Coupon>> fetchCouponDetails(String code) async {
     try {
-      var response = await dio.get(
-        '${wcAPI}coupons?code=$code&$wcCred',
-        options: options,
+      var response = await client.get(
+        Uri.parse('${wcAPI}coupons?code=$code&$wcCred'),
       );
 
-      var result = couponsFromJson(response.data).last;
+      if (errorStatusCodes.contains(response.statusCode)) {
+        logger.e(response.body);
+        return Left(ServerFailure());
+      }
+
+      var result = couponsFromJson(response.body).last;
 
       return Right(result);
     } catch (e) {
@@ -199,78 +203,3 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
     return prefs.user!.shipping?.address1;
   }
 }
-
-// old function
-// @override
-// Future<Either<Failure, List<ShippingZoneLocation>>> fetchShippingZoneLocations(
-//     int zonedID) async {
-//   try {
-//     final stopwatch = Stopwatch()..start();
-
-//     var countryDataResponse = await dio.get(
-//       '${wcAPI}data/countries?$wcCred',
-//       options: options,
-//     );
-
-//     var responseZones = await dio.get(
-//       '${wcAPI}shipping/zones?$wcCred',
-//       options: options,
-//     );
-
-//     var zones = shippingZoneFromJson(responseZones.data);
-
-//     var countryData = countryDataFromJson(countryDataResponse.data);
-
-//     var response = await dio.get(
-//       '${wcAPI}shipping/zones/2/locations?$wcCred',
-//       options: options,
-//     );
-
-//     logger.wtf('response came in ${stopwatch.elapsed}');
-
-//     var result = shippingZoneLocationFromJson(response.data).map(
-//       (location) {
-//         var code = location.code;
-//         if (location.type == 'state') {
-//           var countryCode = code.split(':')[0];
-//           var stateCode = code.split(':')[1];
-
-//           var name = countryData
-//               .firstWhere((element) => element.code == countryCode)
-//               .states
-//               .firstWhere((element) => element.code == stateCode)
-//               .name;
-
-//           return location.copyWith(name: name);
-//         } else if (location.type == 'country') {
-//           var name =
-//               countryData.firstWhere((element) => element.code == code).name;
-//           return location.copyWith(name: name);
-//         } else if (location.type == 'continent') {
-//           Map continents = {
-//             'AF': 'Africa',
-//             'NA': 'North America',
-//             'OC': 'Oceania',
-//             'AN': 'Antarctica',
-//             'AS': 'Asia',
-//             'EU': 'Europe',
-//             'SA': 'South America'
-//           };
-//           var name = continents[code];
-//           return location.copyWith(name: name);
-//         }
-//         return location.copyWith(name: code);
-//       },
-//     ).toList();
-
-//     logger.d(result);
-//     logger.w(ultimateReturn);
-//     logger.wtf('function executed in ${stopwatch.elapsed}');
-
-//     stopwatch.stop();
-//     return Right([]);
-//   } catch (e) {
-//     logger.e(e);
-//     return Left(ServerFailure());
-//   }
-// }

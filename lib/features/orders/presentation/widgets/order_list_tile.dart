@@ -4,6 +4,7 @@ import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/screens/order_details.dart';
 
 import '../../data/models/order.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderListTile extends StatelessWidget {
   const OrderListTile({
@@ -13,6 +14,17 @@ class OrderListTile extends StatelessWidget {
   final Order order;
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+    var statuses = {
+      'processing': localization.processing,
+      'pending': localization.pending,
+      'completed': localization.completed,
+      'on-hold': localization.on_hold,
+      'cancelled': localization.cancelled,
+      'refunded': localization.refunded,
+      'failed': localization.failed,
+      'trash': localization.trash
+    };
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -37,12 +49,12 @@ class OrderListTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Order Number : ${order.id.toString()}",
+                      "${localization.order_number}: ${order.id.toString()}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     verticalSpaceTiny,
                     Text(
-                      "order date: ${order.dateCreated?.formatDate()}",
+                      "${localization.order_date}: ${order.dateCreated?.formatDate()}",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     verticalSpaceTiny,
@@ -50,7 +62,7 @@ class OrderListTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "total: ${order.total}",
+                          "${localization.total}: ${order.total}",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         horizontalSpaceSmall,
@@ -62,7 +74,7 @@ class OrderListTile extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(6),
                             child: Text(
-                              "${order.status}",
+                              statuses["${order.status}"] ?? '',
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ),

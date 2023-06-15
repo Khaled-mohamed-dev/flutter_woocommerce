@@ -1,74 +1,34 @@
-import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_woocommerce/core/error/failures.dart';
-import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
-import 'package:flutter_woocommerce/features/product/data/models/product.dart';
-
-import '../../../../core/consts.dart';
-import '../../../../main.dart';
+import 'package:flutter_woocommerce/features/favorites/data/models/favorite.dart';
+import 'package:hive/hive.dart';
 
 abstract class FavoritesRepository {
-  void changeFavoriteStatus(int productID);
+  void changeFavoriteStatus(Favorite product);
   bool isFavorited(int productID);
-  Future<Either<Failure, List<Product>>> fetchFavoriteProducts(int page);
-  List<String> getFavoritesIDs();
+  List<Favorite> getFavoriteProducts();
 }
 
 class FavoritesRepositoryImpl implements FavoritesRepository {
-  final SharedPrefService sharedPrefService;
-  final Dio dio;
+  final Box<Favorite> favoritesBox;
 
-  FavoritesRepositoryImpl({required this.sharedPrefService, required this.dio});
+  FavoritesRepositoryImpl({required this.favoritesBox});
 
   @override
-  void changeFavoriteStatus(int productID) {
-    List<String> favoritesIDs = sharedPrefService.favorites;
-    if (favoritesIDs.contains(productID.toString())) {
-      favoritesIDs.remove('$productID');
+  void changeFavoriteStatus(Favorite product) {
+    int productID = product.productID;
+    if (favoritesBox.values.any((element) => element.productID == productID)) {
+      favoritesBox.delete(productID.toString());
     } else {
-      favoritesIDs.add('$productID');
-    }
-    sharedPrefService.favorites = favoritesIDs;
-  }
-
-  @override
-  Future<Either<Failure, List<Product>>> fetchFavoriteProducts(int page) async {
-    var include = sharedPrefService.favorites
-        .skip((page - 1) * 10)
-        .take(10)
-        .toString()
-        .replaceAll('(', '')
-        .replaceAll(')', '');
-
-    try {
-      var response = await dio.get(
-        '${wcAPI}products?include=$include&$wcCred',
-        options: Options(
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-          responseType: ResponseType.plain,
-        ),
-      );
-
-      var result = productFromJson(response.data);
-
-      return Right(result);
-    } catch (e) {
-      logger.e('$e');
-      return Left(ServerFailure());
+      favoritesBox.put(productID.toString(), product);
     }
   }
 
   @override
   bool isFavorited(int productID) {
-    List<String> favoritesIDs = sharedPrefService.favorites;
-    return favoritesIDs.contains(productID.toString());
+    return favoritesBox.values.any((element) => element.productID == productID);
   }
 
   @override
-  List<String> getFavoritesIDs() {
-    return sharedPrefService.favorites;
+  List<Favorite> getFavoriteProducts() {
+    return favoritesBox.values.toList();
   }
 }

@@ -8,16 +8,19 @@ import 'package:flutter_woocommerce/features/reviews/presentation/bloc/bloc.dart
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReviewsScreen extends StatelessWidget {
   const ReviewsScreen({Key? key, required this.product}) : super(key: key);
   final Product product;
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text("${product.averageRating} (${product.ratingCount} reviews)"),
+        title: Text(
+            "${product.averageRating} (${product.ratingCount} ${localization.reviews})"),
       ),
       body: BlocProvider(
         create: (context) =>
@@ -50,6 +53,41 @@ class ReviewsScreen extends StatelessWidget {
   }
 }
 
+class MyCustomMessages implements timeago.LookupMessages {
+  @override
+  String prefixAgo() => '';
+  @override
+  String prefixFromNow() => '';
+  @override
+  String suffixAgo() => '';
+  @override
+  String suffixFromNow() => '';
+  @override
+  String lessThanOneMinute(int seconds) => 'الآن';
+  @override
+  String aboutAMinute(int minutes) => '${minutes}د';
+  @override
+  String minutes(int minutes) => '${minutes}د';
+  @override
+  String aboutAnHour(int minutes) => '${minutes}س';
+  @override
+  String hours(int hours) => '${hours}ساعة';
+  @override
+  String aDay(int hours) => '${hours}ساعات';
+  @override
+  String days(int days) => '${days}يوم';
+  @override
+  String aboutAMonth(int days) => '${days}أيام';
+  @override
+  String months(int months) => '${months}شهر';
+  @override
+  String aboutAYear(int year) => '${year}سنة';
+  @override
+  String years(int years) => '${years}سنوات';
+  @override
+  String wordSeparator() => ' ';
+}
+
 class ReviewListTile extends StatelessWidget {
   const ReviewListTile({
     super.key,
@@ -60,6 +98,8 @@ class ReviewListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    timeago.setLocaleMessages('ar', MyCustomMessages());
+
     return ListTile(
       onTap: () {},
       isThreeLine: true,
@@ -105,7 +145,8 @@ class ReviewListTile extends StatelessWidget {
           ),
           verticalSpaceTiny,
           Text(
-            timeago.format(review.dateCreated!),
+            timeago.format(review.dateCreated!,
+                locale: Localizations.localeOf(context).languageCode),
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ],
