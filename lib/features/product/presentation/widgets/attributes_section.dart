@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/core/widgets/message_alert.dart';
 import 'package:flutter_woocommerce/features/product/presentation/bloc/bloc.dart';
-import 'package:flutter_woocommerce/main.dart';
-
 import '../../../../core/colors.dart';
 import '../../../../core/ui_helpers.dart';
 import '../../data/models/product.dart';
@@ -46,14 +44,11 @@ class _AttributesSectionState extends State<AttributesSection> {
   bool isAvailableCombination(String option, int index) {
     if (selectedCombination.every((element) => element == '') &&
         widget.attributes.length > 1) {
-      print('huh!');
       return true;
     }
 
     var myList = List<String>.from(selectedCombination);
     myList[index] = option;
-
-    print(myList);
 
     if (widget.combinations.keys.any(
       (element) {

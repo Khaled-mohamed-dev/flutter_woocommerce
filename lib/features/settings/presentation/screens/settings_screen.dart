@@ -4,15 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
-import 'package:flutter_woocommerce/features/authentication/data/models/user.dart';
-import 'package:flutter_woocommerce/features/authentication/data/repositories/auth_repository.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/contact_us_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/refund_policy_screen.dart';
-import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -22,13 +19,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localization = AppLocalizations.of(context)!;
-
-    var auth = locator<AuthRepository>();
-    bool isLoggedIn = auth.isLoggedIn();
-    User user;
-    if (isLoggedIn) {
-      user = auth.getSignedInUser()!;
-    }
 
     return Scaffold(
       appBar: AppBar(
