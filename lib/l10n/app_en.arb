@@ -86,7 +86,6 @@
     "order_successful": "Order Successful!",
     "leave": "Leave",
     "view_order": "View Order",
-    "order_success_message": "You have successfully made order!",
     "cart": "Cart",
     "empty_cart_message": "Your Cart is empty \ncan't checkout",
     "remove_cart_item_confirmation": "Remove from cart?",
@@ -106,5 +105,7 @@
     "whatsApp" : "WhatsApp",
     "website" : "Website",
     "twitter" : "Twitter",
-    "instagram" : "Instagram"
+    "instagram" : "Instagram",
+    "successful_order" : "Successful Order!",
+    "back_to_store" : "Back to Store"
 }

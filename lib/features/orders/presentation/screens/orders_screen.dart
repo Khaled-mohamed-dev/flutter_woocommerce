@@ -20,7 +20,11 @@ class OrdersScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(title: Text(localization.orders)),
+        appBar: AppBar(
+            title: BaseText(
+          localization.orders,
+          style: Theme.of(context).textTheme.bodySmall!,
+        )),
         body: BlocBuilder<OrdersBloc, OrdersState>(
           builder: (context, state) {
             switch (state.status) {

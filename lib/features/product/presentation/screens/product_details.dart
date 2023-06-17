@@ -652,7 +652,11 @@ class _VariationSelectionPopupState extends State<VariationSelectionPopup> {
     double ratePercentage = double.parse(product.averageRating) / 5;
 
     return Scaffold(
-      appBar: AppBar(title: Text(localization.select_variation)),
+      appBar: AppBar(
+          title: BaseText(
+        localization.select_variation,
+        style: Theme.of(context).textTheme.bodySmall!,
+      )),
       body: FutureBuilder(
         future: future,
         builder: ((context, snapshot) {

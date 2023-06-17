@@ -37,7 +37,10 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
     Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(localization.complete_profile),
+        title: BaseText(
+          localization.complete_profile,
+          style: Theme.of(context).textTheme.bodySmall!,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),

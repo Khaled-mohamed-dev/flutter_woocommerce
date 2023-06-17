@@ -21,7 +21,10 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localization.contact_us),
+        title: BaseText(
+          localization.contact_us,
+          style: Theme.of(context).textTheme.bodySmall!,
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -29,27 +32,27 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
           child: Column(
             children: [
               ContactUsListTile(
-                url: 'url',
+                url: 'https://www.facebook.com/profile.php?id=100068813316337',
                 platform: localization.facebook,
                 icon: Ionicons.logo_facebook,
               ),
               ContactUsListTile(
-                url: 'url',
+                url: 'https://wa.me/201227171323',
                 platform: localization.whatsApp,
                 icon: Ionicons.logo_whatsapp,
               ),
               ContactUsListTile(
-                url: 'url',
+                url: 'https://www.khaled-mohamad.tech',
                 platform: localization.website,
                 icon: Icons.web_asset,
               ),
               ContactUsListTile(
-                url: 'url',
+                url: 'https://twitter.com',
                 platform: localization.twitter,
                 icon: Ionicons.logo_twitter,
               ),
               ContactUsListTile(
-                url: 'url',
+                url: 'https://www.instagram.com',
                 platform: localization.instagram,
                 icon: Ionicons.logo_instagram,
               ),
@@ -78,7 +81,7 @@ class ContactUsListTile extends StatelessWidget {
       child: ListTile(
         minVerticalPadding: 18,
         onTap: () {
-          launchUrl(Uri.parse(url));
+          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
         },
         tileColor: kcCartItemBackgroundColor,
         shape: RoundedRectangleBorder(

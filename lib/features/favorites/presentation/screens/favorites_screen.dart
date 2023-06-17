@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/features/favorites/data/models/favorite.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/widgets/favorites_list_tile.dart';
 import 'package:flutter_woocommerce/features/product/data/repositories/products_repository.dart';
@@ -23,7 +24,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     var localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(localization.wish_slist)),
+      appBar: AppBar(
+          title: BaseText(
+        localization.wish_slist,
+        style: Theme.of(context).textTheme.bodySmall!,
+      )),
       body: Stack(
         children: [
           ValueListenableBuilder(

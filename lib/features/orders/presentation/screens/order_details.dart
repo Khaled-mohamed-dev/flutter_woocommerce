@@ -24,7 +24,11 @@ class OrdersDetails extends StatelessWidget {
     };
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text('${localization.order} #${order.id}')),
+      appBar: AppBar(
+          title: BaseText(
+        '${localization.order} #${order.id}',
+        style: Theme.of(context).textTheme.bodySmall!,
+      )),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(

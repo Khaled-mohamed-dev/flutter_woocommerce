@@ -6,6 +6,7 @@ import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/features/orders/data/repositories/orders_repository.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuccessfulOrderPopup extends StatefulWidget {
   const SuccessfulOrderPopup({Key? key, required this.orderID})
@@ -20,13 +21,17 @@ class _SuccessfulOrderPopupState extends State<SuccessfulOrderPopup> {
   @override
   void initState() {
     super.initState();
-    locator<OrdersRepository>()
-        .updateOrder(widget.orderID)
-        .then((value) => setState(() => isLoading = false));
+    locator<OrdersRepository>().updateOrder(widget.orderID).then(
+          (value) => setState(
+            () => isLoading = false,
+          ),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: isLoading
           ? Center(child: CircularProgressIndicator(color: kcPrimaryColor))
@@ -49,18 +54,21 @@ class _SuccessfulOrderPopupState extends State<SuccessfulOrderPopup> {
                     ),
                   ),
                   verticalSpaceRegular,
-                  BaseText('Order Successful!',
-                      style: Theme.of(context).textTheme.bodyMedium!),
-                  BaseText('You have successfully made order!',
-                      style: Theme.of(context).textTheme.titleMedium!),
+                  BaseText(
+                    localization.order_successful,
+                    style: Theme.of(context).textTheme.bodyMedium!,
+                  ),
+                  BaseText(
+                    "${localization.order_number} ${widget.orderID}",
+                    style: Theme.of(context).textTheme.titleMedium!,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(40.0),
                     child: Column(
                       children: [
-                        // BaseButton(title: 'View Order', callback: () {}),
                         verticalSpaceRegular,
                         BaseButton(
-                          title: 'Back to Store',
+                          title: localization.back_to_store,
                           callback: () {
                             Navigator.of(context).pop();
                           },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/checkout/presentation/widgets/successful_order.dart';
@@ -38,7 +39,11 @@ class WebViewCheckoutScreen extends StatelessWidget {
     CookieManager().clearCookies();
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(localization.checkout)),
+        appBar: AppBar(
+            title: BaseText(
+          localization.checkout,
+          style: Theme.of(context).textTheme.bodySmall!,
+        )),
         body: WebView(
           initialUrl: '${siteUrl}checkout/${addToCartUrl()}',
           javascriptMode: JavascriptMode.unrestricted,

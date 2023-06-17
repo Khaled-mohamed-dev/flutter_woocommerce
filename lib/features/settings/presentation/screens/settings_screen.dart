@@ -10,8 +10,8 @@ import 'package:flutter_woocommerce/features/authentication/presentation/bloc/bl
 import 'package:flutter_woocommerce/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dart';
-import 'package:flutter_woocommerce/features/settings/presentation/screens/address_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/contact_us_screen.dart';
+import 'package:flutter_woocommerce/features/settings/presentation/screens/refund_policy_screen.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,7 +32,10 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localization.profile),
+        title: BaseText(
+          localization.profile,
+          style: Theme.of(context).textTheme.bodySmall!,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -42,33 +45,6 @@ class SettingsScreen extends StatelessWidget {
               iconColor: kcPrimaryColor,
               child: Column(
                 children: [
-                  ListTile(
-                    onTap: () {},
-                    leading: const ResponsiveIcon(IconlyLight.profile),
-                    title: BaseText(
-                      localization.edit_profile,
-                      style: Theme.of(context).textTheme.bodySmall!,
-                    ),
-                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddressScreen(),
-                        ),
-                      );
-                    },
-                    leading: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [ResponsiveIcon(IconlyLight.location)],
-                    ),
-                    title: BaseText(
-                      localization.address,
-                      style: Theme.of(context).textTheme.bodySmall!,
-                    ),
-                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
-                  ),
                   ListTile(
                     onTap: () {
                       Navigator.of(context).push(
@@ -85,7 +61,13 @@ class SettingsScreen extends StatelessWidget {
                     trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const RefundPolicyScreen(),
+                        ),
+                      );
+                    },
                     leading: const ResponsiveIcon(Icons.policy_outlined),
                     title: BaseText(
                       localization.refund_policy,
@@ -112,7 +94,8 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {
                       context.read<SettingsBloc>().add(ThemeChanged());
                     },
-                    leading: const ResponsiveIcon(Icons.remove_red_eye_outlined),
+                    leading:
+                        const ResponsiveIcon(Icons.remove_red_eye_outlined),
                     title: BaseText(
                       localization.dark_mode,
                       style: Theme.of(context).textTheme.bodySmall!,

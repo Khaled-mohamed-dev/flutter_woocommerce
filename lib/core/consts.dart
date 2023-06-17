@@ -9,6 +9,6 @@ const String wcCred =
 
 const String jwtAuth = "${siteUrl}wp-json/jwt-auth/v1/";
 
-const String language = 'en';
+const String language = 'ar';
 
 const webviewCheckout = true;

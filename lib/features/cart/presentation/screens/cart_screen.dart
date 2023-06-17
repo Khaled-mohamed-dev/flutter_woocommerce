@@ -21,7 +21,11 @@ class CartScreen extends StatelessWidget {
     var localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(localization.cart)),
+      appBar: AppBar(
+          title: BaseText(
+        localization.cart,
+        style: Theme.of(context).textTheme.bodySmall!,
+      )),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           switch (state.status) {

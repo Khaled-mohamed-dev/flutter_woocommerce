@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
@@ -37,19 +38,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false,
         titleSpacing: 0,
-        title: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BaseText(localization.welcome,
-                  style: Theme.of(context).textTheme.titleSmall!),
-              BaseText('Khaled',
-                  style: Theme.of(context).textTheme.bodyMedium!),
-            ],
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: kToolbarHeight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Image.asset(
+                  'assets/icon.png',
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ),
+            horizontalSpaceTiny,
+            BaseText('فلوكوميرس', style: Theme.of(context).textTheme.bodySmall!)
+          ],
         ),
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
@@ -150,8 +155,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: Image.network(
-                                                          category.image!,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              category.image!,
                                                           fit: BoxFit.cover,
                                                         ),
                                                       )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
 import 'package:flutter_woocommerce/features/category/data/models/category.dart';
 import 'package:flutter_woocommerce/features/category/presentation/bloc/bloc.dart';
@@ -16,7 +17,11 @@ class CategoryProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(category.name)),
+      appBar: AppBar(
+          title: BaseText(
+        category.name,
+        style: Theme.of(context).textTheme.bodySmall!,
+      )),
       body: BlocProvider(
         create: (context) =>
             locator<CategoryBloc>()..add(LoadData(category.id)),

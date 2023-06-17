@@ -73,7 +73,7 @@ class OrdersRepositoryImpl implements OrdersRepository {
     try {
       var response = await client.put(
         Uri.parse('${wcAPI}orders/$id?$wcCred'),
-        body: {"customer_id": sharedPrefService.user!.id},
+        body: json.encode({"customer_id": sharedPrefService.user!.id}),
         headers: {
           "content-type": "application/json",
         },

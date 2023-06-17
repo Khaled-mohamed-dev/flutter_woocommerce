@@ -80,6 +80,8 @@ class ProductCard extends StatelessWidget {
                             child: Image.network(
                               product.images.first,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.image_not_supported),
                             ),
                           )
                         : const Center(child: ResponsiveIcon(Icons.image)),
@@ -128,7 +130,7 @@ class ProductCard extends StatelessWidget {
               ),
               verticalSpaceTiny,
               SizedBox(
-                height: per * .4,
+                height: per / 3,
                 width: constraints.maxWidth,
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
@@ -143,7 +145,7 @@ class ProductCard extends StatelessWidget {
               ),
               verticalSpaceTiny,
               SizedBox(
-                height: per * .3,
+                height: per / 3,
                 child: Center(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +186,7 @@ class ProductCard extends StatelessWidget {
                 fit: BoxFit.fitHeight,
                 clipBehavior: Clip.hardEdge,
                 child: SizedBox(
-                  height: per * .3,
+                  height: per / 3,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

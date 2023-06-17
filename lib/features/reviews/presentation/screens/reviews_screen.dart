@@ -22,8 +22,10 @@ class ReviewsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            "${product.averageRating} (${product.ratingCount} ${localization.reviews})"),
+        title: BaseText(
+          "${product.averageRating} (${product.ratingCount} ${localization.reviews})",
+          style: Theme.of(context).textTheme.bodySmall!,
+        ),
       ),
       body: BlocProvider(
         create: (context) =>

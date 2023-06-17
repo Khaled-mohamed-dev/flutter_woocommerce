@@ -22,9 +22,9 @@ class SearchScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: BaseText(
           localization.search,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.bodySmall!,
         ),
       ),
       body: BlocProvider(
@@ -363,37 +363,43 @@ class CategoriesList extends StatelessWidget {
         var category = categories[index];
         bool isSelected =
             selectedCategory == category.id.toString() ? true : false;
-        return GestureDetector(
-          onTap: () {
-            BlocProvider.of<SearchBloc>(context).add(SetFilters(
-              state.searchParmas.copyWith(categoryID: category.id.toString()),
-            ));
-          },
-          child: Container(
-            margin: const EdgeInsetsDirectional.only(end: 10),
-            decoration: BoxDecoration(
-              color: isSelected ? kcPrimaryColor : Colors.transparent,
-              borderRadius: BorderRadius.circular(100),
-              border: Border.all(
-                color: isSelected ? kcPrimaryColor : kcSecondaryColor,
-                width: 2,
-              ),
-            ),
-            child: Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
-                child: BaseText(
-                  category.name,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: isSelected ? kcButtonIconColor : null,
-                        fontWeight: isSelected ? FontWeight.bold : null,
+        return category.name != 'Uncategorized'
+            ? GestureDetector(
+                onTap: () {
+                  BlocProvider.of<SearchBloc>(context).add(SetFilters(
+                    state.searchParmas
+                        .copyWith(categoryID: category.id.toString()),
+                  ));
+                },
+                child: Container(
+                  margin: const EdgeInsetsDirectional.only(end: 10),
+                  decoration: BoxDecoration(
+                    color: isSelected ? kcPrimaryColor : Colors.transparent,
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                      color: isSelected ? kcPrimaryColor : kcSecondaryColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 6),
+                      child: BaseText(
+                        category.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                              color: isSelected ? kcButtonIconColor : null,
+                              fontWeight: isSelected ? FontWeight.bold : null,
+                            ),
                       ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-        );
+              )
+            : const SizedBox();
       },
     );
   }

@@ -86,7 +86,6 @@
     "order_successful": "علمية ناجحة!",
     "leave": "غادر",
     "view_order": "عرض الطلب",
-    "order_success_message": "لقد قمت بإرسال طلب جديد",
     "cart": "السلة",
     "empty_cart_message": "السلة فارغة\nلا تستطيع الدفع",
     "remove_cart_item_confirmation": "متأكد من إزالة المنتج؟",
@@ -106,5 +105,7 @@
     "whatsApp" : "واتس آب",
     "website" : "الموقع الالكتروني",
     "twitter" : "تويتر",
-    "instagram" : "إنستاجرام"
+    "instagram" : "إنستاجرام",
+    "successful_order" : "عملية شراء ناجحة!",
+    "back_to_store" : "العودة للمتجر"
 }

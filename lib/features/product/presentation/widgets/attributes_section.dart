@@ -114,6 +114,8 @@ class _AttributesSectionState extends State<AttributesSection> {
                               if (!isAvailableCombination(option, i)) {
                                 selectedCombination =
                                     List.filled(widget.attributes.length, '');
+                              } else {
+                                selectedCombination[i] = option;
                               }
                               if (selectedCombination.length > 1) {
                                 selectedCombination[i] = option;
