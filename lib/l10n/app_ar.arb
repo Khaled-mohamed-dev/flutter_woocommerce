@@ -27,10 +27,10 @@
     "total_price": "السعر الإجمالي",
     "add_to_cart": "أضف للسلة",
     "products_collection": "مجموعة المنتجات",
-    "select_variation": "Select a variation",
+    "select_variation": "اختر تفاصيل المنتج",
     "unselected_variation_message": "رجاءًا، قم باختيار النوع للمنتجات {notSelectedVariableProducts} قبل إضافة المنتج للسلة",
     "confirm": "تأكيد",
-    "select_variation_display_price": "select a variation to display price",
+    "select_variation_display_price": "رجاءًا، اختر تفاصيل المنتج لعرض السعر",
     "orders": "الطلبات",
     "processing": "قيد التجهيز",
     "completed": "مكتمل",
@@ -100,5 +100,11 @@
     "failed" : "فشل",
     "trash": "trash",
     "instock": "متوفر",
-    "outofstock": "نفدت الكمية"
+    "outofstock": "نفدت الكمية",
+    "connection_error" : "لقد حدثت مشكلة\nتأكد من الشبكة وحاول مجددًا",
+    "facebook" : "فيسبوك",
+    "whatsApp" : "واتس آب",
+    "website" : "الموقع الالكتروني",
+    "twitter" : "تويتر",
+    "instagram" : "إنستاجرام"
 }

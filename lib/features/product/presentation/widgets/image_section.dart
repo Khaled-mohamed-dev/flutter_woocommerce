@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/product/presentation/bloc/bloc.dart';
 
 import '../../../../core/ui_helpers.dart';
@@ -51,6 +52,8 @@ class _ImageSectionState extends State<ImageSection> {
         color: kcSecondaryColor,
         width: screenWidth(context),
         height: screenWidth(context),
+        constraints: BoxConstraints(
+            maxHeight: screenHeightPercentage(context, percentage: .5)),
         child: images.isNotEmpty
             ? Stack(
                 alignment: Alignment.center,
@@ -88,7 +91,7 @@ class _ImageSectionState extends State<ImageSection> {
                   )
                 ],
               )
-            : const Icon(Icons.image),
+            : const ResponsiveIcon(Icons.image),
       ),
     );
   }

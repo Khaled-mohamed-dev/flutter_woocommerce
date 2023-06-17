@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/widgets/order_list_tile.dart';
 
@@ -18,9 +20,7 @@ class OrdersScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(localization.orders),
-        ),
+        appBar: AppBar(title: Text(localization.orders)),
         body: BlocBuilder<OrdersBloc, OrdersState>(
           builder: (context, state) {
             switch (state.status) {
@@ -39,10 +39,10 @@ class OrdersScreen extends StatelessWidget {
                             children: [
                               Image.asset('assets/$notFoundImage.png'),
                               verticalSpaceRegular,
-                              Text(
+                              BaseText(
                                 localization.no_orders,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                alignment: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyMedium!,
                               ),
                             ],
                           )
@@ -56,9 +56,9 @@ class OrdersScreen extends StatelessWidget {
                   ),
                 );
               case OrdersStatus.failure:
-                return const Center(
-                  child: Text('some thing went wrong'),
-                );
+                return NoConnectionWidget(reload: () {
+                  context.read<OrdersBloc>().add(LoadOrders());
+                });
             }
           },
         ),

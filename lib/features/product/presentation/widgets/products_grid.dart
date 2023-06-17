@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/favorites/presentation/widgets/favorite_button.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product.dart';
 import 'package:flutter_woocommerce/features/product/presentation/screens/product_details.dart';
@@ -15,13 +17,14 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet = MediaQuery.of(context).size.width > 700;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isTablet ? 3 : 2,
           childAspectRatio: 1 / 1.5,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
@@ -79,19 +82,24 @@ class ProductCard extends StatelessWidget {
                               fit: BoxFit.cover,
                             ),
                           )
-                        : const Center(child: Icon(Icons.image)),
+                        : const Center(child: ResponsiveIcon(Icons.image)),
                   ),
                   PositionedDirectional(
                     end: 10,
                     top: 10,
-                    child: Transform.scale(
-                      scale: .85,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                      ),
+                      child: Transform.scale(
+                        scale: .9,
+                        child: Center(
+                          child: IconTheme(
+                            data: const IconThemeData(color: Colors.white),
+                            child: FavoriteButton(product: product),
+                          ),
                         ),
-                        child: FavoriteButton(product: product),
                       ),
                     ),
                   ),
@@ -106,7 +114,7 @@ class ProductCard extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8),
-                          child: Text(
+                          child: BaseText(
                             "${(int.parse(product.salePrice) / int.parse(product.regularPrice) * 100).toInt()}%",
                             style: const TextStyle(
                               color: Colors.white,
@@ -120,70 +128,95 @@ class ProductCard extends StatelessWidget {
               ),
               verticalSpaceTiny,
               SizedBox(
-                height: per / 3,
-                child: Text(
-                  product.name,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                height: per * .4,
+                width: constraints.maxWidth,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  clipBehavior: Clip.hardEdge,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: BaseText(
+                    product.name,
+                    style: Theme.of(context).textTheme.bodySmall!,
+                    maxLines: 1,
+                  ),
                 ),
               ),
               verticalSpaceTiny,
               SizedBox(
-                height: per / 3,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ShaderMask(
-                      blendMode: BlendMode.srcIn,
-                      shaderCallback: (Rect bounds) => LinearGradient(
-                        stops: [ratePercentage, ratePercentage],
-                        colors: [
-                          kcIconColorSelected,
-                          kcSecondaryColor,
-                        ],
-                      ).createShader(bounds),
-                      child: Icon(
-                        IconlyBold.star,
-                        color: kcIconColorSelected,
-                        size: 20,
+                height: per * .3,
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (Rect bounds) => LinearGradient(
+                          stops: [ratePercentage, ratePercentage],
+                          colors: [
+                            kcPrimaryColor,
+                            kcSecondaryColor,
+                          ],
+                        ).createShader(bounds),
+                        child: ResponsiveIcon(
+                          IconlyBold.star,
+                          color: kcPrimaryColor,
+                          size: 20,
+                        ),
                       ),
-                    ),
-                    horizontalSpaceTiny,
-                    Text(
-                      product.averageRating,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      textAlign: TextAlign.center,
-                    )
-                  ],
+                      horizontalSpaceTiny,
+                      FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: BaseText(
+                          product.averageRating,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(height: 1.5),
+                          alignment: TextAlign.center,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               verticalSpaceTiny,
               FittedBox(
                 fit: BoxFit.fitHeight,
+                clipBehavior: Clip.hardEdge,
                 child: SizedBox(
-                  height: per / 3,
+                  height: per * .3,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (product.onSale && product.type != ProductType.grouped)
                         Padding(
                           padding: const EdgeInsetsDirectional.only(end: 4.0),
-                          child: Text(
-                            '${product.regularPrice}\$',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                  decoration: TextDecoration.lineThrough,
-                                ),
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: BaseText(
+                              '${product.regularPrice}\$',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    height: 1.5,
+                                  ),
+                            ),
                           ),
                         ),
-                      Text(
-                        product.onSale && product.type != ProductType.grouped
-                            ? product.price
-                            : product.htmlPrice,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      )
+                      FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: BaseText(
+                          product.onSale && product.type != ProductType.grouped
+                              ? product.price
+                              : product.htmlPrice,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(height: 1.5),
+                        ),
+                      ),
                     ],
                   ),
                 ),

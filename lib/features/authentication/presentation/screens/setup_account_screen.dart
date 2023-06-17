@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/core/widgets/custome_text_field.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/sign_from/bloc.dart';
 import 'package:flutter_woocommerce/main_screen.dart';
 import 'package:iconly/iconly.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SetupAccountScreen extends StatefulWidget {
   const SetupAccountScreen({Key? key}) : super(key: key);
@@ -30,10 +32,12 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var localization = AppLocalizations.of(context)!;
+
     Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Fill Your Profile'),
+        title: Text(localization.complete_profile),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -48,11 +52,11 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                     CustomTextField(
                       controller: _nameController,
                       keyboardType: TextInputType.name,
-                      hint: 'Full Name',
+                      hint: localization.full_name,
                       icon: IconlyBold.profile,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return localization.required_field;
                         }
                         return null;
                       },
@@ -61,11 +65,11 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                     CustomTextField(
                       controller: _addressController,
                       keyboardType: TextInputType.streetAddress,
-                      hint: 'Address',
+                      hint: localization.address,
                       icon: IconlyBold.location,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return localization.required_field;
                         }
                         return null;
                       },
@@ -74,11 +78,11 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                     CustomTextField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
-                      hint: 'Phone number',
+                      hint: localization.phone_number,
                       icon: IconlyBold.call,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your number';
+                          return localization.required_field;
                         }
                         return null;
                       },
@@ -92,7 +96,7 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
             Column(
               children: [
                 BaseButton(
-                  title: 'Continue',
+                  title: localization.resume,
                   callback: () {
                     context.read<SignFormBloc>().add(
                           SetupAccount(
@@ -101,6 +105,12 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                             phoneNumber: _phoneController.text,
                           ),
                         );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ),
+                    );
                   },
                 ),
                 verticalSpaceTiny,
@@ -113,8 +123,8 @@ class _SetupAccountScreenState extends State<SetupAccountScreen> {
                       ),
                     );
                   },
-                  child: Text(
-                    'Skip',
+                  child: BaseText(
+                    localization.skip,
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       decorationColor: kcPrimaryColor,

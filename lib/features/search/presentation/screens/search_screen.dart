@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/product/presentation/widgets/products_grid.dart';
 import 'package:flutter_woocommerce/features/search/presentation/bloc/bloc.dart';
@@ -47,8 +50,13 @@ class SearchScreen extends StatelessWidget {
                       ),
                     );
                   },
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize:
+                          Theme.of(context).textTheme.bodySmall!.fontSize! *
+                              (screenWidth(context) / 3.5) /
+                              100),
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    prefixIcon: ResponsiveIcon(
                       IconlyLight.search,
                       color: kcPrimaryColor,
                     ),
@@ -74,11 +82,11 @@ class SearchScreen extends StatelessWidget {
                       },
                       icon: Builder(
                         builder: (context) {
-                          return Icon(
+                          return ResponsiveIcon(
                             context.watch<SearchBloc>().state.enableFilters
                                 ? IconlyBold.filter
                                 : IconlyLight.filter,
-                            color: kcIconColorSelected,
+                            color: kcPrimaryColor,
                           );
                         },
                       ),
@@ -90,7 +98,16 @@ class SearchScreen extends StatelessWidget {
                       ),
                     ),
                     isDense: true,
-                    hintStyle: Theme.of(context).textTheme.titleSmall,
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(
+                            fontSize: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .fontSize! *
+                                (screenWidth(context) / 3.5) /
+                                100),
                     filled: true,
                     fillColor: kcSecondaryColor,
                     hintText: '${localization.search}..',
@@ -122,18 +139,17 @@ class SearchScreen extends StatelessWidget {
                                 children: [
                                   Image.asset('assets/$notFoundImage.png'),
                                   verticalSpaceRegular,
-                                  Text(
+                                  BaseText(
                                     localization.no_results,
-                                    textAlign: TextAlign.center,
+                                    alignment: TextAlign.center,
                                     style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                        Theme.of(context).textTheme.bodyMedium!,
                                   ),
                                 ],
                               ),
                             );
                     case SearchStatus.failure:
-                      return const Expanded(
-                          child: Text('something went wrong'));
+                      return NoConnectionWidget(reload: () {});
                     case SearchStatus.initial:
                       return Expanded(
                         child: Column(
@@ -144,15 +160,15 @@ class SearchScreen extends StatelessWidget {
                                   percentage: .3),
                               child: const FittedBox(
                                 fit: BoxFit.fitWidth,
-                                child: Icon(
+                                child: ResponsiveIcon(
                                   IconlyBold.search,
                                 ),
                               ),
                             ),
                             verticalSpaceRegular,
-                            Text(
+                            BaseText(
                               localization.search,
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(context).textTheme.bodyLarge!,
                             ),
                           ],
                         ),
@@ -198,14 +214,20 @@ class FilterBottomSheet extends StatelessWidget {
                             BlocProvider.of<SearchBloc>(context)
                                 .add(ClearFilters());
                           },
-                          child: Text(localization.clear),
+                          child: BaseText(
+                            localization.clear,
+                            style: Theme.of(context).textTheme.bodySmall!,
+                          ),
                         ),
-                        Text(localization.filters),
+                        BaseText(
+                          localization.filters,
+                          style: Theme.of(context).textTheme.bodySmall!,
+                        ),
                         IconButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          icon: const Icon(IconlyBold.close_square),
+                          icon: const ResponsiveIcon(IconlyBold.close_square),
                         )
                       ],
                     ),
@@ -214,7 +236,7 @@ class FilterBottomSheet extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        BaseText(
                           localization.category,
                           style: const TextStyle(
                             fontSize: 16,
@@ -229,7 +251,7 @@ class FilterBottomSheet extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        BaseText(
                           localization.sort_by,
                           style: const TextStyle(
                             fontSize: 16,
@@ -292,10 +314,10 @@ class PricingSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(localization.pricing,
-                style: Theme.of(context).textTheme.headlineSmall),
-            Text('\$$firstRangePoint-\$$secondRangePoint',
-                style: Theme.of(context).textTheme.headlineSmall),
+            BaseText(localization.pricing,
+                style: Theme.of(context).textTheme.headlineSmall!),
+            BaseText('\$$firstRangePoint-\$$secondRangePoint',
+                style: Theme.of(context).textTheme.headlineSmall!),
           ],
         ),
         verticalSpaceRegular,
@@ -335,44 +357,45 @@ class CategoriesList extends StatelessWidget {
     String selectedCategory = state.searchParmas.categoryID ?? '';
     var categories = BlocProvider.of<HomeBloc>(context).state.categories;
     return ListView.builder(
-        itemCount: categories.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          var category = categories[index];
-          bool isSelected =
-              selectedCategory == category.id.toString() ? true : false;
-          return GestureDetector(
-            onTap: () {
-              BlocProvider.of<SearchBloc>(context).add(SetFilters(
-                state.searchParmas.copyWith(categoryID: category.id.toString()),
-              ));
-            },
-            child: Container(
-              margin: const EdgeInsetsDirectional.only(end: 10),
-              decoration: BoxDecoration(
-                color: isSelected ? kcPrimaryColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(100),
-                border: Border.all(
-                  color: isSelected ? kcPrimaryColor : kcSecondaryColor,
-                  width: 2,
-                ),
+      itemCount: categories.length,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        var category = categories[index];
+        bool isSelected =
+            selectedCategory == category.id.toString() ? true : false;
+        return GestureDetector(
+          onTap: () {
+            BlocProvider.of<SearchBloc>(context).add(SetFilters(
+              state.searchParmas.copyWith(categoryID: category.id.toString()),
+            ));
+          },
+          child: Container(
+            margin: const EdgeInsetsDirectional.only(end: 10),
+            decoration: BoxDecoration(
+              color: isSelected ? kcPrimaryColor : Colors.transparent,
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: isSelected ? kcPrimaryColor : kcSecondaryColor,
+                width: 2,
               ),
-              child: Center(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
-                  child: Text(
-                    category.name,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: isSelected ? kcButtonIconColor : null,
-                          fontWeight: isSelected ? FontWeight.bold : null,
-                        ),
-                  ),
+            ),
+            child: Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6),
+                child: BaseText(
+                  category.name,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: isSelected ? kcButtonIconColor : null,
+                        fontWeight: isSelected ? FontWeight.bold : null,
+                      ),
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -417,7 +440,7 @@ class OrderbyOptionsList extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 6),
-                    child: Text(
+                    child: BaseText(
                       langTypes[e]!,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: selected == e ? kcButtonIconColor : null,

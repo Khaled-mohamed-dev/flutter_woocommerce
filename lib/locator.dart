@@ -1,4 +1,3 @@
-import 'package:flutter_woocommerce/core/consts.dart';
 import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
 import 'package:flutter_woocommerce/features/authentication/data/repositories/auth_repository.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/bloc.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_woocommerce/features/cart/data/repositories/cart_reposit
 import 'package:flutter_woocommerce/features/cart/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/category/data/repositories/category_repository.dart';
 import 'package:flutter_woocommerce/features/category/presentation/bloc/bloc.dart';
-import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/favorites/data/models/favorite.dart';
 import 'package:flutter_woocommerce/features/favorites/data/repositories/favorites_repository.dart';
 import 'package:flutter_woocommerce/features/home/data/repository/home_repository.dart';
@@ -26,8 +24,6 @@ import 'package:flutter_woocommerce/features/settings/presentation/bloc/settings
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'features/checkout/data/repositories/checkout_repository.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -121,23 +117,6 @@ Future setupLocator() async {
   locator.registerLazySingleton<FavoritesRepository>(
     () => FavoritesRepositoryImpl(
       favoritesBox: favoritesBox,
-    ),
-  );
-
-  // locator.registerFactory<FavoritesBloc>(
-  //   () => FavoritesBloc(favoritesRepository: locator()),
-  // );
-
-  //Feature - Checkout
-
-  locator.registerLazySingleton<CheckoutRepository>(
-    () => CheckoutRepositoryImpl(client: locator(), prefs: locator()),
-  );
-
-  locator.registerFactory<CheckoutBloc>(
-    () => CheckoutBloc(
-      checkoutRepository: locator(),
-      sharedPrefService: locator(),
     ),
   );
 

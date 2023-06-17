@@ -6,15 +6,15 @@ part 'favorite.g.dart';
 @HiveType(typeId: 2)
 class Favorite extends Equatable {
   @HiveField(0)
-  int productID;
+  final int productID;
 
   @HiveField(1)
-  String productName;
+  final String productName;
 
   @HiveField(2)
-  String image;
+  final String image;
 
-  Favorite({
+  const Favorite({
     required this.productID,
     required this.productName,
     required this.image,

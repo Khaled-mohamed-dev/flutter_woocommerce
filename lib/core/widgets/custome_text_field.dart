@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/ui_helpers.dart';
+
+import 'responsive_icon.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -38,16 +41,22 @@ class CustomTextField extends StatelessWidget {
         }
         return null;
       },
-      style: theme.textTheme.bodySmall,
+      style: theme.textTheme.bodySmall!.copyWith(
+          fontSize: theme.textTheme.bodySmall!.fontSize! *
+              (screenWidth(context) / 3.5) /
+              100),
       cursorColor: kcPrimaryColor,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: Theme.of(context).textTheme.titleMedium,
+        hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+            fontSize: theme.textTheme.titleMedium!.fontSize! *
+                (screenWidth(context) / 3.5) /
+                100),
         prefixIcon: icon == null
             ? null
-            : Icon(
-                icon,
-                color: kcIconColorSelected,
+            : ResponsiveIcon(
+                icon!,
+                color: kcPrimaryColor,
               ),
         filled: true,
         fillColor: kcSecondaryColor,

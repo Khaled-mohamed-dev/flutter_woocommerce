@@ -100,5 +100,11 @@
     "failed" : "failed",
     "trash": "trash",
     "instock": "instock",
-    "outofstock":"out of stock"
+    "outofstock":"out of stock",
+    "connection_error" : "An error ocured\n Check your internet and try again",
+    "facebook" : "Facebook",
+    "whatsApp" : "WhatsApp",
+    "website" : "Website",
+    "twitter" : "Twitter",
+    "instagram" : "Instagram"
 }

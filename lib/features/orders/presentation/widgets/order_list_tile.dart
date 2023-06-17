@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/features/orders/presentation/screens/order_details.dart';
 
 import '../../data/models/order.dart';
@@ -48,22 +49,22 @@ class OrderListTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    BaseText(
                       "${localization.order_number}: ${order.id.toString()}",
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!,
                     ),
                     verticalSpaceTiny,
-                    Text(
+                    BaseText(
                       "${localization.order_date}: ${order.dateCreated?.formatDate()}",
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!,
                     ),
                     verticalSpaceTiny,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        BaseText(
                           "${localization.total}: ${order.total}",
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.titleMedium!,
                         ),
                         horizontalSpaceSmall,
                         Container(
@@ -73,9 +74,9 @@ class OrderListTile extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(6),
-                            child: Text(
+                            child: BaseText(
                               statuses["${order.status}"] ?? '',
-                              style: Theme.of(context).textTheme.titleSmall,
+                              style: Theme.of(context).textTheme.titleSmall!,
                             ),
                           ),
                         ),

@@ -3,6 +3,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_woocommerce/core/colors.dart";
 import "package:flutter_woocommerce/core/ui_helpers.dart";
 import "package:flutter_woocommerce/core/widgets/base_button.dart";
+import "package:flutter_woocommerce/core/widgets/base_text.dart";
 import "package:flutter_woocommerce/core/widgets/custome_text_field.dart";
 import "package:flutter_woocommerce/core/widgets/toast.dart";
 import "package:flutter_woocommerce/features/authentication/presentation/screens/sign_up_screen.dart";
@@ -68,8 +69,10 @@ class _SignupViewState extends State<SigninScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(localization.sign_in,
-                    style: Theme.of(context).textTheme.bodyLarge),
+                BaseText(
+                  localization.sign_in,
+                  style: Theme.of(context).textTheme.bodyLarge!,
+                ),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -131,7 +134,7 @@ class _SignupViewState extends State<SigninScreen> {
                           ),
                         );
                       },
-                      child: Text(
+                      child: BaseText(
                         localization.or_sign_up,
                         style: const TextStyle(
                           color: kcMediumGreyColorLightTheme,

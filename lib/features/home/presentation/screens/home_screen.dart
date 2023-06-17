@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/core/widgets/skelton.dart';
 import 'package:flutter_woocommerce/features/category/presentation/screens/category_screen.dart';
-import 'package:flutter_woocommerce/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter_woocommerce/features/home/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/product/presentation/widgets/products_grid.dart';
 import 'package:flutter_woocommerce/features/search/presentation/screens/search_screen.dart';
@@ -42,9 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(localization.welcome,
-                  style: Theme.of(context).textTheme.titleSmall),
-              Text('Khaled', style: Theme.of(context).textTheme.bodyMedium),
+              BaseText(localization.welcome,
+                  style: Theme.of(context).textTheme.titleSmall!),
+              BaseText('Khaled',
+                  style: Theme.of(context).textTheme.bodyMedium!),
             ],
           ),
         ),
@@ -68,14 +71,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.of(context).push(_createRoute());
                         },
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .fontSize! *
+                                (screenWidth(context) / 3.5) /
+                                100),
                         decoration: InputDecoration(
-                          prefixIcon: Icon(
+                          prefixIcon: ResponsiveIcon(
                             IconlyLight.search,
                             color: kcPrimaryColor,
                           ),
-                          suffixIcon: Icon(
+                          suffixIcon: ResponsiveIcon(
                             IconlyLight.filter,
-                            color: kcIconColorSelected,
+                            color: kcPrimaryColor,
                           ),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -84,15 +94,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           isDense: true,
-                          hintStyle: Theme.of(context).textTheme.titleSmall,
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                  fontSize: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .fontSize! *
+                                      (screenWidth(context) / 3.5) /
+                                      100),
                           filled: true,
                           fillColor: kcSecondaryColor,
                           hintText: '${localization.search}..',
                         ),
                       ),
                       verticalSpaceRegular,
-                      SizedBox(
-                        height: 100,
+                      Container(
+                        height: screenWidthPercentage(context, percentage: .2),
+                        constraints: const BoxConstraints(minHeight: 90),
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: state.categories.length,
@@ -113,36 +133,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsetsDirectional.only(
                                           end: 12),
                                       child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            child: Container(
-                                              height: 60,
-                                              width: 60,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: kcSecondaryColor,
+                                          Expanded(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: kcSecondaryColor,
+                                                ),
+                                                child: category.image != null
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Image.network(
+                                                          category.image!,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )
+                                                    : const ResponsiveIcon(
+                                                        Icons.image),
                                               ),
-                                              child: category.image != null
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Image.network(
-                                                        category.image!,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    )
-                                                  : const Icon(Icons.image),
                                             ),
                                           ),
                                           verticalSpaceTiny,
-                                          Text(
+                                          BaseText(
                                             category.name,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodySmall,
+                                                .bodySmall!,
                                           )
                                         ],
                                       ),
@@ -152,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ),
+                      verticalSpaceSmall,
                       ProductsGrid(products: state.products),
                       verticalSpaceSmall,
                       state.isLoadingMoreProducts
@@ -166,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             case HomeStatus.failure:
-              return ErrorWidget(reload: () {
+              return NoConnectionWidget(reload: () {
                 context.read<HomeBloc>().add(LoadHome());
               });
           }
@@ -195,45 +219,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({
-    super.key,
-    required this.reload,
-  });
-
-  final Function reload;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/error.png',
-            width: screenWidthPercentage(context, percentage: .5),
-          ),
-          verticalSpaceRegular,
-          const Text(
-            'An error ocured\n Check your internet and try again',
-            textAlign: TextAlign.center,
-          ),
-          verticalSpaceRegular,
-          IconButton(
-            onPressed: (){
-              reload();
-            },
-            icon: Icon(
-              Icons.refresh,
-              color: kcPrimaryColor,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
 Route _createRoute() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
@@ -257,6 +242,7 @@ class HomeScreenLoading extends StatelessWidget {
   const HomeScreenLoading({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    bool isTablet = MediaQuery.of(context).size.width > 600;
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Padding(
@@ -300,8 +286,8 @@ class HomeScreenLoading extends StatelessWidget {
               child: GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: isTablet ? 3 : 2,
                   childAspectRatio: 1 / 1.5,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,

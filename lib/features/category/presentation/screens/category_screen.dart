@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
 import 'package:flutter_woocommerce/features/category/data/models/category.dart';
 import 'package:flutter_woocommerce/features/category/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product.dart';
@@ -15,12 +16,7 @@ class CategoryProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          category.name,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-      ),
+      appBar: AppBar(title: Text(category.name)),
       body: BlocProvider(
         create: (context) =>
             locator<CategoryBloc>()..add(LoadData(category.id)),
@@ -37,10 +33,9 @@ class CategoryProductsScreen extends StatelessWidget {
                   categoryID: category.id,
                 );
               case CategoryStatus.failure:
-                return Text(
-                  'SOME THING WENT WRONG ',
-                  style: Theme.of(context).textTheme.displayMedium,
-                );
+                return NoConnectionWidget(reload: () {
+                  context.read<CategoryBloc>().add(LoadData(category.id));
+                });
             }
           },
         ),

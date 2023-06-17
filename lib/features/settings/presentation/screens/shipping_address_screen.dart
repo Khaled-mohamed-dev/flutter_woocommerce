@@ -44,7 +44,7 @@ class _ShippingAddressScreenState extends State<ShippingAddressScreen> {
                 hintStyle: Theme.of(context).textTheme.titleMedium,
                 prefixIcon: Icon(
                   IconlyBold.location,
-                  color: kcIconColorSelected,
+                  color: kcPrimaryColor,
                 ),
                 focusColor: kcPrimaryColor,
                 iconColor: kcPrimaryColor,

@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/custome_text_field.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/reviews/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
@@ -33,25 +36,25 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
           24,
           24,
           24,
-          MediaQuery.of(context).viewInsets.bottom + 24 ,
+          MediaQuery.of(context).viewInsets.bottom + 24,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            BaseText(
               localization.leave_review,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyLarge!,
             ),
             Divider(color: kcSecondaryColor),
             verticalSpaceSmall,
-            Text(
-             localization.order_opinion,
-              style: Theme.of(context).textTheme.bodyLarge,
+            BaseText(
+              localization.order_opinion,
+              style: Theme.of(context).textTheme.bodyLarge!,
             ),
             verticalSpaceTiny,
-            Text(
+            BaseText(
               localization.review_message,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleSmall!,
             ),
             verticalSpaceSmall,
             Row(
@@ -64,38 +67,18 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                         rate = i;
                       });
                     },
-                    icon: Icon(
+                    icon: ResponsiveIcon(
                       rate >= i ? IconlyBold.star : IconlyLight.star,
                       size: 30,
                     ),
                   )
               ],
             ),
-            verticalSpaceSmall,
-            TextField(
+            verticalSpaceRegular,
+            CustomTextField(
               controller: controller,
               keyboardType: TextInputType.multiline,
-              style: Theme.of(context).textTheme.titleMedium,
-              decoration: InputDecoration(
-                hintText: localization.your_feedback,
-                hintStyle: Theme.of(context).textTheme.titleMedium,
-                focusColor: kcPrimaryColor,
-                filled: true,
-                fillColor: kcSecondaryColor,
-                isDense: true,
-                border: circularBorder.copyWith(
-                  borderSide: BorderSide(color: kcSecondaryColor),
-                ),
-                errorBorder: circularBorder.copyWith(
-                  borderSide: const BorderSide(color: Colors.red),
-                ),
-                focusedBorder: circularBorder.copyWith(
-                  borderSide: BorderSide(color: kcPrimaryColor),
-                ),
-                enabledBorder: circularBorder.copyWith(
-                  borderSide: BorderSide(color: kcSecondaryColor),
-                ),
-              ),
+              hint: localization.your_feedback,
             ),
             verticalSpaceSmall,
             Divider(color: kcSecondaryColor),

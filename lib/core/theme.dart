@@ -2,107 +2,106 @@ import 'package:flutter/material.dart';
 
 import 'colors.dart';
 
-extension SizerExt on num {
-  /// Calculates the sp (Scalable Pixel) depending on the device's screen size
-  double get sp =>
-      this *
-      ((MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width) /
-          3.5) /
-      100;
-}
+// extension SizerExt on num {
+//   /// Calculates the sp (Scalable Pixel) depending on the device's screen size
+//   double get sp =>
+//       this *
+//       ((MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width) /
+//           3.5) /
+//       100;
+// }
 
 class ThemeConfig {
 // Light Theme
   static ThemeData lightTheme = ThemeData(
-    fontFamily: 'Urbanist',
     colorScheme: ThemeData().colorScheme.copyWith(
-          primary: kcDarkColor,
-          secondary: kcDarkColor,
+          primary: kcPrimaryLightThemeColor,
+          secondary: kcPrimaryLightThemeColor,
         ),
-    unselectedWidgetColor: kcDarkColor,
-    scaffoldBackgroundColor: kcLightColor,
+    unselectedWidgetColor: kcPrimaryLightThemeColor,
+    scaffoldBackgroundColor: const Color(0xffFDFDFD),
     brightness: Brightness.light,
-    appBarTheme: AppBarTheme(
-      backgroundColor: kcLightColor,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xffFDFDFD),
       foregroundColor: kcLightBodyTextColor,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 18,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
     ),
     bottomAppBarTheme:
-        const BottomAppBarTheme(color: kcLightColor, elevation: 0),
+        const BottomAppBarTheme(color: Color(0xffFDFDFD), elevation: 0),
     iconTheme: const IconThemeData(
-      color: kcLightSubtitleTextColor,
+      color: kcLightHeadersColor,
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       displayLarge: TextStyle(
-        fontSize: 48.sp,
+        fontSize: 48,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       displayMedium: TextStyle(
-        fontSize: 40.sp,
+        fontSize: 40,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       displaySmall: TextStyle(
-        fontSize: 32.sp,
+        fontSize: 32,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       headlineLarge: TextStyle(
-        fontSize: 24.sp,
+        fontSize: 24,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       headlineMedium: TextStyle(
-        fontSize: 20.sp,
+        fontSize: 20,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       headlineSmall: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 18,
         color: kcLightHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       bodyLarge: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 18,
         color: kcLightBodyTextColor,
         fontWeight: FontWeight.bold,
       ),
       bodyMedium: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 16,
         color: kcLightBodyTextColor,
         fontWeight: FontWeight.bold,
       ),
       bodySmall: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 14,
         color: kcLightBodyTextColor,
         fontWeight: FontWeight.bold,
       ),
       titleLarge: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 16,
         color: kcLightSubtitleTextColor,
         fontWeight: FontWeight.normal,
       ),
       titleMedium: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 14,
         color: kcLightSubtitleTextColor,
         fontWeight: FontWeight.normal,
       ),
       titleSmall: TextStyle(
-        fontSize: 12.sp,
+        fontSize: 12,
         color: kcLightSubtitleTextColor,
         fontWeight: FontWeight.normal,
       ),
       // Used for Buttons
       labelLarge: TextStyle(
-        fontSize: 16.sp,
-        color: kcLightColor,
+        fontSize: 16,
+        color: kcPrimaryDarkThemeColor,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -111,94 +110,93 @@ class ThemeConfig {
   // Dark Theme
 
   static ThemeData darkTheme = ThemeData(
-    fontFamily: 'Urbanist',
     colorScheme: ThemeData().colorScheme.copyWith(
-          primary: kcLightColor,
-          secondary: kcLightColor,
+          primary: kcPrimaryDarkThemeColor,
+          secondary: kcPrimaryDarkThemeColor,
         ),
-    scaffoldBackgroundColor: kcDarkColor,
-    unselectedWidgetColor: kcLightColor,
-    appBarTheme: AppBarTheme(
-      backgroundColor: kcDarkColor,
+    scaffoldBackgroundColor: const Color(0xff181A20),
+    unselectedWidgetColor: kcPrimaryDarkThemeColor,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xff181A20),
       foregroundColor: kcDarkHeadersColor,
       centerTitle: true,
       elevation: 0,
       titleTextStyle: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 18,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
     ),
     bottomAppBarTheme:
-        const BottomAppBarTheme(color: kcDarkColor, elevation: 0),
+        const BottomAppBarTheme(color: Color(0xff181A20), elevation: 0),
     iconTheme: const IconThemeData(
       color: kcDarkHeadersColor,
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       displayLarge: TextStyle(
-        fontSize: 48.sp,
+        fontSize: 48,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       displayMedium: TextStyle(
-        fontSize: 40.sp,
+        fontSize: 40,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       displaySmall: TextStyle(
-        fontSize: 32.sp,
+        fontSize: 32,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       headlineLarge: TextStyle(
-        fontSize: 24.sp,
+        fontSize: 24,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       headlineMedium: TextStyle(
-        fontSize: 20.sp,
+        fontSize: 20,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       headlineSmall: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 18,
         color: kcDarkHeadersColor,
         fontWeight: FontWeight.bold,
       ),
       bodyLarge: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 18,
         color: kcDarkBodyTextColor,
         fontWeight: FontWeight.bold,
       ),
       bodyMedium: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 16,
         color: kcDarkBodyTextColor,
         fontWeight: FontWeight.bold,
       ),
       bodySmall: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 14,
         color: kcDarkBodyTextColor,
         fontWeight: FontWeight.bold,
       ),
       titleLarge: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 16,
         color: kcDarkSubtitleTextColor,
         fontWeight: FontWeight.normal,
       ),
       titleMedium: TextStyle(
-        fontSize: 14.sp,
+        fontSize: 14,
         color: kcDarkSubtitleTextColor,
         fontWeight: FontWeight.normal,
       ),
       titleSmall: TextStyle(
-        fontSize: 12.sp,
+        fontSize: 12,
         color: kcDarkSubtitleTextColor,
         fontWeight: FontWeight.normal,
       ),
       // Used for Buttons
       labelLarge: TextStyle(
-        fontSize: 16.sp,
-        color: kcDarkColor,
+        fontSize: 16,
+        color: kcPrimaryLightThemeColor,
         fontWeight: FontWeight.bold,
       ),
     ),

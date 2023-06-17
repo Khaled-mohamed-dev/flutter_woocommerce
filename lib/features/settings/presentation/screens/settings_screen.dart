@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/authentication/data/models/user.dart';
 import 'package:flutter_woocommerce/features/authentication/data/repositories/auth_repository.dart';
 import 'package:flutter_woocommerce/features/authentication/presentation/bloc/bloc.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_woocommerce/features/authentication/presentation/screens
 import 'package:flutter_woocommerce/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/address_screen.dart';
+import 'package:flutter_woocommerce/features/settings/presentation/screens/contact_us_screen.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,6 +29,7 @@ class SettingsScreen extends StatelessWidget {
     if (isLoggedIn) {
       user = auth.getSignedInUser()!;
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localization.profile),
@@ -40,12 +44,12 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   ListTile(
                     onTap: () {},
-                    leading: const Icon(IconlyLight.profile),
-                    title: Text(
+                    leading: const ResponsiveIcon(IconlyLight.profile),
+                    title: BaseText(
                       localization.edit_profile,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
                   ),
                   ListTile(
                     onTap: () {
@@ -55,12 +59,15 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    leading: const Icon(IconlyLight.location),
-                    title: Text(
-                      localization.address,
-                      style: Theme.of(context).textTheme.bodySmall,
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [ResponsiveIcon(IconlyLight.location)],
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    title: BaseText(
+                      localization.address,
+                      style: Theme.of(context).textTheme.bodySmall!,
+                    ),
+                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
                   ),
                   ListTile(
                     onTap: () {
@@ -70,39 +77,45 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    leading: const Icon(IconlyLight.heart),
-                    title: Text(
+                    leading: const ResponsiveIcon(IconlyLight.heart),
+                    title: BaseText(
                       localization.wish_slist,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
                   ),
                   ListTile(
                     onTap: () {},
-                    leading: const Icon(Icons.policy_outlined),
-                    title: Text(
+                    leading: const ResponsiveIcon(Icons.policy_outlined),
+                    title: BaseText(
                       localization.refund_policy,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
                   ),
                   ListTile(
-                    onTap: () {},
-                    leading: const Icon(IconlyLight.call),
-                    title: Text(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ContactUsScreen(),
+                        ),
+                      );
+                    },
+                    leading: const ResponsiveIcon(IconlyLight.call),
+                    title: BaseText(
                       localization.contact_us,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    trailing: const ResponsiveIcon(Icons.arrow_forward_ios),
                   ),
                   ListTile(
                     onTap: () {
                       context.read<SettingsBloc>().add(ThemeChanged());
                     },
-                    leading: const Icon(Icons.remove_red_eye_outlined),
-                    title: Text(
+                    leading: const ResponsiveIcon(Icons.remove_red_eye_outlined),
+                    title: BaseText(
                       localization.dark_mode,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!,
                     ),
                     trailing: CupertinoSwitch(
                       value: !isLightTheme,
@@ -123,11 +136,11 @@ class SettingsScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    leading: const Icon(
+                    leading: const ResponsiveIcon(
                       IconlyLight.logout,
                       color: Colors.red,
                     ),
-                    title: Text(
+                    title: BaseText(
                       localization.logout,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             color: Colors.red,

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/product/data/models/product.dart';
 import 'package:flutter_woocommerce/features/reviews/data/models/review.dart';
 import 'package:flutter_woocommerce/features/reviews/presentation/bloc/bloc.dart';
@@ -41,51 +44,15 @@ class ReviewsScreen extends StatelessWidget {
                   },
                 );
               case ReviewsStatus.failure:
-                return Text(
-                  'SOME THING WENT WRONG ',
-                  style: Theme.of(context).textTheme.displayMedium,
-                );
+                return NoConnectionWidget(reload: () {
+                  context.read<ReviewsBloc>().add(LoadReviews(product.id));
+                });
             }
           },
         ),
       ),
     );
   }
-}
-
-class MyCustomMessages implements timeago.LookupMessages {
-  @override
-  String prefixAgo() => '';
-  @override
-  String prefixFromNow() => '';
-  @override
-  String suffixAgo() => '';
-  @override
-  String suffixFromNow() => '';
-  @override
-  String lessThanOneMinute(int seconds) => 'الآن';
-  @override
-  String aboutAMinute(int minutes) => '${minutes}د';
-  @override
-  String minutes(int minutes) => '${minutes}د';
-  @override
-  String aboutAnHour(int minutes) => '${minutes}س';
-  @override
-  String hours(int hours) => '${hours}ساعة';
-  @override
-  String aDay(int hours) => '${hours}ساعات';
-  @override
-  String days(int days) => '${days}يوم';
-  @override
-  String aboutAMonth(int days) => '${days}أيام';
-  @override
-  String months(int months) => '${months}شهر';
-  @override
-  String aboutAYear(int year) => '${year}سنة';
-  @override
-  String years(int years) => '${years}سنوات';
-  @override
-  String wordSeparator() => ' ';
 }
 
 class ReviewListTile extends StatelessWidget {
@@ -98,7 +65,7 @@ class ReviewListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    timeago.setLocaleMessages('ar', MyCustomMessages());
+    timeago.setLocaleMessages('ar', timeago.ArMessages());
 
     return ListTile(
       onTap: () {},
@@ -107,9 +74,9 @@ class ReviewListTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          BaseText(
             review.reviewer,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium!,
           ),
           Container(
             decoration: BoxDecoration(
@@ -121,14 +88,14 @@ class ReviewListTile extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
               child: Row(
                 children: [
-                  Icon(
+                  ResponsiveIcon(
                     IconlyBold.star,
                     color: kcPrimaryColor,
                   ),
                   horizontalSpaceTiny,
-                  Text(
+                  BaseText(
                     review.rating.toString(),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium!,
                   )
                 ],
               ),
@@ -139,15 +106,15 @@ class ReviewListTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          BaseText(
             pText(review.review),
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge!,
           ),
           verticalSpaceTiny,
-          Text(
+          BaseText(
             timeago.format(review.dateCreated!,
                 locale: Localizations.localeOf(context).languageCode),
-            style: Theme.of(context).textTheme.titleSmall,
+            style: Theme.of(context).textTheme.titleSmall!,
           ),
         ],
       ),

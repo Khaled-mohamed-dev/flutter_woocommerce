@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
-import 'package:flutter_woocommerce/core/consts.dart';
-import 'package:flutter_woocommerce/core/services/sharedpref_service.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/home/presentation/screens/home_screen.dart';
-import 'package:flutter_woocommerce/features/orders/data/models/order.dart';
-import 'package:flutter_woocommerce/features/reviews/data/models/review.dart';
 import 'package:flutter_woocommerce/features/settings/presentation/screens/settings_screen.dart';
-import 'package:flutter_woocommerce/locator.dart';
-import 'package:flutter_woocommerce/main.dart';
 import 'package:iconly/iconly.dart';
 import 'features/cart/presentation/screens/cart_screen.dart';
 import 'features/orders/presentation/screens/orders_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -38,13 +33,6 @@ class _MainScreenState extends State<MainScreen> {
         bucket: bucket,
         child: currentScreen,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
-        child: Icon(
-          Icons.add,
-          color: kcButtonIconColor,
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
@@ -67,14 +55,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        ResponsiveIcon(
                           currentTab == 0 ? IconlyBold.home : IconlyLight.home,
                           size: 26,
                           color: currentTab == 0
-                              ? kcIconColorSelected
-                              : kcIconColor,
+                              ? kcPrimaryColor
+                              : kcBottomNavIconColor,
                         ),
-                        Text(
+                        BaseText(
                           localization.home,
                           style:
                               Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -103,18 +91,18 @@ class _MainScreenState extends State<MainScreen> {
                       Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          Icon(
+                          ResponsiveIcon(
                             currentTab == 1 ? IconlyBold.bag : IconlyLight.bag,
                             color: currentTab == 1
-                                ? kcIconColorSelected
-                                : kcIconColor,
+                                ? kcPrimaryColor
+                                : kcBottomNavIconColor,
                             size: 26,
                           ),
                           // const Positioned(
                           //     right: -10, top: -10, child: CartNotifier()),
                         ],
                       ),
-                      Text(
+                      BaseText(
                         localization.cart,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
@@ -139,13 +127,14 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      ResponsiveIcon(
                         currentTab == 2 ? IconlyBold.buy : IconlyLight.buy,
                         size: 26,
-                        color:
-                            currentTab == 2 ? kcIconColorSelected : kcIconColor,
+                        color: currentTab == 2
+                            ? kcPrimaryColor
+                            : kcBottomNavIconColor,
                       ),
-                      Text(
+                      BaseText(
                         localization.orders,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
@@ -170,16 +159,18 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      ResponsiveIcon(
                         currentTab == 3
                             ? IconlyBold.profile
                             : IconlyLight.profile,
                         size: 26,
-                        color:
-                            currentTab == 3 ? kcIconColorSelected : kcIconColor,
+                        color: currentTab == 3
+                            ? kcPrimaryColor
+                            : kcBottomNavIconColor,
                       ),
-                      Text(
+                      BaseText(
                         localization.profile,
+                        alignment: TextAlign.center,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 10,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/favorites/data/models/favorite.dart';
 import 'package:flutter_woocommerce/features/favorites/data/repositories/favorites_repository.dart';
 import 'package:flutter_woocommerce/locator.dart';
@@ -28,36 +30,43 @@ class FavoriteListTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        12.0, 12.0, 0, 12.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        width: width * .2,
-                        height: width * .2,
-                        color: kcSecondaryColor,
-                        child: product.image.isNotEmpty
-                            ? Image.network(product.image)
-                            : const Icon(Icons.image),
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          12.0, 12.0, 0, 12.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          width: width * .2,
+                          height: width * .2,
+                          constraints: const BoxConstraints(
+                              maxHeight: 200, maxWidth: 200),
+                          color: kcSecondaryColor,
+                          child: product.image.isNotEmpty
+                              ? Image.network(product.image)
+                              : const ResponsiveIcon(Icons.image),
+                        ),
                       ),
                     ),
-                  ),
-                  horizontalSpaceSmall,
-                  Text(
-                    product.productName,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
+                    horizontalSpaceSmall,
+                    Expanded(
+                      child: BaseText(
+                        product.productName,
+                        style: Theme.of(context).textTheme.bodyMedium!,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               IconButton(
                 splashRadius: 1,
                 onPressed: () {
                   locator<FavoritesRepository>().changeFavoriteStatus(product);
                 },
-                icon: const Icon(
+                icon: const ResponsiveIcon(
                   IconlyLight.delete,
                 ),
               )

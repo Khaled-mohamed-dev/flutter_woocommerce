@@ -6,27 +6,27 @@ part 'cart_item.g.dart';
 @HiveType(typeId: 1)
 class CartItem extends Equatable {
   @HiveField(0)
-  int productID;
+  final int productID;
 
   @HiveField(1)
-  int? variationID;
+  final int? variationID;
 
   @HiveField(6)
-  String? variationTitle;
+  final String? variationTitle;
 
   @HiveField(2)
-  int quantity;
+  final int quantity;
 
   @HiveField(3)
-  String productPrice;
+  final String productPrice;
 
   @HiveField(4)
-  String productName;
+  final String productName;
 
   @HiveField(5)
-  String image;
+  final String image;
 
-  CartItem({
+  const CartItem({
     required this.productID,
     this.variationID,
     this.variationTitle,

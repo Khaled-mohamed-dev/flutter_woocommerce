@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 
 import '../colors.dart';
 
@@ -43,15 +45,15 @@ class _BaseButtonState extends State<BaseButton> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           widget.icon != null
-              ? Icon(
-                  widget.icon,
+              ? ResponsiveIcon(
+                  widget.icon!,
                   color: kcButtonIconColor,
                 )
               : const SizedBox.shrink(),
           widget.icon != null ? horizontalSpaceSmall : const SizedBox.shrink(),
-          Text(
+          BaseText(
             widget.title.toUpperCase(),
-            style: Theme.of(context).textTheme.labelLarge,
+            style: Theme.of(context).textTheme.labelLarge!,
           )
         ],
       ),

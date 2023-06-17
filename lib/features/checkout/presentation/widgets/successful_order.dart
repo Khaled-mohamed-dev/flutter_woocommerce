@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
 import 'package:flutter_woocommerce/core/widgets/base_button.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/features/orders/data/repositories/orders_repository.dart';
 import 'package:flutter_woocommerce/locator.dart';
 import 'package:iconly/iconly.dart';
@@ -48,10 +49,10 @@ class _SuccessfulOrderPopupState extends State<SuccessfulOrderPopup> {
                     ),
                   ),
                   verticalSpaceRegular,
-                  Text('Order Successful!',
-                      style: Theme.of(context).textTheme.bodyMedium),
-                  Text('You have successfully made order!',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  BaseText('Order Successful!',
+                      style: Theme.of(context).textTheme.bodyMedium!),
+                  BaseText('You have successfully made order!',
+                      style: Theme.of(context).textTheme.titleMedium!),
                   Padding(
                     padding: const EdgeInsets.all(40.0),
                     child: Column(

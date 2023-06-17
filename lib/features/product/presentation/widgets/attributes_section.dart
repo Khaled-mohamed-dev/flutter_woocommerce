@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/message_alert.dart';
 import 'package:flutter_woocommerce/features/product/presentation/bloc/bloc.dart';
+import 'package:flutter_woocommerce/main.dart';
 
 import '../../../../core/colors.dart';
 import '../../../../core/ui_helpers.dart';
@@ -41,12 +44,16 @@ class _AttributesSectionState extends State<AttributesSection> {
   }
 
   bool isAvailableCombination(String option, int index) {
-    if (selectedCombination.every((element) => element == '')) {
+    if (selectedCombination.every((element) => element == '') &&
+        widget.attributes.length > 1) {
+      print('huh!');
       return true;
     }
 
     var myList = List<String>.from(selectedCombination);
     myList[index] = option;
+
+    print(myList);
 
     if (widget.combinations.keys.any(
       (element) {
@@ -60,6 +67,12 @@ class _AttributesSectionState extends State<AttributesSection> {
                 .toList());
       },
     )) {
+      if (widget.combinations[myList.toString()] != null &&
+          (widget.combinations[myList.toString()] as ProductVariation)
+                  .stockStatus ==
+              'outofstock') {
+        return false;
+      }
       return true;
     }
 
@@ -74,36 +87,18 @@ class _AttributesSectionState extends State<AttributesSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Divider(color: kcSecondaryColor),
+        verticalSpaceTiny,
         if (selectedCombination.any((element) => element == ''))
-          Container(
-            width: screenWidth(context) - 48,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                stops: const [0.015, 0.015],
-                colors: [kcPrimaryColor, kcSecondaryColor],
-              ),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Container(
-              margin: const EdgeInsetsDirectional.only(start: 4),
-              width: screenWidth(context) - 57,
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Text(
-                  localization.select_variation_display_price,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
-            ),
-          ),
+          MessageAlert(message: localization.select_variation_display_price),
         verticalSpaceSmall,
         for (var i = 0; i < widget.attributes.length; i++)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              BaseText(
                 widget.attributes.keys.toList()[i],
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context).textTheme.headlineSmall!,
               ),
               verticalSpaceTiny,
               Wrap(
@@ -111,8 +106,6 @@ class _AttributesSectionState extends State<AttributesSection> {
                   (option) {
                     return GestureDetector(
                       onTap: () {
-                        isOptionSelected(option);
-
                         setState(
                           () {
                             if (isOptionSelected(option)) {
@@ -122,7 +115,9 @@ class _AttributesSectionState extends State<AttributesSection> {
                                 selectedCombination =
                                     List.filled(widget.attributes.length, '');
                               }
-                              selectedCombination[i] = option;
+                              if (selectedCombination.length > 1) {
+                                selectedCombination[i] = option;
+                              }
                             }
                             if (!selectedCombination
                                 .any((element) => element == '')) {
@@ -131,12 +126,13 @@ class _AttributesSectionState extends State<AttributesSection> {
                                 //     .controller!.position.minScrollExtent);
                               }
                             }
-                            BlocProvider.of<ProductsBloc>(context)
-                                .add(SelectCombination(
-                              selectedCombination,
-                              product: widget.product,
-                              variations: widget.variations,
-                            ));
+                            BlocProvider.of<ProductsBloc>(context).add(
+                              SelectCombination(
+                                selectedCombination,
+                                product: widget.product,
+                                variations: widget.variations,
+                              ),
+                            );
                           },
                         );
                       },
@@ -156,7 +152,7 @@ class _AttributesSectionState extends State<AttributesSection> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(6.0),
-                                child: Text(
+                                child: BaseText(
                                   option,
                                   style: Theme.of(context)
                                       .textTheme
@@ -184,7 +180,7 @@ class _AttributesSectionState extends State<AttributesSection> {
               ),
               verticalSpaceTiny
             ],
-          )
+          ),
       ],
     );
   }

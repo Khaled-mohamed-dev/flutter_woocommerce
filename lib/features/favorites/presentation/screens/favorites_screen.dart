@@ -23,9 +23,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     var localization = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localization.wish_slist),
-      ),
+      appBar: AppBar(title: Text(localization.wish_slist)),
       body: Stack(
         children: [
           ValueListenableBuilder(
@@ -55,7 +53,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           );
                         },
                       ).catchError((e) {
-                        print(e);
                         setState(() {
                           isLoading = false;
                         });

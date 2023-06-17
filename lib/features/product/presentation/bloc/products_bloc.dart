@@ -41,7 +41,6 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 
                 return ProductsState(
                   status: ProductsStatus.success,
-                  // variations: r,
                   combinations: combinationAndAttributes[0],
                   attributes: combinationAndAttributes[1],
                 );
@@ -93,8 +92,22 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<HandleButtonClick>(
       (event, emit) {
         var product = event.product;
+
+        if (product.stockStatus == 'outofstock') {
+          showToast(locator<SharedPrefService>().lang == "en"
+              ? "The product is out of stock"
+              : "لقد نفدت الكمية، لايمكن إضافة المنتج");
+          return;
+        }
+
         switch (product.type) {
           case ProductType.simple:
+            if (product.stockStatus == 'outofstock') {
+              showToast(locator<SharedPrefService>().lang == "en"
+                  ? "The product is out of stock"
+                  : "لقد نفدت الكمية، لايمكن إضافة المنتج");
+              return;
+            }
             cartRepository.addCartItem(
               CartItem(
                 productID: product.id,
@@ -104,6 +117,9 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
                 productPrice: product.price,
               ),
             );
+            showToast(locator<SharedPrefService>().lang == "en"
+                ? "Product was added to cart"
+                : "تمت الإضافة للسلة");
             break;
           case ProductType.grouped:
             if (state.selectedVariationsGroupedVariableProducts!.length ==
@@ -145,6 +161,13 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
                   );
                 }
               }
+              showToast(locator<SharedPrefService>().lang == "en"
+                  ? "Product was added to cart"
+                  : "تمت الإضافة للسلة");
+            } else {
+              showToast(locator<SharedPrefService>().lang == "en"
+                  ? "Please, select a variation"
+                  : "رجاءًا، قم باختيار تفاصيل المنتج");
             }
             break;
           case ProductType.external:
@@ -172,11 +195,15 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
                   productPrice: variation.price,
                 ),
               );
+              showToast(locator<SharedPrefService>().lang == "en"
+                  ? "Product was added to cart"
+                  : "تمت الإضافة للسلة");
+            } else {
+              showToast(locator<SharedPrefService>().lang == "en"
+                  ? "Please, select a variation"
+                  : "رجاءًا، قم باختيار تفاصيل المنتج");
             }
             break;
-        }
-        if (product.type != ProductType.external) {
-          showToast(locator<SharedPrefService>().lang == "en" ? "Product was added to cart" : "تمت الإضافة للسلة");
         }
       },
     );
@@ -234,7 +261,6 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           } else {
             ProductVariation variation =
                 state.combinations![event.selectedCombination.toString()];
-            print(variation.image);
             var image = variation.image;
             emit(state.copyWith(
                 price: variation.price,

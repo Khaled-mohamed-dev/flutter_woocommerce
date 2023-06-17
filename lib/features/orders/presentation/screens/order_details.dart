@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
 import 'package:flutter_woocommerce/features/orders/data/models/order.dart';
 import 'package:flutter_woocommerce/features/reviews/presentation/widgets/create_review.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,9 +34,9 @@ class OrdersDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                BaseText(
                   localization.order_status,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -44,9 +45,9 @@ class OrdersDetails extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(6),
-                    child: Text(
+                    child: BaseText(
                       statuses["${order.status}"] ?? '',
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme.of(context).textTheme.titleSmall!,
                     ),
                   ),
                 ),
@@ -58,9 +59,9 @@ class OrdersDetails extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                BaseText(
                   localization.order_items,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
                 verticalSpaceRegular,
                 ...order.lineItems.map((e) => LineItemTile(
@@ -99,9 +100,9 @@ class LineItemTile extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                BaseText(
                   item.name!,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium!,
                 ),
                 if (isCompleted)
                   GestureDetector(
@@ -128,9 +129,9 @@ class LineItemTile extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(6),
-                        child: Text(
+                        child: BaseText(
                           localization.leave_review,
-                          style: Theme.of(context).textTheme.titleSmall,
+                          style: Theme.of(context).textTheme.titleSmall!,
                         ),
                       ),
                     ),
@@ -140,9 +141,9 @@ class LineItemTile extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                BaseText(
                   "${localization.total}: ${item.total}",
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: Theme.of(context).textTheme.bodySmall!,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -151,9 +152,9 @@ class LineItemTile extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Text(
+                    child: BaseText(
                       item.quantity.toString(),
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.headlineSmall!,
                     ),
                   ),
                 )

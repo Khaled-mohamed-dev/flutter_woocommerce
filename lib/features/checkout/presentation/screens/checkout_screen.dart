@@ -1,306 +1,130 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_woocommerce/core/colors.dart';
-import 'package:flutter_woocommerce/core/ui_helpers.dart';
-import 'package:flutter_woocommerce/core/widgets/base_button.dart';
-import 'package:flutter_woocommerce/core/widgets/toast.dart';
+import 'package:flutter_woocommerce/core/widgets/no_connection.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
-import 'package:flutter_woocommerce/features/cart/presentation/widgets/cart_list_tile.dart';
-import 'package:flutter_woocommerce/features/checkout/presentation/bloc/bloc.dart';
-import 'package:flutter_woocommerce/features/checkout/presentation/screens/payment_methods_screen.dart';
-import 'package:flutter_woocommerce/features/checkout/presentation/screens/shipping_methods_screen.dart';
-import 'package:flutter_woocommerce/features/settings/presentation/bloc/settings_bloc.dart';
-import 'package:flutter_woocommerce/features/settings/presentation/screens/shipping_address_screen.dart';
-
+import 'package:flutter_woocommerce/features/checkout/presentation/widgets/successful_order.dart';
 import 'package:flutter_woocommerce/locator.dart';
-import 'package:iconly/iconly.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../../../core/consts.dart';
+import '../../../../core/services/sharedpref_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({Key? key, required this.cartItems}) : super(key: key);
+import '../../../cart/presentation/bloc/bloc.dart';
+
+class WebViewCheckoutScreen extends StatelessWidget {
+  const WebViewCheckoutScreen({Key? key, required this.cartItems})
+      : super(key: key);
   final List<CartItem> cartItems;
 
   @override
   Widget build(BuildContext context) {
     var localization = AppLocalizations.of(context)!;
+    bool isSignedin = locator<SharedPrefService>().user != null;
+    WebViewController? controller;
 
-    var price = cartItems
-        .map((e) => double.parse(e.productPrice) * e.quantity)
-        .reduce((a, b) => a + b);
-    var address = context.watch<SettingsBloc>().state.settingModel.address;
-    return Scaffold(
-      appBar: AppBar(title: Text(localization.checkout)),
-      body: BlocProvider(
-        create: (context) => locator<CheckoutBloc>()..add(LoadCheckout()),
-        lazy: false,
-        child: BlocBuilder<CheckoutBloc, CheckoutState>(
-          builder: (context, state) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (state.shippingAddress.isEmpty)
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                stops: const [0.015, 0.015],
-                                colors: [kcPrimaryColor, kcSecondaryColor],
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Container(
-                              margin:
-                                  const EdgeInsetsDirectional.only(start: 4),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Text(
-                                  localization.address_required_message,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                              ),
-                            ),
-                          ),
-                        Text(
-                          localization.shipping_address,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        verticalSpaceSmall,
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                  value: context.read<CheckoutBloc>(),
-                                  child: const ShippingAddressScreen(),
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: kcCartItemBackgroundColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: kcPrimaryColor,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        IconlyBold.location,
-                                        color: kcButtonIconColor,
-                                      ),
-                                    ),
-                                  ),
-                                  horizontalSpaceSmall,
-                                  Expanded(
-                                    child: Text(
-                                      address.isEmpty
-                                          ? localization.no_address
-                                          : address,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  ),
-                                  horizontalSpaceSmall,
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(IconlyBold.edit),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    verticalSpaceSmall,
-                    Divider(color: kcSecondaryColor),
-                    verticalSpaceSmall,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          localization.order_items,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        verticalSpaceSmall,
-                        ...cartItems
-                            .map((e) => CartListTile(item: e, deleteItem: true))
-                      ],
-                    ),
-                    verticalSpaceSmall,
-                    Divider(color: kcSecondaryColor),
-                    verticalSpaceSmall,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (state.selectedShippingMethod == null)
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                stops: const [0.015, 0.015],
-                                colors: [kcPrimaryColor, kcSecondaryColor],
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Container(
-                              margin:
-                                  const EdgeInsetsDirectional.only(start: 4),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Text(
-                                  localization.shipping_method_required_message,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                              ),
-                            ),
-                          ),
-                        Text(
-                          localization.shipping_methods,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        verticalSpaceSmall,
-                        Builder(
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => BlocProvider.value(
-                                      value: BlocProvider.of<CheckoutBloc>(
-                                          context),
-                                      child: const ShippingMethodsScreen(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: kcCartItemBackgroundColor,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Icon(
-                                        Icons.local_shipping,
-                                      ),
-                                      horizontalSpaceSmall,
-                                      Expanded(
-                                        child: Text(
-                                          state.selectedShippingMethod == null
-                                              ? localization
-                                                  .choose_shipping_method
-                                              : state.selectedShippingMethod!
-                                                  .title,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                        ),
-                                      ),
-                                      horizontalSpaceSmall,
-                                      const Icon(
-                                          Icons.arrow_forward_ios_outlined),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                    verticalSpaceSmall,
-                    Divider(color: kcSecondaryColor),
-                    verticalSpaceSmall,
-                    Container(
-                      decoration: BoxDecoration(
-                        color: kcCartItemBackgroundColor,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(localization.amount),
-                                Text('$price\$')
-                              ],
-                            ),
-                            verticalSpaceRegular,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(localization.shipping),
-                                Text(state.selectedShippingMethod == null
-                                    ? '_'
-                                    : "${double.parse(state.selectedShippingMethod!.cost)} \$")
-                              ],
-                            ),
-                            verticalSpaceSmall,
-                            Divider(color: kcSecondaryColor),
-                            verticalSpaceSmall,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(localization.total),
-                                Text(
-                                    '${price + double.parse(state.selectedShippingMethod?.cost ?? '0')}\$')
-                              ],
-                            ),
-                          ],
-                        ),
+    String addToCartUrl() {
+      String items = '';
+      for (var element in cartItems) {
+        if (element.variationID != null) {
+          items += "${element.variationID.toString()}," * element.quantity;
+        } else {
+          items += "${element.productID.toString()}," * element.quantity;
+        }
+      }
+      return "?add-to-cart=$items";
+    }
+
+    CookieManager().clearCookies();
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: Text(localization.checkout)),
+        body: WebView(
+          initialUrl: '${siteUrl}checkout/${addToCartUrl()}',
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (webViewController) async {
+            controller = webViewController;
+          },
+          onWebResourceError: (e) {
+            if (e.description.contains("ERR_INTERNET_DISCONNECTED")) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                    appBar: AppBar(
+                      leading: IconButton(
+                        onPressed: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        },
+                        icon: const Icon(Icons.arrow_back),
                       ),
                     ),
-                    verticalSpaceRegular,
-                    Builder(
-                      builder: (context) {
-                        return BaseButton(
-                          title: localization.continue_payment,
-                          callback: () {
-                            if (state.shippingAddress.isEmpty ||
-                                state.selectedShippingMethod == null) {
-                              showToast(localization.missing_address_method);
-                            } else {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PaymentMethodsScreen(),
-                                ),
-                              );
-                            }
-                          },
-                        );
+                    body: NoConnectionWidget(
+                      reload: () async {
+                        await controller!.reload();
+                        Navigator.pop(context);
                       },
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
+              );
+            }
+          },
+          onPageFinished: (url) async {
+            await controller!.runJavascriptReturningResult(
+              '''
+                document.querySelector('.storefront-breadcrumb').style.display = 'none';
+                document.querySelector('.storefront-handheld-footer-bar').hidden = true; 
+                document.querySelector('.woocommerce-notices-wrapper').hidden = true; 
+                document.querySelector('header').style.display = 'none';
+                document.querySelector('footer').style.display = 'none';
+
+              ''',
             );
+            if (isSignedin) {
+              var user = locator<SharedPrefService>().user!;
+              controller!.runJavascript(
+                '''
+                  document.querySelector('.woocommerce-form-login-toggle').hidden = true;
+                  document.querySelector('.woocommerce-account-fields').hidden = true;
+                  document.getElementById('billing_email').value = "${user.email ?? ''}" ;
+                  document.getElementById('billing_phone').value = "${user.billing?.phone ?? ''}";
+                  document.getElementById('billing_first_name').value = "${user.billing?.firstName ?? ''}";
+                  document.getElementById('billing_last_name').value = "${user.billing?.lastName ?? ''}";
+                ''',
+              );
+            }
+          },
+          navigationDelegate: (navigation) {
+            var url = navigation.url;
+
+            if (url.contains('shop')) {
+              Navigator.of(context).pop();
+            }
+
+            if (url.contains('order-received') && isSignedin) {
+              context.read<CartBloc>().add(ClearCartItems());
+              if (isSignedin) {
+                // now here i will update the order by the id and change the customer id to the current user id if he is signed in;
+                var orderID =
+                    url.substring(url.indexOf('order-received')).split('/')[1];
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SuccessfulOrderPopup(orderID: orderID),
+                    ),
+                    (route) => route.isFirst);
+              }
+            }
+
+            if (url.contains(siteUrl)) {
+              if (!url.contains('checkout') && !url.contains('cart')) {
+                return NavigationDecision.prevent;
+              }
+            }
+
+            return NavigationDecision.navigate;
           },
         ),
       ),

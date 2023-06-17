@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_woocommerce/core/colors.dart';
 import 'package:flutter_woocommerce/core/ui_helpers.dart';
+import 'package:flutter_woocommerce/core/widgets/base_text.dart';
+import 'package:flutter_woocommerce/core/widgets/responsive_icon.dart';
 import 'package:flutter_woocommerce/features/cart/data/models/cart_item.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/bloc/bloc.dart';
 import 'package:flutter_woocommerce/features/cart/presentation/widgets/confirm_delete_widget.dart';
@@ -38,10 +40,12 @@ class CartListTile extends StatelessWidget {
                   child: Container(
                     width: width * .3,
                     height: width * .3,
+                    constraints:
+                        const BoxConstraints(maxHeight: 200, maxWidth: 200),
                     color: kcSecondaryColor,
                     child: item.image.isNotEmpty
                         ? Image.network(item.image)
-                        : const Icon(Icons.image),
+                        : const ResponsiveIcon(Icons.image),
                   ),
                 ),
               ),
@@ -60,9 +64,9 @@ class CartListTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Text(
+                            child: BaseText(
                               item.productName,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium!,
                             ),
                           ),
                           if (!deleteItem)
@@ -84,7 +88,7 @@ class CartListTile extends StatelessWidget {
                                   },
                                 );
                               },
-                              icon: const Icon(IconlyLight.delete),
+                              icon: const ResponsiveIcon(IconlyLight.delete),
                             ),
                         ],
                       ),
@@ -93,9 +97,9 @@ class CartListTile extends StatelessWidget {
                         Column(
                           children: [
                             verticalSpaceSmall,
-                            Text(
+                            BaseText(
                               item.variationTitle!,
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleSmall!,
                             ),
                           ],
                         ),
@@ -104,9 +108,9 @@ class CartListTile extends StatelessWidget {
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                BaseText(
                                   "${item.productPrice}\$",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium!,
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
@@ -122,14 +126,14 @@ class CartListTile extends StatelessWidget {
                                               .add(DecrementQuantity(
                                                   cartItem: item));
                                         },
-                                        icon: const Icon(Icons.remove),
+                                        icon: const ResponsiveIcon(Icons.remove),
                                         splashRadius: 0.1,
                                       ),
-                                      Text(
+                                      BaseText(
                                         item.quantity.toString(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headlineSmall,
+                                            .headlineSmall!,
                                       ),
                                       IconButton(
                                         iconSize: 12,
@@ -138,7 +142,7 @@ class CartListTile extends StatelessWidget {
                                               .add(IncrementQuantity(
                                                   cartItem: item));
                                         },
-                                        icon: const Icon(Icons.add),
+                                        icon: const ResponsiveIcon(Icons.add),
                                         splashRadius: 0.1,
                                       )
                                     ],
@@ -149,9 +153,9 @@ class CartListTile extends StatelessWidget {
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                BaseText(
                                   "${item.productPrice}\$",
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium!,
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
@@ -160,11 +164,11 @@ class CartListTile extends StatelessWidget {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(18.0),
-                                    child: Text(
+                                    child: BaseText(
                                       item.quantity.toString(),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headlineSmall,
+                                          .headlineSmall!,
                                     ),
                                   ),
                                 )
