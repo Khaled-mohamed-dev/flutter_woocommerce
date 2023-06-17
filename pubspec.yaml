@@ -9,6 +9,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.19.6 <3.0.0'
 dependencies:
+
   flutter:
     sdk: flutter
 
@@ -54,26 +55,42 @@ dependencies:
   http:
 
 
+
   # Others
   url_launcher: ^6.1.11
   share_plus: 
   cached_network_image: ^3.2.3
+
+  
+
   
   flutter_localizations:
     sdk: flutter
     version: ^0.0.0
   
 
+  
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_native_splash: 
+  
+flutter_native_splash:
+  image: assets/icon.png
+  color: "ffffff"
+
+
 
   hive_generator:
 
   build_runner: 
 
   flutter_lints: ^2.0.0
+
 
 flutter:
   generate: true

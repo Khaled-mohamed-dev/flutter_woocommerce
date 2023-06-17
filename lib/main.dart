@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
               child: child!,
             );
           },
-          title: 'Flutter Woocommerce',
+          title: 'فلوكوميرس',
           theme: theme.copyWith(
             textTheme: theme.textTheme.apply(fontFamily: fontFamily),
             appBarTheme: theme.appBarTheme.copyWith(

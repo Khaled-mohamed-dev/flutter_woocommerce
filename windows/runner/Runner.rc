@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "flutter_woocommerce" "\0"
+            VALUE "FileDescription", "فلوكوميرس" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_woocommerce" "\0"
+            VALUE "InternalName", "فلوكوميرس" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "flutter_woocommerce.exe" "\0"
-            VALUE "ProductName", "flutter_woocommerce" "\0"
+            VALUE "ProductName", "فلوكوميرس" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
