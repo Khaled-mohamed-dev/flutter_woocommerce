@@ -249,7 +249,7 @@ class HomeScreenLoading extends StatelessWidget {
   const HomeScreenLoading({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    bool isTablet = MediaQuery.of(context).size.width > 600;
+    bool isTablet = MediaQuery.of(context).size.width > 700;
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Padding(
@@ -299,7 +299,7 @@ class HomeScreenLoading extends StatelessWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
-                itemCount: 4,
+                itemCount: 6,
                 itemBuilder: (BuildContext context, int index) {
                   return LayoutBuilder(
                     builder: (context, constraints) {
