@@ -12,17 +12,12 @@ abstract class ReviewsRepository {
   Future<Either<Failure, Unit>> leaveReview(Review review);
   Future<Either<Failure, List<Review>>> fetchProductReviews(
       int productID, int page);
-
-  // TODO Find a way to filter reviews by rating
-  // Future<Either<Failure, List<Review>>> fetchProductReviewsByRating(
-  //     {required int productID, required int rating});
 }
 
 class ReviewsRepositoryImpl implements ReviewsRepository {
   final http.Client client;
 
   ReviewsRepositoryImpl({required this.client});
-
 
   @override
   Future<Either<Failure, List<Review>>> fetchProductReviews(

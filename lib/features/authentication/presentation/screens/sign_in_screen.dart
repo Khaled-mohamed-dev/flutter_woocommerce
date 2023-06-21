@@ -116,7 +116,7 @@ class _SignupViewState extends State<SigninScreen> {
                         if (_formKey.currentState!.validate()) {
                           BlocProvider.of<SignFormBloc>(context).add(
                             SignInWithEmailAndPasswordPressed(
-                              emailAdress: _emailController.text,
+                              emailAdress: _emailController.text.trim(),
                               password: _passwordController.text,
                             ),
                           );

@@ -235,11 +235,7 @@ class ProductDetails extends StatelessWidget {
                                           Html(
                                             data: product.description,
                                             style: {
-                                              'div': Style(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge!
-                                                    .color,
+                                              '*': Style(
                                                 fontSize: FontSize(
                                                   Theme.of(context)
                                                           .textTheme
@@ -253,24 +249,6 @@ class ProductDetails extends StatelessWidget {
                                                     const EdgeInsets.all(0),
                                                 margin: const EdgeInsets.all(0),
                                               ),
-                                              'p': Style(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge!
-                                                    .color,
-                                                padding:
-                                                    const EdgeInsets.all(0),
-                                                margin: const EdgeInsets.all(0),
-                                                fontSize: FontSize(
-                                                  Theme.of(context)
-                                                          .textTheme
-                                                          .titleLarge!
-                                                          .fontSize! /
-                                                      (screenWidth(context) /
-                                                          3.5) /
-                                                      100,
-                                                ),
-                                              )
                                             },
                                           ),
                                           Divider(color: kcSecondaryColor),
@@ -821,7 +799,7 @@ class _VariationSelectionPopupState extends State<VariationSelectionPopup> {
                                 Html(
                                   data: product.description,
                                   style: {
-                                    'div': Style(
+                                    '*': Style(
                                       fontSize: FontSize(
                                         Theme.of(context)
                                                 .textTheme
@@ -833,18 +811,6 @@ class _VariationSelectionPopupState extends State<VariationSelectionPopup> {
                                       padding: const EdgeInsets.all(0),
                                       margin: const EdgeInsets.all(0),
                                     ),
-                                    'p': Style(
-                                      padding: const EdgeInsets.all(0),
-                                      margin: const EdgeInsets.all(0),
-                                      fontSize: FontSize(
-                                        Theme.of(context)
-                                                .textTheme
-                                                .titleLarge!
-                                                .fontSize! *
-                                            (screenWidth(context) / 3.5) /
-                                            100,
-                                      ),
-                                    )
                                   },
                                 ),
                               ],
