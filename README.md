@@ -10,13 +10,19 @@ Cart Screen                                  |  Order Details Screen            
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Flucommerce allow you to create a mobile app for your woocommerce website with simple configration, all you have to do is to provide the API credentials.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
+The app is build with a clean architecture approche using Bloc package for state management
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1- Light/Dark Mode
+2- English and Arabic language with flutter_localization package
+3- Webview for checkout page
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Packages
+Here is a list of some of the packages that I used.
+
+1- Bloc: State managment 
+2- hive and shared_preferences : Local DB
+3- flutter_html: Render HTML (the product details comes as HTML for the woocommerce api)
+4- http: for api requests
