@@ -1,12 +1,11 @@
 # flutter_woocommerce
 
-Home Screen                                  |  Product details screen                       |  screenshot 2                                 |  screenshot 2
-:-------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:
-![](https://i.ibb.co/Gx6M7Bb/home-screen.jpg)|  ![](https://i.ibb.co/y6HhgZ4/product-details-screen.jpg) |  ![](https://i.ibb.co/NNHjjBg/task-list2.jpg) |  ![](https://i.ibb.co/NNHjjBg/task-list2.jpg)
-
-Cart Screen                                  |  screenshot 2                                 |  screenshot 2                                 |  screenshot 3
-:-------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:
-![](https://i.ibb.co/R46PyCs/cart-screen.jpg)  |  ![](https://i.ibb.co/NNHjjBg/task-list2.jpg) |  ![](https://i.ibb.co/NNHjjBg/task-list2.jpg) |  ![](https://i.ibb.co/NNHjjBg/task-list2.jpg)
+Home Screen                                  |  Product details screen                       |  Search screen |  
+:-------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:
+![](https://i.ibb.co/Gx6M7Bb/home-screen.jpg)|  ![](https://i.ibb.co/y6HhgZ4/product-details-screen.jpg) |  ![](https://i.ibb.co/CJfgnFY/search-screen.jpg) 
+Cart Screen                                  |  Order Details Screen                                 |  Confirm order screen                                 
+:-------------------------------------------:|:---------------------------------------------:|:---------------------------------------------:
+![](https://i.ibb.co/R46PyCs/cart-screen.jpg)  |  ![](https://i.ibb.co/VWpxTsC/order-details-screen.jpg) |  ![](https://i.ibb.co/R67wXLt/order-success-screen.jpg)
 
 
 ## Getting Started
