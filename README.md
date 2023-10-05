@@ -12,6 +12,8 @@ Cart Screen                                  |  Order Details Screen            
 
 Flucommerce allow you to create a mobile app for your woocommerce website with simple configration, all you have to do is to provide the API credentials.
 
+You can try the app from here https://play.google.com/store/apps/details?id=com.flucommerce
+
 ## Features
 The app is build with a clean architecture approche using Bloc package for state management
 
